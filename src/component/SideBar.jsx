@@ -19,7 +19,7 @@ export default function SideBar({handleChange}) {
         >
             <div className="logoDiv">
                 <img src={logo} alt="logo"/>
-                <h1 class="text-3xl font-bold">
+                <h1 className="text-3xl font-bold">
                     Music<span style={{color: "#1DB954"}}>Mix</span>
                 </h1>
             </div>
