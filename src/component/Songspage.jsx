@@ -2,13 +2,11 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import SongCard from "./SongCard";
 import Footer from "./Footer";
-import SideBar from "./SideBar";
 import MenuAppBar from "./NavBar";
 
 export default function Songspage({search}) {
     const [data, setData] = useState([]);
     const [isLoading, setisLoading] = useState(false);
-    console.log(search)
 
     function getData() {
         setisLoading(true);
@@ -56,7 +54,7 @@ export default function Songspage({search}) {
             }}
         >
             <MenuAppBar/>
-            <h2 class="text-2xl font-semibold">Best of what India listens to!</h2>
+            <h2 className="text-2xl font-semibold">Best of what India listens to!</h2>
             {isLoading ? (
                 <h2 style={{textAlign: "center", margin: "150px", color: "#1DB954"}}>
                     Loading...
@@ -70,7 +68,7 @@ export default function Songspage({search}) {
                         gap: "30px 20px",
                     }}
                 >
-                    {data && data.map((e) => {
+                    {data && data.map((e,index) => {
 
                         return (
                             <SongCard
@@ -78,7 +76,7 @@ export default function Songspage({search}) {
                                 image={e.image}
                                 title={e.title}
                                 artist={e.artist}
-                                id={e._id}
+                                key={index}
                             />
                         );
                     })}

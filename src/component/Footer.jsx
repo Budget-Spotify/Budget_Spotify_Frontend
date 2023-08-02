@@ -2,7 +2,6 @@ import React from 'react'
 import "./component.css";
 import {Link} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {} from '@fortawesome/free-solid-svg-icons';
 import {faTwitter, faInstagram, faFacebook} from '@fortawesome/free-brands-svg-icons';
 
 export default function Footer() {
