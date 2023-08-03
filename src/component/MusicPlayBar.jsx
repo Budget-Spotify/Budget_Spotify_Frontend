@@ -57,8 +57,9 @@ export default function MusicPlayBar({songUrl, image, title, artist, id}) {
             {
                 songUrl ? <ReactH5AudioPlayer
                         src={songUrl}
-                        autoPlay
+                        layout="stacked-reverse"
                         volume={0.6}
+                        showSkipControls={true}
                         progressJumpStep={5000}
                         style={{
                             color: "white",
@@ -71,8 +72,9 @@ export default function MusicPlayBar({songUrl, image, title, artist, id}) {
                     /> :
                     <ReactH5AudioPlayer
                         src={"https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/03_-_Voyage_I_-_Waterfall.mp3"}
-                        autoPlay
+                        layout="stacked-reverse"
                         volume={0.6}
+                        showSkipControls={true}
                         progressJumpStep={5000}
                         style={{
                             color: "white",
