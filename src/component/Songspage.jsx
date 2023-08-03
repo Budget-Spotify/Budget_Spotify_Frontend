@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import SongCard from "./SongCard";
 import Footer from "./Footer";
-import SideBar from "./SideBar";
 import MenuAppBar from "./NavBar";
 
 export default function Songspage({search}) {

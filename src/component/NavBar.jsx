@@ -42,7 +42,7 @@ export default function MenuAppBar() {
                         <MenuIcon/>
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        Music
+                        
                     </Typography>
                     {auth && (
                         <div>

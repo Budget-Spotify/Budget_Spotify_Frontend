@@ -4,6 +4,7 @@ import {Routes, Route, Navigate} from "react-router-dom"
 import Home from './pages/Home';
 import LoginComponent from "./pages/Login";
 import SignupComponent from "./pages/Signup";
+import AdminPage from './pages/admin';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/login" element={<LoginComponent/>}/>
                 <Route path="/signup" element={<SignupComponent/>}/>
                 <Route path="*" element={<Navigate to="/login"/>}/>
+                <Route path='/admin/userlist' element={<AdminPage/>}/>
             </Routes>
         </div>
     );
