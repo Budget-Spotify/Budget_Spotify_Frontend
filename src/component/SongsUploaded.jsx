@@ -5,6 +5,7 @@ import TablePagination, {
 } from '@mui/base/TablePagination';
 import {useOutletContext} from "react-router-dom";
 import MenuAppBar from "./NavBar";
+import AddSong from "./AddSong";
 
 export default function TableUnstyled() {
     const [search] = useOutletContext();
@@ -39,6 +40,7 @@ export default function TableUnstyled() {
             <MenuAppBar/>
             <h1>Songs Uploaded</h1>
             <br/>
+            <AddSong/>
             <table aria-label="custom pagination table">
                 <thead>
                 <tr>
