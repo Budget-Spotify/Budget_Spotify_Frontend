@@ -1,15 +1,13 @@
 import {useFormik} from "formik";
 import * as Yup from 'yup';
 import axios from "axios";
-// import TextField from "../component/shared/TextInput";
-// import TextField from "../component/shared/PasswordInput";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 import TextField from '@mui/material/TextField';
-import {red} from "@mui/material/colors";
 
 export function SignupComponent() {
-    const validateLogin = Yup.object({
+    const navigate = useNavigate();
+    const validateSignup = Yup.object({
         username: Yup.string()
             .matches(/^[a-zA-Z0-9]+$/, 'Username không được ký tự đặc biệt'),
         password: Yup.string()
@@ -38,13 +36,11 @@ export function SignupComponent() {
             gender: "",
             avatar: "",
         },
-        validationSchema: validateLogin,
+        validationSchema: validateSignup,
         onSubmit: async (values) => {
-            console.log("formik signup")
-            console.log(values)
             try {
                 const response = await axios.post("http://localhost:8000/auth/register", values);
-                console.log("Registration successful:", response.data);
+                navigate('/login');
             } catch (error) {
                 console.error("Registration failed:", error);
             }
@@ -52,7 +48,7 @@ export function SignupComponent() {
     });
 
     return (
-        <div className="w-full h-full flex flex-col items-center">
+        <div className="w-full h-full flex flex-col items-center" style={{backgroundColor: "white"}}>
             <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
                 <h1 className="text-4xl font-bold">
                     Music<span className="text-green-500">Mix</span>
