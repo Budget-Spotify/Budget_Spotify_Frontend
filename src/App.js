@@ -1,8 +1,8 @@
 import './App.css';
 import {Routes, Route, Navigate} from "react-router-dom"
 import Home from './pages/Home';
-import LoginComponent from "./pages/Login";
-import SignupComponent from "./pages/Signup";
+import {LoginComponent} from "./pages/Login";
+import {SignupComponent} from "./pages/Signup";
 import Songspage from "./component/Songspage";
 import React from "react";
 import TableUnstyled from "./component/SongsUploaded";
@@ -22,7 +22,7 @@ function App() {
                 <Route path="/login" element={<LoginComponent/>}/>
                 <Route path="/signup" element={<SignupComponent/>}/>
                 <Route path="*" element={<Navigate to="/login"/>}/>
-                
+
             </Routes>
         </div>
     );
