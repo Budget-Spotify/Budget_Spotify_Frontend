@@ -13,6 +13,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Stack from '@mui/material/Stack';
 import MenuAppBar from "./NavBar";
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import {useEffect} from "react";
 import UserService from "../services/user.service";
 import {useParams} from "react-router-dom";
@@ -32,6 +33,7 @@ const ExpandMore = styled((props) => {
 export default function RecipeReviewCard() {
     const [expanded, setExpanded] = React.useState(false);
     const [favorite, setFavorite] = React.useState(false);
+    const [isPlay, setIsPlay] = React.useState(false);
     const [song, setSong] = React.useState({});
 
     const handleExpandClick = () => {
@@ -40,6 +42,10 @@ export default function RecipeReviewCard() {
 
     const handleFavoriteClick = () => {
         setFavorite(!favorite);
+    }
+
+    const handlePlayClick = () => {
+        setIsPlay(!isPlay);
     }
 
     let songId = useParams();
@@ -116,13 +122,28 @@ export default function RecipeReviewCard() {
                     </CardContent>
                 </Stack>
                 <CardActions disableSpacing>
-                    <IconButton aria-label="play">
-                        <PlayCircleIcon
-                            fontSize='large'
-                            sx={{
-                                color: '#1ed760',
-                            }}
-                        />
+                    <IconButton aria-label="play" onClick={handlePlayClick}>
+                        {
+                            isPlay ?
+                                (
+                                    <PauseCircleIcon
+                                        fontSize='large'
+                                        sx={{
+                                            color: '#1ed760',
+                                            fontSize: 60,
+                                        }}
+                                    />
+                                ) :
+                                (
+                                    <PlayCircleIcon
+                                        fontSize='large'
+                                        sx={{
+                                            color: '#1ed760',
+                                            fontSize: 60,
+                                        }}
+                                    />
+                                )
+                        }
                     </IconButton>
                     <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
                         {
@@ -139,7 +160,7 @@ export default function RecipeReviewCard() {
                                     <FavoriteBorderIcon
                                         fontSize='large'
                                         sx={{
-                                            color: '#1ed760'
+                                            color: '#1ed760',
                                         }}
                                     />
                                 )
