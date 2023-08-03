@@ -6,7 +6,7 @@ import TablePagination, {
 import { useOutletContext } from "react-router-dom";
 import MenuAppBar from "./NavBar";
 import { useState, useEffect } from 'react';
-import AdminUser from '../services/admin.user';
+import AdminService from '../services/admin.service'
 
 export default function UserList() {
     const [search] = useOutletContext();
@@ -16,7 +16,7 @@ export default function UserList() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     function getData() {
         setisLoading(true);
-        AdminUser.getUserList().then(res => {
+        AdminService.getUserList().then(res => {
             console.log(res.data);
             setData(res.data)
             setisLoading(false)
@@ -24,7 +24,7 @@ export default function UserList() {
     }
     useEffect(() => {
         getData()
-    }, {});
+    }, []);
     const rows = data.list.sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
     const emptyRows =
@@ -33,7 +33,7 @@ export default function UserList() {
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-    
+
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
