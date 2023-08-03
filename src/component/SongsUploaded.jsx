@@ -43,6 +43,7 @@ export default function TableUnstyled() {
                 <thead>
                 <tr>
                     <th>#</th>
+                    <th>Avatar</th>
                     <th>Name of the song</th>
                     <th>Singer</th>
                     <th>Listens</th>
@@ -55,6 +56,7 @@ export default function TableUnstyled() {
                 ).map((row, index) => (
                     <tr key={row.name}>
                         <td>{index + 1}</td>
+                        <td>{index + 1}</td>
                         <td>{row.name}</td>
                         <td>
                             {row.calories}
@@ -66,7 +68,7 @@ export default function TableUnstyled() {
                 ))}
                 {emptyRows > 0 && (
                     <tr style={{height: 41 * emptyRows}}>
-                        <td colSpan={4}/>
+                        <td colSpan={5}/>
                     </tr>
                 )}
                 </tbody>
@@ -74,7 +76,7 @@ export default function TableUnstyled() {
                 <tr>
                     <CustomTablePagination
                         rowsPerPageOptions={[10, 15, 20, {label: 'All', value: -1}]}
-                        colSpan={4}
+                        colSpan={5}
                         count={rows.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
