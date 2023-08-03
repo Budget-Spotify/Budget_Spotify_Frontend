@@ -3,8 +3,10 @@ import axios from "axios";
 import SongCard from "./SongCard";
 import Footer from "./Footer";
 import MenuAppBar from "./NavBar";
+import {useOutletContext} from "react-router-dom";
 
-export default function Songspage({search}) {
+export default function Songspage() {
+    const [search] = useOutletContext();
     const [data, setData] = useState([]);
     const [isLoading, setisLoading] = useState(false);
 
@@ -68,7 +70,7 @@ export default function Songspage({search}) {
                         gap: "30px 20px",
                     }}
                 >
-                    {data && data.map((e,index) => {
+                    {data && data.map((e, index) => {
 
                         return (
                             <SongCard
