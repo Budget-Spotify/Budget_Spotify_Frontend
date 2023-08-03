@@ -2,6 +2,7 @@ import React from "react";
 import logo from "../images/logo.png";
 import "./component.css";
 import {Link, NavLink} from "react-router-dom";
+import SideBarMenu from "./SideBarMenu";
 
 export default function SideBar({handleChange}) {
     return (
@@ -19,8 +20,8 @@ export default function SideBar({handleChange}) {
         >
             <div className="logoDiv">
                 <img src={logo} alt="logo"/>
-                <h1 class="text-3xl font-bold">
-                    Music<span style={{color: "#1DB954"}}>Mix</span>
+                <h1 className="text-3xl font-bold">
+                    DieC<span style={{color: "#1DB954"}}>Team</span>
                 </h1>
             </div>
             <div className="linkDiv">
@@ -29,24 +30,7 @@ export default function SideBar({handleChange}) {
                     handleChange(e.target.value)
                 }}/>
                 <br/>
-                <NavLink
-                    to="/"
-                    className={({isActive}) =>
-                        isActive ? "navLinksClick" : "navLinks"
-                    }
-                >
-                    Home
-                </NavLink>
-                <NavLink to="/library" className={({isActive}) =>
-                    isActive ? "navLinksClick" : "navLinks"
-                }>
-                    Your Library
-                </NavLink>
-                <NavLink to="/login" className={({isActive}) =>
-                    isActive ? "navLinksClick" : "navLinks"
-                }>
-                    Login
-                </NavLink>
+                <SideBarMenu/>
             </div>
         </div>
     );

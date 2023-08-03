@@ -2,7 +2,6 @@ import React from 'react'
 import "./component.css";
 import {Link} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {} from '@fortawesome/free-solid-svg-icons';
 import {faTwitter, faInstagram, faFacebook} from '@fortawesome/free-brands-svg-icons';
 
 export default function Footer() {
@@ -23,7 +22,7 @@ export default function Footer() {
                         <Link className='fooLinks'>Advertising</Link>
                         <Link className='fooLinks'>Investor</Link>
                         <Link className='fooLinks'>Vendors</Link>
-                        <Link className='fooLinks'>MusicMix for Work</Link>
+                        <Link className='fooLinks'>DieCTeam for Work</Link>
                     </div>
                     <div>
                         <h3>Usefull Links</h3>

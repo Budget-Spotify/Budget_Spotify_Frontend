@@ -4,21 +4,15 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import {useState} from "react";
+import {Avatar} from "@mui/material";
 
 export default function MenuAppBar() {
     const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
-
-    const handleChange = (event) => {
-        setAuth(event.target.checked);
-    };
+    const open = Boolean(anchorEl);
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -29,7 +23,7 @@ export default function MenuAppBar() {
     };
 
     return (
-        <Box sx={{flexGrow: 1, position: 'fixed', top: 0, zIndex: 999, width: '80%'}}>
+        <Box sx={{flexGrow: 1, position: 'fixed', top: 0, zIndex: 999, width: '77%'}}>
             <AppBar position="static" sx={{backgroundColor: 'black'}}>
                 <Toolbar>
                     <IconButton
@@ -47,29 +41,49 @@ export default function MenuAppBar() {
                     {auth && (
                         <div>
                             <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
                                 onClick={handleMenu}
-                                color="inherit"
+                                size="small"
+                                sx={{ml: 2}}
+                                aria-controls={open ? 'account-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
                             >
-                                <AccountCircle/>
+                                <Avatar sx={{width: 32, height: 32}}>M</Avatar>
                             </IconButton>
                             <Menu
-                                id="menu-appbar"
                                 anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorEl)}
+                                id="account-menu"
+                                open={open}
                                 onClose={handleClose}
+                                onClick={handleClose}
+                                PaperProps={{
+                                    elevation: 0,
+                                    sx: {
+                                        overflow: 'visible',
+                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                        mt: 1.5,
+                                        '& .MuiAvatar-root': {
+                                            width: 32,
+                                            height: 32,
+                                            ml: -0.5,
+                                            mr: 1,
+                                        },
+                                        '&:before': {
+                                            content: '""',
+                                            display: 'block',
+                                            position: 'absolute',
+                                            top: 0,
+                                            right: 14,
+                                            width: 10,
+                                            height: 10,
+                                            bgcolor: 'background.paper',
+                                            transform: 'translateY(-50%) rotate(45deg)',
+                                            zIndex: 0,
+                                        },
+                                    },
+                                }}
+                                transformOrigin={{horizontal: 'right', vertical: 'top'}}
+                                anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                             >
                                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                                 <MenuItem onClick={handleClose}>Log out</MenuItem>
