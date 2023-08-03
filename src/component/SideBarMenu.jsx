@@ -19,6 +19,11 @@ export default function SideBarMenu() {
             }>
                 Songs Uploaded
             </NavLink>
+            <NavLink to="/users-manager" className={({isActive}) =>
+                isActive ? "navLinksClick" : "navLinks"
+            }>
+                UserManager
+            </NavLink>
         </>
     )
 }
