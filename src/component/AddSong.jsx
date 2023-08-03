@@ -4,7 +4,7 @@ import Modal from '@mui/material/Modal';
 import TextField from "@mui/material/TextField";
 import {Add} from "@mui/icons-material";
 import {useFormik} from "formik";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 const style = {
     position: 'absolute',
@@ -16,14 +16,24 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    display: 'flex',
+    flexDirection: 'row'
 };
 
 export default function AddSong() {
     const [open, setOpen] = useState(false);
+    const [file,setFile]=useState(null)
+    const [image,setImage]=useState(null)
+    const [imageSrc,setImageSrc] = useState("")
     const [haveFile, setHaveFile] = useState(false)
     const [haveImage, setHaveImage] = useState(false)
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const handleFileInput = (e) => setFile(e.target.files[0])
+    const handleImageInput = (e) => {
+        setImage(e.target.files[0])
+        setImageSrc(URL.createObjectURL(e.target.files[0]))
+    }
     const resetFormFileAndImage = () => {
         setHaveFile(false)
         setHaveImage(false)
@@ -42,6 +52,8 @@ export default function AddSong() {
             isPublic: false
         },
         onSubmit: (values) => {
+            console.log(file)
+            console.log(image)
 
         },
     });
@@ -62,36 +74,48 @@ export default function AddSong() {
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-                sx={{flexDirection: 'row'}}
             >
                 <Box component="form" onSubmit={formAdd.handleSubmit} noValidate sx={style}>
-                    <h1>Add a new song</h1>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        value={formAdd.values.songName}
-                        onChange={formAdd.handleChange}
-                        id="songName"
-                        label="Song Name"
-                        name="songName"
-                        autoComplete="songName"
-                        autoFocus
-                    />
-                    <input type="file"/>
-                    <input type="file"/>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{mt: 3, mb: 2, backgroundColor: 'green'}}
-                    >
-                        Save
-                    </Button>
+                    <div style={{position:"relative",width:"50%"}}>
+                        <h1>Add a new song</h1>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            value={formAdd.values.songName}
+                            onChange={formAdd.handleChange}
+                            id="songName"
+                            label="Song Name"
+                            name="songName"
+                            autoComplete="songName"
+                            autoFocus
+                        />
+                        <label htmlFor="avatar">Avatar:</label>
+                        <input id="avatar" type="file" onChange={handleImageInput}/>
+                        <label htmlFor="song">Song:</label>
+                        <input id="song" type="file" onChange={handleFileInput}/>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{mt: 3, mb: 2, backgroundColor: 'green'}}
+                        >
+                            Save
+                        </Button>
+                    </div>
+                    <div style={{
+                        position:"absolute",
+                        width:"50%",
+                        height:"100%",
+                        top:0,
+                        right:0,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                        <img src={imageSrc} alt="Image Preview"/>
+                    </div>
                 </Box>
-                <div>
-                    <img src="" alt="aaa"/>
-                </div>
             </Modal>
         </>
     );
