@@ -7,6 +7,7 @@ import Songspage from "./component/Songspage";
 import React from "react";
 import TableUnstyled from "./component/SongsUploaded";
 import UserList from './component/UserManager';
+import EditPassword from './component/EditPassword';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/" element={<Songspage/>}/>
                     <Route path="/songs-uploaded" element={<TableUnstyled/>}/>
                     <Route path="/users-manager" element={<UserList/>}/>
+                    <Route path="/account-editpassword" element={<EditPassword/>}/>
                 </Route>
                 <Route path="/login" element={<LoginComponent/>}/>
                 <Route path="/signup" element={<SignupComponent/>}/>
