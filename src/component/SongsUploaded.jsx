@@ -3,10 +3,11 @@ import {styled} from '@mui/system';
 import TablePagination, {
     tablePaginationClasses as classes,
 } from '@mui/base/TablePagination';
-import {useOutletContext} from "react-router-dom";
+import {Link, useOutletContext} from "react-router-dom";
 import MenuAppBar from "./NavBar";
 import {useEffect, useState} from "react";
 import UserService from "../services/user.service";
+import Footer from "./Footer";
 
 export default function TableUnstyled() {
     const [search] = useOutletContext();
@@ -49,7 +50,7 @@ export default function TableUnstyled() {
             }}
         >
             <MenuAppBar/>
-            <h1>Songs Uploaded</h1>
+            <h2 className="text-2xl font-semibold">Songs Uploaded</h2>
             <br/>
             <table aria-label="custom pagination table">
                 <thead>
@@ -69,7 +70,11 @@ export default function TableUnstyled() {
                     <tr key={song._id}>
                         <td>{index + 1}</td>
                         <td>{song.avatar}</td>
-                        <td>{song.songName}</td>
+                        <td>
+                            <Link to={`/song/detail/${song._id}`}>
+                                {song.songName}
+                            </Link>
+                        </td>
                         <td>
                             {song.singers.map(singer => (
                                 {singer}
@@ -109,6 +114,7 @@ export default function TableUnstyled() {
                 </tr>
                 </tfoot>
             </table>
+            <Footer/>
         </Root>
     );
 }

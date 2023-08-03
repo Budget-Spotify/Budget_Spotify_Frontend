@@ -56,6 +56,8 @@ export default function Songspage() {
             }}
         >
             <MenuAppBar/>
+            <br/>
+            <br/>
             <h2 className="text-2xl font-semibold">Best of what India listens to!</h2>
             {isLoading ? (
                 <h2 style={{textAlign: "center", margin: "150px", color: "#1DB954"}}>
