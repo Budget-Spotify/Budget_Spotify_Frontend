@@ -6,6 +6,7 @@ import SignupComponent from "./pages/Signup";
 import Songspage from "./component/Songspage";
 import React from "react";
 import TableUnstyled from "./component/SongsUploaded";
+import UserList from './component/UserManager';
 
 
 function App() {
@@ -16,11 +17,12 @@ function App() {
                 <Route path='/' element={<Home/>}>
                     <Route path="/" element={<Songspage/>}/>
                     <Route path="/songs-uploaded" element={<TableUnstyled/>}/>
+                    <Route path="/users-manager" element={<UserList/>}/>
                 </Route>
                 <Route path="/login" element={<LoginComponent/>}/>
                 <Route path="/signup" element={<SignupComponent/>}/>
                 <Route path="*" element={<Navigate to="/login"/>}/>
-                <Route path='/admin/userlist' element={<AdminPage/>}/>
+                
             </Routes>
         </div>
     );
