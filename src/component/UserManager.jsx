@@ -57,7 +57,7 @@ export default function UserList() {
                 </h2>
             ) : (
                 <div>
-                    <h1>Songs Uploaded</h1>
+                    <h1>User List:</h1>
                     <br />
                     <table aria-label="custom pagination table">
                         <thead>
