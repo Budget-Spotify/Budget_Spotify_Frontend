@@ -31,9 +31,7 @@ body {
 
 .textFieldSignup-width {
     width: 100%;
-    /*outline: 1px solid white;*/
 }
-
-/*.textFieldSignup-width:hover, .textFieldSignup-width:active, .textFieldSignup-width:focus  {*/
-/*    outline: none;*/
-/*}*/
+.textFieldLogin-width {
+    width: 100%;
+}

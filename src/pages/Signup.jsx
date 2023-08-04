@@ -41,6 +41,7 @@ const theme = createTheme({
 });
 
 export function SignupComponent() {
+    const [alert_exist_user, set_alert_exist_user] = useState(false);
     const navigate = useNavigate();
     const validateSignup = Yup.object({
         username: Yup.string()
@@ -69,11 +70,10 @@ export function SignupComponent() {
         },
         validationSchema: validateSignup,
         onSubmit: async (values) => {
-            try {
-                const response = await axios.post("http://localhost:8000/auth/register", values);
+            try {await axios.post("http://localhost:8000/auth/register", values);
                 navigate('/login');
             } catch (error) {
-                console.error("Registration failed:", error);
+                set_alert_exist_user(true);
             }
         }
     });
@@ -229,6 +229,10 @@ export function SignupComponent() {
                                         <option value="female">Female</option>
                                         <option value="other">Other</option>
                                     </select>
+                                </div>
+
+                                <div style={{display: 'flex', justifyContent: 'center'}}>
+                                    {alert_exist_user && <div style={{color: 'red'}}><p>This user is already exist</p></div>}
                                 </div>
 
                                 <div className="w-full flex items-center justify-center my-8">
