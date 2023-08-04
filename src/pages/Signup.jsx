@@ -18,6 +18,13 @@ const theme = createTheme({
         },
     },
     components: {
+        MuiFormHelperText: {
+            styleOverrides: {
+                root: {
+                    color: 'red',
+                },
+            },
+        },
         MuiTextField: {
             styleOverrides: {
                 root: {
@@ -35,6 +42,7 @@ const theme = createTheme({
                         borderColor: '#ffffff', // Màu viền khi input được chọn (focus)
                     },
                 },
+
             },
         },
     },
@@ -49,7 +57,7 @@ export function SignupComponent() {
         password: Yup.string()
             .matches(
                 /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/,
-                'Password phải có tối thiểu 1 ký tự hoa, 1 ký tự số và 1 ký tự đặc biệt, và ít nhất 8 ký tự'
+                'Mật khẩu cần chứa ít nhất 8 ký tự, 1 ký tự hoa, 1 số và 1 đặc biệt.'
             ),
         confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
         phoneNumber: Yup.string()
@@ -70,7 +78,8 @@ export function SignupComponent() {
         },
         validationSchema: validateSignup,
         onSubmit: async (values) => {
-            try {await axios.post("http://localhost:8000/auth/register", values);
+            try {
+                await axios.post("http://localhost:8000/auth/register", values);
                 navigate('/login');
             } catch (error) {
                 set_alert_exist_user(true);
@@ -110,9 +119,8 @@ export function SignupComponent() {
                                             required
                                             borderColor="white"
                                             error={showErrorMessage}
+                                            helperText={formik.errors.username ? formik.errors.username : " "}
                                         />
-                                        {formik.errors.username &&
-                                            <div style={{color: 'red'}}>{formik.errors.username}</div>}
                                     </div>
 
                                     <div style={{marginBottom: '10px'}}>
@@ -127,9 +135,8 @@ export function SignupComponent() {
                                             required
                                             borderColor="white"
                                             error={showErrorMessage}
+                                            helperText={formik.errors.password ? formik.errors.password : " "}
                                         />
-                                        {formik.errors.password &&
-                                            <div style={{color: 'red'}}>{formik.errors.password}</div>}
                                     </div>
 
                                     <div style={{marginBottom: '10px'}}>
@@ -144,9 +151,8 @@ export function SignupComponent() {
                                             required
                                             borderColor="white"
                                             error={showErrorMessage}
+                                            helperText={formik.errors.confirmPassword ? formik.errors.confirmPassword : " "}
                                         />
-                                        {formik.errors.confirmPassword &&
-                                            <div style={{color: 'red'}}>{formik.errors.confirmPassword}</div>}
                                     </div>
                                 </div>
 
@@ -183,9 +189,8 @@ export function SignupComponent() {
                                         onChange={formik.handleChange}
                                         name="firstName"
                                         borderColor="white"
+                                        helperText={formik.errors.firstName ? formik.errors.firstName : null}
                                     />
-                                    {formik.errors.firstName &&
-                                        <div style={{color: 'red'}}>{formik.errors.firstName}</div>}
                                 </div>
 
                                 <div style={{marginBottom: '10px'}}>
@@ -197,9 +202,8 @@ export function SignupComponent() {
                                         onChange={formik.handleChange}
                                         name="lastName"
                                         borderColor="white"
+                                        helperText={formik.errors.lastName ? formik.errors.lastName : null}
                                     />
-                                    {formik.errors.lastName &&
-                                        <div style={{color: 'red'}}>{formik.errors.lastName}</div>}
                                 </div>
 
                                 <div style={{marginBottom: '10px'}}>
@@ -211,9 +215,8 @@ export function SignupComponent() {
                                         onChange={formik.handleChange}
                                         name="phoneNumber"
                                         borderColor="white"
+                                        helperText={formik.errors.phoneNumber ? formik.errors.phoneNumber : null}
                                     />
-                                    {formik.errors.phoneNumber &&
-                                        <div style={{color: 'red'}}>{formik.errors.phoneNumber}</div>}
                                 </div>
 
                                 <div className="textInputDiv flex flex-col space-y-2 w-full">
@@ -232,7 +235,8 @@ export function SignupComponent() {
                                 </div>
 
                                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                                    {alert_exist_user && <div style={{color: 'red'}}><p>This user is already exist</p></div>}
+                                    {alert_exist_user &&
+                                        <div style={{color: 'red'}}><p>This user is already exist</p></div>}
                                 </div>
 
                                 <div className="w-full flex items-center justify-center my-8">
