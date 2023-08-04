@@ -9,7 +9,7 @@ import {useEffect, useState} from "react";
 import UserService from "../services/user.service";
 import Footer from "./Footer";
 
-export default function TableUnstyled() {
+export default function SongUploaded() {
     const [search] = useOutletContext();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);

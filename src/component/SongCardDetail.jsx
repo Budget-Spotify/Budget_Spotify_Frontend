@@ -30,7 +30,7 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export default function RecipeReviewCard() {
+export default function SongCardDetail() {
     const [expanded, setExpanded] = React.useState(false);
     const [favorite, setFavorite] = React.useState(false);
     const [isPlay, setIsPlay] = React.useState(false);
