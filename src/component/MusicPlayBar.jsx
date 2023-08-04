@@ -2,9 +2,11 @@ import React, {useEffect, useState} from "react";
 import ReactH5AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import "./component.css";
+import {useSelector} from "react-redux";
 
 
-export default function MusicPlayBar({songUrl, image, title, artist, id}) {
+export default function MusicPlayBar() {
+    const song = useSelector(state => state.song.song);
 
     return (
         <div
@@ -32,10 +34,10 @@ export default function MusicPlayBar({songUrl, image, title, artist, id}) {
                     justifyContent: "space-between",
                 }}
             >
-                {image ? (
+                {song ? (
 
                     <img
-                        src={image}
+                        src={song.avatar}
                         alt="img"
                         style={{width: "70px", height: "100%", borderRadius: "5px"}}
                     />
@@ -48,15 +50,15 @@ export default function MusicPlayBar({songUrl, image, title, artist, id}) {
                 )}
 
                 <div style={{color: "#fff", background: "black", width: "78%"}}>
-                    {title ? <h3 style={{background: "black", marginTop: "4px"}}>{title}</h3> :
+                    {song ? <h3 style={{background: "black", marginTop: "4px"}}>{song.songName}</h3> :
                         <h3 style={{marginTop: "4px", background: "black"}}>Voyage I - Waterfall</h3>}
-                    {artist ? <p style={{fontSize: "13px", background: "black", marginTop: "20px"}}>{artist}</p> :
+                    {song ? <p style={{fontSize: "13px", background: "black", marginTop: "20px"}}>{song.songName}</p> :
                         <p style={{background: "black", fontSize: "13px", marginTop: "20px"}}>The Kyoto Connection</p>}
                 </div>
             </div>
             {
-                songUrl ? <ReactH5AudioPlayer
-                        src={songUrl}
+                song ? <ReactH5AudioPlayer
+                        src={song.fileURL}
                         layout="stacked-reverse"
                         volume={0.6}
                         showSkipControls={true}
