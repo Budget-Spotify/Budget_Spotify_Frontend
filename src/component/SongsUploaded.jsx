@@ -83,7 +83,7 @@ export default function SongUploaded() {
                             ))}
                         </td>
                         <td>
-                            {song.uploadTime}
+                            {new Date(song.uploadTime).toLocaleDateString()}
                         </td>
                     </tr>
                 ))}
