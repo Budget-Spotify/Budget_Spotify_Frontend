@@ -5,6 +5,9 @@ import TextField from "@mui/material/TextField";
 import {Add} from "@mui/icons-material";
 import {useFormik} from "formik";
 import {useEffect, useState} from "react";
+import storage from "../config/firebase.config"
+import {ref, getDownloadURL, uploadBytesResumable} from "firebase/storage"
+import UserService from "../services/user.service";
 
 const style = {
     position: 'absolute',
@@ -22,9 +25,9 @@ const style = {
 
 export default function AddSong() {
     const [open, setOpen] = useState(false);
-    const [file,setFile]=useState(null)
-    const [image,setImage]=useState(null)
-    const [imageSrc,setImageSrc] = useState("")
+    const [file, setFile] = useState(null)
+    const [image, setImage] = useState(null)
+    const [imageSrc, setImageSrc] = useState("")
     const [haveFile, setHaveFile] = useState(false)
     const [haveImage, setHaveImage] = useState(false)
     const handleOpen = () => setOpen(true);
@@ -48,13 +51,53 @@ export default function AddSong() {
             singers: [],
             composers: [],
             tags: [],
-            uploader: '',
+            uploader: '64ca21378646dc995d7f7683',
             isPublic: false
         },
         onSubmit: (values) => {
-            console.log(file)
-            console.log(image)
+            try {
+                console.log(file)
+                console.log(image)
+                const imgRef = ref(storage, `/images/${image.name}`);
+                const imageTask = uploadBytesResumable(imgRef, image);
+                const fileRef = ref(storage, `/songs/${file.name}`);
+                const fileTask = uploadBytesResumable(fileRef, file)
 
+                imageTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        const percent = Math.round(
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        );
+                        if(percent===100) console.log('image upload done');
+                    },
+                    (err) => console.log(err),
+                    async () => {
+                        let avatar = await getDownloadURL(imageTask.snapshot.ref);
+                        await formAdd.setFieldValue('avatar',avatar,false)
+                    }
+                );
+                fileTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        const percent = Math.round(
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        );
+                        if(percent===100) console.log('file upload done');
+                    },
+                    (err) => console.log(err),
+                    async () => {
+                        let fileURL = await getDownloadURL(fileTask.snapshot.ref);
+                        await formAdd.setFieldValue('fileURL',fileURL,false)
+                    }
+                );
+                UserService.addSong(formAdd.values)
+                    .then(res=>console.log(res))
+                    .catch(err=>console.log(err))
+            }
+            catch (e) {
+                console.log(e.message)
+            }
         },
     });
 
@@ -76,7 +119,7 @@ export default function AddSong() {
                 aria-describedby="modal-modal-description"
             >
                 <Box component="form" onSubmit={formAdd.handleSubmit} noValidate sx={style}>
-                    <div style={{position:"relative",width:"50%"}}>
+                    <div style={{position: "relative", width: "50%"}}>
                         <h1>Add a new song</h1>
                         <TextField
                             margin="normal"
@@ -88,6 +131,18 @@ export default function AddSong() {
                             label="Song Name"
                             name="songName"
                             autoComplete="songName"
+                            autoFocus
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            value={formAdd.values.description}
+                            onChange={formAdd.handleChange}
+                            id="description"
+                            label="Description"
+                            name="description"
+                            autoComplete="description"
                             autoFocus
                         />
                         <label htmlFor="avatar">Avatar:</label>
@@ -104,11 +159,11 @@ export default function AddSong() {
                         </Button>
                     </div>
                     <div style={{
-                        position:"absolute",
-                        width:"50%",
-                        height:"100%",
-                        top:0,
-                        right:0,
+                        position: "absolute",
+                        width: "50%",
+                        height: "100%",
+                        top: 0,
+                        right: 0,
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center"

@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
-import 'dotenv/config'
 const firebaseConfig = {
     apiKey: "AIzaSyBOR0GGxF4Oyd9iu7I-V3zJpalnvk5Rhmc",
     authDomain: "budget-spotify.firebaseapp.com",
