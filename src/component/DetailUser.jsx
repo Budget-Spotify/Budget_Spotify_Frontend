@@ -11,42 +11,41 @@ import Footer from "./Footer";
 import { useParams } from "react-router-dom";
 
 const DetailUser = () => {
-    const { id } = useParams();
+    const { id } = useParams()
     const [search] = useOutletContext();
-    const [info, setInfo] = useState({});
+    const [info, setInfo] = useState({})
     const [isLoading, setisLoading] = useState(false);
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
-    const navigate = useNavigate();
-
+    const navigate = useNavigate()
     function getData() {
         setisLoading(true);
         UserService.getInfo(id).then(res => {
             console.log(res.data);
-            setInfo(res.data.user);
-            setisLoading(false);
-        });
+            setInfo(res.data.user)
+            setisLoading(false)
+        })
     }
 
     useEffect(() => {
-        getData();
+        getData()
     }, []);
 
+
     return (
-        <div
-            style={{
-                marginLeft: '20.5%',
-                marginBottom: '155px',
-                marginRight: '1%',
-                color: '#fff',
-                padding: '30px 20px 20px 20px',
-                background: 'black',
-                borderRadius: '10px',
-            }}
-        >
+
+        <div style={{
+            marginLeft: "20.5%",
+            marginBottom: "155px",
+            marginRight: "1%",
+            color: "#fff",
+            padding: "30px 20px 20px 20px",
+            background: "black",
+            borderRadius: "10px",
+        }} >
             <MenuAppBar />
-            <div className="center-content">
-                <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
+            <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
+                <div>
                     {/* <Icon icon="logos:spotify" width="150" /> */}
                 </div>
                 <div className="inputRegion w-full px-4 sm:w-2/3 md:w-1/2 lg:w-1/3 py-10 flex flex-col items-center">
@@ -55,10 +54,7 @@ const DetailUser = () => {
                     </div>
                     <div class="container">
                         <div className="avatar">
-                            <img
-                                src="https://scontent.fhan17-1.fna.fbcdn.net/v/t39.30808-6/344544622_582258900551376_4176474794430710547_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=lzWCZ30j7hgAX_BNQDP&_nc_ht=scontent.fhan17-1.fna&oh=00_AfCukd50pGVHSTivMrBxhfXgCFzQk0bzjDQ16JbwcM9pCQ&oe=64D0A1FC"
-                                alt=""
-                            />
+                            <img src="https://scontent.fhan17-1.fna.fbcdn.net/v/t39.30808-6/344544622_582258900551376_4176474794430710547_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=lzWCZ30j7hgAX_BNQDP&_nc_ht=scontent.fhan17-1.fna&oh=00_AfCukd50pGVHSTivMrBxhfXgCFzQk0bzjDQ16JbwcM9pCQ&oe=64D0A1FC" alt="" />
                         </div>
                         <div class="name">
                             <h1>Username: {info.username} </h1>
@@ -74,6 +70,11 @@ const DetailUser = () => {
                                 </li>
                             </ul>
                         </div>
+                        <div className="flex justify-end">
+                            <button className="bg-green-400 font-semibold p-3 px-10 rounded-full " type="submit">
+                                Edit
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -81,4 +82,5 @@ const DetailUser = () => {
         </div>
     );
 };
+
 export default DetailUser;
