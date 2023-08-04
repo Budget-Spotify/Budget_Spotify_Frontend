@@ -8,12 +8,15 @@ import MenuAppBar from "./NavBar";
 import {useEffect, useState} from "react";
 import UserService from "../services/user.service";
 import Footer from "./Footer";
+import MusicPlayBar from "./MusicPlayBar";
 
 export default function SongUploaded() {
     const [search] = useOutletContext();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [songs, setSongs] = useState([]);
+    const [selectedSong, setSelectedSong] = useState({});
+    const [flag, setFlag] = useState(false);
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - songs.length) : 0;
@@ -25,6 +28,11 @@ export default function SongUploaded() {
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
+    };
+
+    const handleAvatarClick = (song) => {
+        setFlag(true);
+        setSelectedSong(song);
     };
 
     useEffect(() => {
@@ -69,7 +77,15 @@ export default function SongUploaded() {
                 ).map((song, index) => (
                     <tr key={song._id}>
                         <td>{index + 1}</td>
-                        <td>{song.avatar}</td>
+                        <td onClick={() => handleAvatarClick(song)}>
+                            <img
+                                src={song.avatar}
+                                alt="Error"
+                                style={{
+                                    width: '100px'
+                                }}
+                            />
+                        </td>
                         <td>
                             <Link to={`/song/detail/${song._id}`}>
                                 {song.songName}
@@ -115,6 +131,7 @@ export default function SongUploaded() {
                 </tfoot>
             </table>
             <Footer/>
+            {flag && <MusicPlayBar songUrl={selectedSong.fileURL} image={selectedSong.avatar}/>}
         </Root>
     );
 }
