@@ -1,19 +1,21 @@
 import * as React from 'react';
-import { styled } from '@mui/system';
+import {styled} from '@mui/system';
 import TablePagination, {
     tablePaginationClasses as classes,
 } from '@mui/base/TablePagination';
-import { useOutletContext } from "react-router-dom";
+import {useOutletContext} from "react-router-dom";
 import MenuAppBar from "./NavBar";
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 import AdminService from '../services/admin.service'
+import Footer from "./Footer";
 
 export default function UserList() {
     const [search] = useOutletContext();
-    const [data, setData] = useState({ list: [] });
+    const [data, setData] = useState({list: []});
     const [isLoading, setisLoading] = useState(false);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
     function getData() {
         setisLoading(true);
         AdminService.getUserList().then(res => {
@@ -22,6 +24,7 @@ export default function UserList() {
             setisLoading(false)
         })
     }
+
     useEffect(() => {
         getData()
     }, []);
@@ -50,75 +53,75 @@ export default function UserList() {
                 borderRadius: "10px",
             }}
         >
-            <MenuAppBar />
+            <MenuAppBar/>
             {isLoading ? (
-                <h2 style={{ textAlign: "center", margin: "150px", color: "#1DB954" }}>
+                <h2 style={{textAlign: "center", margin: "150px", color: "#1DB954"}}>
                     Loading...
                 </h2>
             ) : (
                 <div>
                     <h1>User List:</h1>
-                    <br />
+                    <br/>
                     <table aria-label="custom pagination table">
                         <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>User Name</th>
-                                <th>first Name</th>
-                                <th>Last Name</th>
-                            </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>User Name</th>
+                            <th>first Name</th>
+                            <th>Last Name</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {(rowsPerPage > 0
+                        {(rowsPerPage > 0
                                 ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 : rows
-                            ).map((row, index) => (
-                                <tr key={row.name}>
-                                    <td>{index + 1}</td>
-                                    <td>{row.username}</td>
-                                    <td>
-                                        {row.firstName}
-                                    </td>
-                                    <td>
-                                        {row.lastName}
-                                    </td>
-                                </tr>
-                            ))}
-                            {emptyRows > 0 && (
-                                <tr style={{ height: 41 * emptyRows }}>
-                                    <td colSpan={4} />
-                                </tr>
-                            )}
+                        ).map((row, index) => (
+                            <tr key={row.name}>
+                                <td>{index + 1}</td>
+                                <td>{row.username}</td>
+                                <td>
+                                    {row.firstName}
+                                </td>
+                                <td>
+                                    {row.lastName}
+                                </td>
+                            </tr>
+                        ))}
+                        {emptyRows > 0 && (
+                            <tr style={{height: 41 * emptyRows}}>
+                                <td colSpan={4}/>
+                            </tr>
+                        )}
                         </tbody>
                         <tfoot>
-                            <tr>
-                                <CustomTablePagination
-                                    rowsPerPageOptions={[10, 15, 20, { label: 'All', value: -1 }]}
-                                    colSpan={4}
-                                    count={rows.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    slotProps={{
-                                        select: {
-                                            'aria-label': 'rows per page',
-                                        },
-                                        actions: {
-                                            showFirstButton: true,
-                                            showLastButton: true,
-                                        },
-                                    }}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
-                            </tr>
+                        <tr>
+                            <CustomTablePagination
+                                rowsPerPageOptions={[10, 15, 20, {label: 'All', value: -1}]}
+                                colSpan={4}
+                                count={rows.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                slotProps={{
+                                    select: {
+                                        'aria-label': 'rows per page',
+                                    },
+                                    actions: {
+                                        showFirstButton: true,
+                                        showLastButton: true,
+                                    },
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
+                        </tr>
                         </tfoot>
                     </table>
                 </div>
             )}
+            <Footer/>
         </Root>
     );
 }
-
 
 
 const grey = {
@@ -128,7 +131,7 @@ const grey = {
 };
 
 const Root = styled('div')(
-    ({ theme }) => `
+    ({theme}) => `
   table {
     font-family: IBM Plex Sans, sans-serif;
     font-size: 0.875rem;

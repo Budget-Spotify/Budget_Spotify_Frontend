@@ -54,7 +54,7 @@ export default function AddSong() {
             uploader: '64ca21378646dc995d7f7683',
             isPublic: false
         },
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             try {
                 console.log(file)
                 console.log(image)
@@ -63,7 +63,7 @@ export default function AddSong() {
                 const fileRef = ref(storage, `/songs/${file.name}`);
                 const fileTask = uploadBytesResumable(fileRef, file)
 
-                imageTask.on(
+                await imageTask.on(
                     "state_changed",
                     (snapshot) => {
                         const percent = Math.round(
@@ -77,7 +77,7 @@ export default function AddSong() {
                         await formAdd.setFieldValue('avatar',avatar,false)
                     }
                 );
-                fileTask.on(
+                await fileTask.on(
                     "state_changed",
                     (snapshot) => {
                         const percent = Math.round(
@@ -91,8 +91,9 @@ export default function AddSong() {
                         await formAdd.setFieldValue('fileURL',fileURL,false)
                     }
                 );
+                console.log(formAdd.values)
                 UserService.addSong(formAdd.values)
-                    .then(res=>console.log(res))
+                    .then(res=>console.log("song added"))
                     .catch(err=>console.log(err))
             }
             catch (e) {
