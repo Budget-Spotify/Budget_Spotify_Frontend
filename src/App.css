@@ -28,3 +28,10 @@ body {
 ::-webkit-scrollbar-track {
     background-color: black;
 }
+
+.textFieldSignup-width {
+    width: 100%;
+}
+.textFieldLogin-width {
+    width: 100%;
+}
