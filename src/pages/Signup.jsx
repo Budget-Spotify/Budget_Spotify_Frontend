@@ -3,13 +3,10 @@ import * as Yup from 'yup';
 import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
-// import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField';
 import {useState} from "react";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import { styled } from '@mui/material/styles';
-import MuiTextField from '@mui/material/TextField';
 
-// Tạo theme mới với các giá trị màu thay thế
 const theme = createTheme({
     palette: {
         primary: {
@@ -19,30 +16,29 @@ const theme = createTheme({
             primary: '#ffffff', // Đổi màu chữ (text) thành trắng
             secondary: '#ffffff', // Đổi màu chữ phụ (secondary text) thành trắng
         },
-
-    }
-})
-
-const options = { // create custom textField with border
-    shouldForwardProp: (prop) => prop !== 'borderColor',
-};
-const outlinedSelectors = [
-    '& .MuiOutlinedInput-notchedOutline',
-    '&:hover .MuiOutlinedInput-notchedOutline',
-    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline',
-];
-const TextField = styled(
-    MuiTextField,
-    options,
-)(({ borderColor }) => ({
-    '& label.Mui-focused': {
-        color: borderColor,
     },
-    [outlinedSelectors.join(',')]: {
-        borderWidth: 1,
-        borderColor,
+    components: {
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& label.Mui-focused': {
+                        color: '#ffffff', // Màu chữ (text) khi label được focus
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderWidth: 2,
+                        borderColor: '#ffffff', // Màu viền (border) ban đầu
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#ffffff', // Màu viền khi hover
+                    },
+                    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#ffffff', // Màu viền khi input được chọn (focus)
+                    },
+                },
+            },
+        },
     },
-}));
+});
 
 export function SignupComponent() {
     const navigate = useNavigate();
