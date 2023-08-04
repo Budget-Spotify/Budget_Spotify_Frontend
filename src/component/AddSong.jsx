@@ -21,6 +21,30 @@ const style = {
   p: 4,
   display: "flex",
   flexDirection: "row",
+  color: "black",
+};
+const imageInputLabelStyle = {
+  display: "inline-block",
+  width: "20%",
+  textAlign: "left",
+  marginBottom: "5px"
+};
+
+const imageInputStyle = {
+  marginLeft: "10px",
+  maxWidth: "70%",
+  marginBottom:"5px"
+};
+
+const fileInputLabelStyle = {
+  display: "inline-block",
+  width: "20%",
+  textAlign: "left",
+};
+
+const fileInputStyle = {
+  marginLeft: "10px",
+  maxWidth: "70%",
 };
 
 export default function AddSong() {
@@ -135,7 +159,7 @@ export default function AddSong() {
       console.log(data);
       resetFormFileAndImage();
       formAdd.resetForm();
-      handleClose()
+      handleClose();
       UserService.addSong(data)
         .then((res) => console.log("song added"))
         .catch((err) => console.log(err));
@@ -195,10 +219,26 @@ export default function AddSong() {
               autoComplete="description"
               autoFocus
             />
-            <label htmlFor="avatar">Avatar:</label>
-            <input id="avatar" type="file" onChange={handleImageInput} />
-            <label htmlFor="song">Song:</label>
-            <input id="song" type="file" onChange={handleFileInput} />
+            <div>
+              <label htmlFor="avatar" style={imageInputLabelStyle}>
+                Avatar:
+              </label>
+              <input
+                id="avatar"
+                type="file"
+                onChange={handleImageInput}
+                style={imageInputStyle}
+              />
+              <label htmlFor="song" style={fileInputLabelStyle}>
+                Song:
+              </label>
+              <input
+                id="song"
+                type="file"
+                onChange={handleFileInput}
+                style={fileInputStyle}
+              />
+            </div>
             <Button
               type="submit"
               fullWidth
@@ -220,7 +260,15 @@ export default function AddSong() {
               alignItems: "center",
             }}
           >
-            <img src={imageSrc} alt="Image Preview" />
+            {imageSrc !== "" ? (
+              <img
+                src={imageSrc}
+                alt="Image Preview"
+                style={{ width: "80%", height: "80%" }}
+              />
+            ) : (
+              <p>Image Preview</p>
+            )}
           </div>
         </Box>
       </Modal>
