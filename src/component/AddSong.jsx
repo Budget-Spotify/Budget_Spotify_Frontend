@@ -63,40 +63,41 @@ export default function AddSong() {
                 const fileRef = ref(storage, `/songs/${file.name}`);
                 const fileTask = uploadBytesResumable(fileRef, file)
 
-                await imageTask.on(
-                    "state_changed",
-                    (snapshot) => {
-                        const percent = Math.round(
-                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                        );
-                        if(percent===100) console.log('image upload done');
-                    },
-                    (err) => console.log(err),
-                    async () => {
-                        let avatar = await getDownloadURL(imageTask.snapshot.ref);
-                        await formAdd.setFieldValue('avatar',avatar,false)
-                    }
-                );
-                await fileTask.on(
-                    "state_changed",
-                    (snapshot) => {
-                        const percent = Math.round(
-                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                        );
-                        if(percent===100) console.log('file upload done');
-                    },
-                    (err) => console.log(err),
-                    async () => {
-                        let fileURL = await getDownloadURL(fileTask.snapshot.ref);
-                        await formAdd.setFieldValue('fileURL',fileURL,false)
-                    }
-                );
+                await Promise.all([
+                    imageTask.on(
+                        "state_changed",
+                        (snapshot) => {
+                            const percent = Math.round(
+                                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                            );
+                            if (percent === 100) console.log('image upload done');
+                        },
+                        (err) => console.log(err),
+                        async () => {
+                            let avatar = await getDownloadURL(imageTask.snapshot.ref);
+                            await formAdd.setFieldValue('avatar', avatar, false)
+                        }
+                    ),
+                    fileTask.on(
+                        "state_changed",
+                        (snapshot) => {
+                            const percent = Math.round(
+                                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                            );
+                            if (percent === 100) console.log('file upload done');
+                        },
+                        (err) => console.log(err),
+                        async () => {
+                            let fileURL = await getDownloadURL(fileTask.snapshot.ref);
+                            await formAdd.setFieldValue('fileURL', fileURL, false)
+                        }
+                    )
+                ])
                 console.log(formAdd.values)
                 UserService.addSong(formAdd.values)
-                    .then(res=>console.log("song added"))
-                    .catch(err=>console.log(err))
-            }
-            catch (e) {
+                    .then(res => console.log("song added"))
+                    .catch(err => console.log(err))
+            } catch (e) {
                 console.log(e.message)
             }
         },
