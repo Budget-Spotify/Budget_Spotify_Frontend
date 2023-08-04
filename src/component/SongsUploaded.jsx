@@ -9,15 +9,16 @@ import AddSong from "./AddSong";
 import {useEffect, useState} from "react";
 import UserService from "../services/user.service";
 import Footer from "./Footer";
-import MusicPlayBar from "./MusicPlayBar";
+import {useDispatch} from "react-redux";
+import {setSong} from "../redux/features/songs/songSlice";
 
 export default function SongUploaded() {
     const [search] = useOutletContext();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [songs, setSongs] = useState([]);
-    const [selectedSong, setSelectedSong] = useState({});
-    const [flag, setFlag] = useState(false);
+    const dispatch = useDispatch();
+    const [songsListChange, setSongsListChange] = useState(null);
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - songs.length) : 0;
@@ -31,11 +32,6 @@ export default function SongUploaded() {
         setPage(0);
     };
 
-    const handleAvatarClick = (song) => {
-        setFlag(true);
-        setSelectedSong(song);
-    };
-
     useEffect(() => {
         UserService.getSongs()
             .then(res => {
@@ -44,7 +40,7 @@ export default function SongUploaded() {
             .catch(err => {
                 console.log(err)
             })
-    }, []);
+    }, [songsListChange]);
 
     return (
         <Root
@@ -61,7 +57,7 @@ export default function SongUploaded() {
             <MenuAppBar/>
             <h2 className="text-2xl font-semibold">Songs Uploaded</h2>
             <br/>
-            <AddSong/>
+            <AddSong reload={setSongsListChange}/>
             <table aria-label="custom pagination table">
                 <thead>
                 <tr>
@@ -79,12 +75,19 @@ export default function SongUploaded() {
                 ).map((song, index) => (
                     <tr key={song._id}>
                         <td>{index + 1}</td>
-                        <td onClick={() => handleAvatarClick(song)}>
+                        <td
+                            onClick={() => dispatch(setSong(song))}
+                            style={{
+                                cursor: "pointer",
+                            }}
+                        >
                             <img
                                 src={song.avatar}
                                 alt="Error"
                                 style={{
-                                    width: '100px'
+                                    width: '100px',
+                                    height: '100px',
+                                    borderRadius: '50%',
                                 }}
                             />
                         </td>
@@ -133,7 +136,6 @@ export default function SongUploaded() {
                 </tfoot>
             </table>
             <Footer/>
-            {flag && <MusicPlayBar songUrl={selectedSong.fileURL} image={selectedSong.avatar}/>}
         </Root>
     );
 }
@@ -156,12 +158,18 @@ const Root = styled('div')(
   td,
   th {
     border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
-    text-align: left;
+    text-align: center;
     padding: 8px;
   }
 
   th {
     background-color: ${theme.palette.mode === 'dark' ? grey[900] : 'grey'};
+  }
+  
+  td img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
   }
   `,
 );

@@ -60,7 +60,7 @@ export default function UserList() {
                 </h2>
             ) : (
                 <div>
-                    <h1>User List:</h1>
+                    <h2 className="text-2xl font-semibold">List Of Users</h2>
                     <br/>
                     <table aria-label="custom pagination table">
                         <thead>
