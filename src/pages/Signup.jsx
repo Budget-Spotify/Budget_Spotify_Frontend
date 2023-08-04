@@ -219,7 +219,7 @@ export function SignupComponent() {
                                 <div className="textInputDiv flex flex-col space-y-2 w-full">
                                     <label className="font-semibold pt-5">Gender</label>
                                     <select
-                                        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                                        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 bg-black text-white"
                                         name="gender"
                                         value={formik.values.gender}
                                         onChange={formik.handleChange}
@@ -230,7 +230,6 @@ export function SignupComponent() {
                                         <option value="other">Other</option>
                                     </select>
                                 </div>
-                                {formik.errors.gender && <div style={{color: 'red'}}>{formik.errors.gender}</div>}
 
                                 <div className="w-full flex items-center justify-center my-8">
                                     <button className="bg-green-400 font-semibold p-3 px-10 rounded-full" type="submit">
