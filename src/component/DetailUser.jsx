@@ -34,7 +34,7 @@ return (
                     </div>
                     <div class="container">
                         <div className="avatar">
-                            <img src="https://scontent.fhan17-1.fna.fbcdn.net/v/t39.30808-6/344544622_582258900551376_4176474794430710547_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=lzWCZ30j7hgAX_BNQDP&_nc_ht=scontent.fhan17-1.fna&oh=00_AfCukd50pGVHSTivMrBxhfXgCFzQk0bzjDQ16JbwcM9pCQ&oe=64D0A1FC" alt="" />
+                            <img src={userLogin.avatar} alt="" />
                         </div>
                         <div class="name">
                             <h1>Username: {userLogin.username} </h1>

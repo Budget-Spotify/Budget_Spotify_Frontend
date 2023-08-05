@@ -30,7 +30,7 @@ export default function MenuAppBar() {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userLogin');
-        navigate('/login');
+        navigate('/');
     }
 
     return (
@@ -58,12 +58,18 @@ export default function MenuAppBar() {
                                 aria-controls={open ? 'account-menu' : undefined}
                                 aria-haspopup="true"
                                 aria-expanded={open ? 'true' : undefined}
-                            >   {userLogin && userLogin.avatar ? (
-                                <Avatar sx={{ width: 32, height: 32 }}><img src={userLogin.avatar}></img></Avatar>
+                            >   {userLogin ? (
+                                userLogin.avatar ? (
+                                    <Avatar sx={{ width: 32, height: 32 }}>
+                                        <img src={userLogin.avatar}></img>
+                                    </Avatar>
+                                ) : (
+                                    <Avatar sx={{ width: 32, height: 32 }}>{userLogin.firstName}</Avatar>
+                                )
                             ) : (
-                                <Avatar sx={{ width: 32, height: 32 }}>{userLogin.firstName}</Avatar>
+                                <Avatar sx={{ width: 32, height: 32 }}>U</Avatar>
                             )}
-                                
+
                             </IconButton>
                             <Menu
                                 anchorEl={anchorEl}
