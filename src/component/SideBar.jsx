@@ -21,7 +21,7 @@ export default function SideBar({handleChange}) {
             <div className="logoDiv">
                 <img src={logo} alt="logo"/>
                 <h1 className="text-3xl font-bold">
-                    DieC<span style={{color: "#1DB954"}}>Team</span>
+                    <Link to={"/"}>DieC<span style={{color: "#1DB954"}}>Team</span></Link>
                 </h1>
             </div>
             <div className="linkDiv">

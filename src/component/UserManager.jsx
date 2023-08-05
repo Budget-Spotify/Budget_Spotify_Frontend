@@ -76,7 +76,7 @@ export default function UserList() {
                                 ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 : rows
                         ).map((row, index) => (
-                            <tr key={row.name}>
+                            <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{row.username}</td>
                                 <td>
