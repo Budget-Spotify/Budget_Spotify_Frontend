@@ -47,7 +47,7 @@ const editpasswordSchema = Yup.object().shape({
     newpassword: Yup.string()
         .matches(
             /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/,
-            'Password phải có tối thiểu 1 ký tự hoa, 1 ký tự số và 1 ký tự đặc biệt, và ít nhất 8 ký tự'
+            'Password tối thiểu 1 chữ hoa,1 số và 1 ký tự đặc biệt,8 ký tự trở lên'
         ),
 });
 
@@ -112,42 +112,40 @@ const EditPassword = () => {
                                 type="password"
                                 label="Current Password"
                                 placeholder="Enter Current Password"
-                                className="my-6"
+                                className="my-8"
                                 name="oldpassword"
                                 onChange={formEdit.handleChange}
                                 value={formEdit.values.oldpassword}
                                 inputProps={{ style: { color: "white" } }}
                                 fullWidth
                                 margin="normal"
-                                sx={{ background: "black" }}
-
                             />
                             <TextField
                                 type="password"
                                 label="New Password"
                                 placeholder="Enter New Password"
-                                className="mb-6"
+                                className="my-8"
                                 onChange={formEdit.handleChange}
                                 value={formEdit.values.newpassword}
                                 name="newpassword"
                                 inputProps={{ style: { color: "white" } }}
                                 fullWidth
                                 margin="normal"
-                                sx={{ background: "black" }}
                             />
-                            {formEdit.errors.newpassword && <div style={{ color: 'red' }}>{formEdit.errors.newpassword}</div>}
+                            {formEdit.errors.newpassword && (
+                                <div style={{ color: 'red' }}>{formEdit.errors.newpassword}</div>
+                            )}
                             <TextField
                                 type="password"
                                 label="Confirm newpassword"
                                 placeholder="reEnter new password"
-                                className="mb-6"
+                                className="my-8"
                                 onChange={formEdit.handleChange}
                                 value={formEdit.values.newpasswordconfirm}
                                 name="newpasswordconfirm"
                                 inputProps={{ style: { color: "white" } }}
                                 fullWidth
                                 margin="normal"
-                                sx={{ background: "black" }}
                             />
 
                             <div className="w-full flex items-center justify-center my-8">
