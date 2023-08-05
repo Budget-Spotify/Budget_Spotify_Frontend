@@ -98,7 +98,7 @@ export default function MenuAppBar() {
                             >
                                 {userLogin ? (
                                     <div>
-                                        <MenuItem ><Link to={`/info/detail/${userLogin._id}`}>Profile</Link></MenuItem>
+                                        <MenuItem ><Link to={`/info/detail`}>Profile</Link></MenuItem>
                                         <MenuItem ><Link to={'/info/editpassword'}>Change Password</Link></MenuItem>
                                         <MenuItem onClick={handleLogout} >Log out</MenuItem>
                                     </div>) : 

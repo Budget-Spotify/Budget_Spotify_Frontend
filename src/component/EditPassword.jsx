@@ -10,6 +10,39 @@ import { useEffect } from "react";
 import * as Yup from 'yup';
 import { useOutletContext } from "react-router-dom";
 import Footer from "./Footer";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#ffffff', // Đổi màu chữ (text) thành trắng
+        },
+        text: {
+            primary: '#ffffff', // Đổi màu chữ (text) thành trắng
+            secondary: '#ffffff', // Đổi màu chữ phụ (secondary text) thành trắng
+        },
+    },
+    components: {
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& label.Mui-focused': {
+                        color: '#ffffff', // Màu chữ (text) khi label được focus
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderWidth: 2,
+                        borderColor: '#ffffff', // Màu viền (border) ban đầu
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#ffffff', // Màu viền khi hover
+                    },
+                    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#ffffff', // Màu viền khi input được chọn (focus)
+                    },
+                },
+            },
+        },
+    },
+});
 const editpasswordSchema = Yup.object().shape({
     newpassword: Yup.string()
         .matches(
@@ -24,7 +57,7 @@ const EditPassword = () => {
     const userLogin = JSON.parse(userLoginJSON);
     const [errMessage, setErrorMessage] = useState("");
     const navigate = useNavigate()
-    
+
     useEffect(() => {
     }, [errMessage]);
     const formEdit = useFormik({
@@ -64,67 +97,71 @@ const EditPassword = () => {
             borderRadius: "10px",
         }} >
             <MenuAppBar />
-            <div className="w-full h-full flex flex-col items-center">
-                <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
-                    {/* <Icon icon="logos:spotify" width="150" /> */}
-                </div>
-                <div className="inputRegion w-full px-4 sm:w-2/3 md:w-1/2 lg:w-1/3 py-10 flex flex-col items-center">
-                    <div className="font-bold mb-4 text-2xl">
-                        Security Management
+            <ThemeProvider theme={theme}>
+                <div className="w-full h-full flex flex-col items-center">
+                    <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
+                        {/* <Icon icon="logos:spotify" width="150" /> */}
                     </div>
-                    <form onSubmit={formEdit.handleSubmit}>
-                        <p style={{ color: "red" }}>{errMessage}</p>
-                        <TextField
-                            type="password"
-                            label="Current Password"
-                            placeholder="Enter Current Password"
-                            className="my-6"
-                            name="oldpassword"
-                            onChange={formEdit.handleChange}
-                            value={formEdit.values.oldpassword}
-                            inputProps={{ style: { color: "black" } }}
-                            fullWidth
-                            margin="normal"
-                            style={{ background: "white" }}
-                            
-                        />
-                        <TextField
-                            type="password"
-                            label="New Password"
-                            placeholder="Enter New Password"
-                            className="mb-6"
-                            onChange={formEdit.handleChange}
-                            value={formEdit.values.newpassword}
-                            name="newpassword"
-                            inputProps={{ style: { color: "black" } }}
-                            fullWidth
-                            margin="normal"
-                            style={{ background: "white" }}
-                        />
-                        {formEdit.errors.newpassword && <div style={{ color: 'red' }}>{formEdit.errors.newpassword}</div>}
-                        <TextField
-                            type="password"
-                            label="Confirm newpassword"
-                            placeholder="reEnter new password"
-                            className="mb-6"
-                            onChange={formEdit.handleChange}
-                            value={formEdit.values.newpasswordconfirm}
-                            name="newpasswordconfirm"
-                            inputProps={{ style: { color: "black" } }}
-                            fullWidth
-                            margin="normal"
-                            style={{ background: "white" }}
-                        />
-
-                        <div className="w-full flex items-center justify-center my-8">
-                            <button className="bg-green-400 font-semibold p-3 px-10 rounded-full" style={{ width: "100%" }}>
-                                Edit password
-                            </button>
+                    <div className="inputRegion w-full px-4 sm:w-2/3 md:w-1/2 lg:w-1/3 py-10 flex flex-col items-center">
+                        <div className="font-bold mb-4 text-2xl">
+                            Security Management
                         </div>
-                    </form>
+                        <form onSubmit={formEdit.handleSubmit}>
+                            <p style={{ color: "red" }}>{errMessage}</p>
+                            <TextField
+                                type="password"
+                                label="Current Password"
+                                placeholder="Enter Current Password"
+                                className="my-6"
+                                name="oldpassword"
+                                onChange={formEdit.handleChange}
+                                value={formEdit.values.oldpassword}
+                                inputProps={{ style: { color: "white" } }}
+                                fullWidth
+                                margin="normal"
+                                sx={{ background: "black" }}
+
+                            />
+                            <TextField
+                                type="password"
+                                label="New Password"
+                                placeholder="Enter New Password"
+                                className="mb-6"
+                                onChange={formEdit.handleChange}
+                                value={formEdit.values.newpassword}
+                                name="newpassword"
+                                inputProps={{ style: { color: "white" } }}
+                                fullWidth
+                                margin="normal"
+                                sx={{ background: "black" }}
+                            />
+                            {formEdit.errors.newpassword && <div style={{ color: 'red' }}>{formEdit.errors.newpassword}</div>}
+                            <TextField
+                                type="password"
+                                label="Confirm newpassword"
+                                placeholder="reEnter new password"
+                                className="mb-6"
+                                onChange={formEdit.handleChange}
+                                value={formEdit.values.newpasswordconfirm}
+                                name="newpasswordconfirm"
+                                inputProps={{ style: { color: "white" } }}
+                                fullWidth
+                                margin="normal"
+                                sx={{ background: "black" }}
+                            />
+
+                            <div className="w-full flex items-center justify-center my-8">
+                                <button className="bg-green-400 font-semibold p-3 px-10 rounded-full" style={{ width: "100%" }}>
+                                    Edit password
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <Footer/>
+
+            </ThemeProvider>
+
+            <Footer />
         </div>
     );
 };

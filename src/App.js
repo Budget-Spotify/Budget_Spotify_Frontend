@@ -25,7 +25,7 @@ function App() {
                     <Route path="/users-manager" element={<UserList/>}/>
                     <Route path="/song/detail/:id" element={<SongCardDetail/>}/>
                     <Route path="/info/editpassword" element={<EditPassword/>}/>
-                    <Route path="/info/detail/:id" element={<DetailUser/>}/>
+                    <Route path="/info/detail" element={<DetailUser/>}/>
                 </Route>
                 <Route path="/login" element={<LoginComponent/>}/>
                 <Route path="/signup" element={<SignupComponent/>}/>
