@@ -4,6 +4,7 @@ import MenuAppBar from "./NavBar";
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import Footer from "./Footer";
+import EditInfo from "./EditInfo";
 
 
 const DetailUser = () => {
@@ -11,8 +12,11 @@ const DetailUser = () => {
     const [isLoading, setisLoading] = useState(false);
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
-    
-return (
+    const [user,setUser]=useState({})
+    useEffect(() => {
+        setUser(userLogin)
+    }, [user]);
+    return (
 
         <div style={{
             marginLeft: "20.5%",
@@ -34,26 +38,30 @@ return (
                     </div>
                     <div class="container">
                         <div className="avatar">
-                            <img src={userLogin.avatar} alt="" />
+                            <img src={user.avatar} alt="" />
                         </div>
                         <div class="name">
-                            <h1>Username: {userLogin.username} </h1>
+                            <h1>Username: {user.username} </h1>
                             <ul class="contact">
                                 <li>
-                                    <span>Role:</span> {userLogin.role}
+                                    <span>First Name:</span> {user.firstName}
                                 </li>
                                 <li>
-                                    <span>PhoneNumber:</span> {userLogin.phoneNumber}
+                                    <span>Last Name:</span> {user.lastName}
                                 </li>
                                 <li>
-                                    <span>Gender:</span> {userLogin.gender}
+                                    <span>Role:</span> {user.role}
+                                </li>
+                                <li>
+                                    <span>PhoneNumber:</span> {user.phoneNumber}
+                                </li>
+                                <li>
+                                    <span>Gender:</span> {user.gender}
                                 </li>
                             </ul>
                         </div>
                         <div className="flex justify-end">
-                            <button className="bg-green-400 font-semibold p-3 px-10 rounded-full " type="submit">
-                                Edit
-                            </button>
+                            <EditInfo />
                         </div>
                     </div>
                 </div>

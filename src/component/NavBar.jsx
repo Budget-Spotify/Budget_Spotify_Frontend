@@ -108,8 +108,8 @@ export default function MenuAppBar() {
                             >
                                 {userLogin ? (
                                     <div>
-                                        <MenuItem ><Link to={`/info/detail`}>Profile</Link></MenuItem>
-                                        <MenuItem ><Link to={'/info/editpassword'}>Change Password</Link></MenuItem>
+                                        <MenuItem ><Link style={{ width: '100%', display: 'block' }} to={`/info/detail`}>Profile</Link></MenuItem>
+                                        <MenuItem ><Link style={{ width: '100%', display: 'block' }} to={'/info/editpassword'}>Change Password</Link></MenuItem>
                                         <MenuItem onClick={handleLogout} >Log out</MenuItem>
                                     </div>) :
                                     (

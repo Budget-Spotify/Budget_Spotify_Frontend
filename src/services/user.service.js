@@ -20,6 +20,9 @@ class UserService {
        return await axios.get('http://localhost:8000/user/info/'+id)
 
     }
+    static async editInfo(data){
+        return await axios.put('http://localhost:8000/user/editinfo',data)
+    }
 }
 
 export default UserService;
