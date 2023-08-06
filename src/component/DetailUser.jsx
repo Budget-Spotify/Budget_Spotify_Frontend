@@ -1,23 +1,13 @@
-import PasswordInput from "../component/shared/PasswordInput";
 import { useState } from "react";
 import MenuAppBar from "./NavBar";
-import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import Footer from "./Footer";
 import EditInfo from "./EditInfo";
-
-
 const DetailUser = () => {
     const [search] = useOutletContext();
-    const [isLoading, setisLoading] = useState(false);
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
-    const [user,setUser]=useState({})
-    useEffect(() => {
-        setUser(userLogin)
-    }, [user]);
     return (
-
         <div style={{
             marginLeft: "20.5%",
             marginBottom: "155px",
@@ -38,25 +28,25 @@ const DetailUser = () => {
                     </div>
                     <div class="container">
                         <div className="avatar">
-                            <img src={user.avatar} alt="" />
+                            <img src={userLogin.avatar} alt="" />
                         </div>
                         <div class="name">
-                            <h1>Username: {user.username} </h1>
+                            <h1>Username: {userLogin.username} </h1>
                             <ul class="contact">
                                 <li>
-                                    <span>First Name:</span> {user.firstName}
+                                    <span>First Name:</span> {userLogin.firstName}
                                 </li>
                                 <li>
-                                    <span>Last Name:</span> {user.lastName}
+                                    <span>Last Name:</span> {userLogin.lastName}
                                 </li>
                                 <li>
-                                    <span>Role:</span> {user.role}
+                                    <span>Role:</span> {userLogin.role}
                                 </li>
                                 <li>
-                                    <span>PhoneNumber:</span> {user.phoneNumber}
+                                    <span>PhoneNumber:</span> {userLogin.phoneNumber}
                                 </li>
                                 <li>
-                                    <span>Gender:</span> {user.gender}
+                                    <span>Gender:</span> {userLogin.gender}
                                 </li>
                             </ul>
                         </div>

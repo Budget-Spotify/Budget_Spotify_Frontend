@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import { Add } from "@mui/icons-material";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import storage from "../config/firebase.config";
@@ -111,6 +110,7 @@ export default function EditInfo({ reload }) {
             }
             const userString = JSON.stringify(dataLogin);
             localStorage.setItem("userLogin", userString);
+            window.location.reload()
         }
     }, [haveImage]);
     return (
