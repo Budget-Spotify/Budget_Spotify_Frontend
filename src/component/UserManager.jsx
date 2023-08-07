@@ -60,7 +60,7 @@ export default function UserList() {
                 </h2>
             ) : (
                 <div>
-                    <h1>User List:</h1>
+                    <h2 className="text-2xl font-semibold">List Of Users</h2>
                     <br/>
                     <table aria-label="custom pagination table">
                         <thead>
@@ -76,7 +76,7 @@ export default function UserList() {
                                 ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 : rows
                         ).map((row, index) => (
-                            <tr key={row.name}>
+                            <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{row.username}</td>
                                 <td>
