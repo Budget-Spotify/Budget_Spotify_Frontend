@@ -84,7 +84,7 @@ export default function SongCardDetail() {
                     <CardMedia
                         component="img"
                         height="194"
-                        image="https://images.genius.com/64e8b829027624906b9832567259a0e1.1000x1000x1.jpg"
+                        image={song.avatar}
                         alt="Paella dish"
                         sx={{
                             width: '192px',
