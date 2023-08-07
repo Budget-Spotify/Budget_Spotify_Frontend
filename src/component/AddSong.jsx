@@ -65,7 +65,7 @@ export default function AddSong({ reload }) {
     setOpen(true);
   };
   const handleClose = () => {
-    setImageSrc('')
+    setImageSrc("");
     setOpen(false);
   };
   const handleFileInput = (e) => setFile(e.target.files[0]);
@@ -167,12 +167,14 @@ export default function AddSong({ reload }) {
         fileURL: file,
         avatar: image,
       };
-      resetFormFileAndImage();
-      formAdd.resetForm();
-      handleClose();
       UserService.addSong(data)
-        .then((res) => reload(data))
-        .catch((err) => console.log(err));
+        .then((res) => {
+          resetFormFileAndImage();
+          formAdd.resetForm();
+          handleClose();
+          reload(data);
+        })
+        .catch((err) => setShowError(err.response.data.message));
     }
   }, [haveFile, haveImage]);
   return (
@@ -205,7 +207,11 @@ export default function AddSong({ reload }) {
         >
           <div style={{ position: "relative", width: "50%" }}>
             <h1
-              style={showError === "" || showError === "Submitting..." ? { color: "black" } : { color: "red" }}
+              style={
+                showError === "" || showError === "Submitting..."
+                  ? { color: "black" }
+                  : { color: "red" }
+              }
             >
               {showError === "" ? "Add a new song" : showError}
             </h1>
