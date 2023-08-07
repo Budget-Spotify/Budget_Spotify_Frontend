@@ -8,7 +8,6 @@ const DetailUser = () => {
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
     const [userChange, setUserChange] = useState(null);
-    console.log(userLogin);
     return (
         <div style={{
             marginLeft: "20.5%",
