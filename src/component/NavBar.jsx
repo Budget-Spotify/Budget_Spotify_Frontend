@@ -64,7 +64,7 @@ export default function MenuAppBar() {
                                         <img src={userLogin.avatar}></img>
                                     </Avatar>
                                 ) : (
-                                    <Avatar sx={{ width: 32, height: 32 }}>{userLogin.firstName}</Avatar>
+                                    <Avatar sx={{ width: 32, height: 32 }}>{userLogin.firstName.charAt(0)}</Avatar>
                                 )
                             ) : (
                                 <Avatar sx={{ width: 32, height: 32 }}>U</Avatar>
@@ -108,8 +108,8 @@ export default function MenuAppBar() {
                             >
                                 {userLogin ? (
                                     <div>
-                                        <MenuItem ><Link to={`/info/detail`}>Profile</Link></MenuItem>
-                                        <MenuItem ><Link to={'/info/editpassword'}>Change Password</Link></MenuItem>
+                                        <MenuItem ><Link style={{ width: '100%', display: 'block' }} to={`/info/detail`}>Profile</Link></MenuItem>
+                                        <MenuItem ><Link style={{ width: '100%', display: 'block' }} to={'/info/editpassword'}>Change Password</Link></MenuItem>
                                         <MenuItem onClick={handleLogout} >Log out</MenuItem>
                                     </div>) :
                                     (
