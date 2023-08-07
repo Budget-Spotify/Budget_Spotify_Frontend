@@ -2,11 +2,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import {Add} from "@mui/icons-material";
-import {useFormik} from "formik";
-import {useEffect, useState} from "react";
+import { Add } from "@mui/icons-material";
+import { useFormik } from "formik";
+import { useEffect, useState } from "react";
 import storage from "../config/firebase.config";
-import {ref, getDownloadURL, uploadBytesResumable} from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import UserService from "../services/user.service";
 
 const style = {
@@ -27,13 +27,13 @@ const imageInputLabelStyle = {
   display: "inline-block",
   width: "20%",
   textAlign: "left",
-  marginBottom: "5px"
+  marginBottom: "5px",
 };
 
 const imageInputStyle = {
   marginLeft: "10px",
   maxWidth: "70%",
-  marginBottom:"5px"
+  marginBottom: "5px",
 };
 
 const fileInputLabelStyle = {
@@ -47,89 +47,93 @@ const fileInputStyle = {
   maxWidth: "70%",
 };
 
-export default function AddSong({reload}) {
-    const [open, setOpen] = useState(false);
+export default function AddSong({ reload }) {
+  const [open, setOpen] = useState(false);
 
-    const [file, setFile] = useState(null);
-    const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
+  const [image, setImage] = useState(null);
 
-    const [imageSrc, setImageSrc] = useState("");
+  const [imageSrc, setImageSrc] = useState("");
 
-    const [haveFile, setHaveFile] = useState(false);
-    const [haveImage, setHaveImage] = useState(false);
+  const [haveFile, setHaveFile] = useState(false);
+  const [haveImage, setHaveImage] = useState(false);
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const handleFileInput = (e) => setFile(e.target.files[0]);
-    const handleImageInput = (e) => {
-        setImage(e.target.files[0]);
-        setImageSrc(URL.createObjectURL(e.target.files[0]));
-    };
-    const resetFormFileAndImage = () => {
-        setFile(null);
-        setImage(null);
-        setHaveFile(false);
-        setHaveImage(false);
-    };
+  const [showError, setShowError] = useState("");
 
-    const handleUploadFile = () => {
-        return new Promise((resolve, reject) => {
-            console.log(file);
-            console.log(image);
-            const imgRef = ref(storage, `/images/${image.name}`);
-            const imageTask = uploadBytesResumable(imgRef, image);
-            const fileRef = ref(storage, `/songs/${file.name}`);
-            const fileTask = uploadBytesResumable(fileRef, file);
+  const handleOpen = () => {
+    setShowError("");
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setImageSrc("");
+    setOpen(false);
+  };
+  const handleFileInput = (e) => setFile(e.target.files[0]);
+  const handleImageInput = (e) => {
+    setImage(e.target.files[0]);
+    setImageSrc(URL.createObjectURL(e.target.files[0]));
+  };
+  const resetFormFileAndImage = () => {
+    setFile(null);
+    setImage(null);
+    setHaveFile(false);
+    setHaveImage(false);
+  };
 
-            imageTask.on(
-                "state_changed",
-                (snapshot) => {
-                    const percent = Math.round(
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    );
-                    if (percent === 100) console.log("img uploaded");
-                },
-                (err) => {
-                    console.log(err);
-                    reject(err);
-                },
-                () => {
-                    getDownloadURL(imageTask.snapshot.ref)
-                        .then((avatarFirebase) => {
-                            console.log(avatarFirebase);
-                            setImage(avatarFirebase);
-                            setHaveImage(true);
-                            resolve();
-                        })
-                        .catch((err) => reject(err));
-                }
-            );
+  const handleUploadFile = () => {
+    return new Promise((resolve, reject) => {
+      const imgRef = ref(storage, `/images/${image.name}`);
+      const imageTask = uploadBytesResumable(imgRef, image);
+      const fileRef = ref(storage, `/songs/${file.name}`);
+      const fileTask = uploadBytesResumable(fileRef, file);
 
-            fileTask.on(
-                "state_changed",
-                (snapshot) => {
-                    const percent = Math.round(
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    );
-                    if (percent === 100) console.log("file uploaded");
-                },
-                (err) => {
-                    console.log(err);
-                    reject(err);
-                },
-                () => {
-                    getDownloadURL(fileTask.snapshot.ref)
-                        .then((fileFirebase) => {
-                            console.log(fileFirebase);
-                            setFile(fileFirebase);
-                            setHaveFile(true);
-                            resolve();
-                        })
-                        .catch((err) => reject(err));
-                }
-            );
-        });
-    };
+      imageTask.on(
+        "state_changed",
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          if (percent === 100) console.log("img uploaded");
+        },
+        (err) => {
+          console.log(err);
+          reject(err);
+        },
+        () => {
+          getDownloadURL(imageTask.snapshot.ref)
+            .then((avatarFirebase) => {
+              setImage(avatarFirebase);
+              setHaveImage(true);
+              resolve();
+            })
+            .catch((err) => reject(err));
+        }
+      );
+
+      fileTask.on(
+        "state_changed",
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          if (percent === 100) console.log("file uploaded");
+        },
+        (err) => {
+          console.log(err);
+          reject(err);
+        },
+        () => {
+          getDownloadURL(fileTask.snapshot.ref)
+            .then((fileFirebase) => {
+              setFile(fileFirebase);
+              setHaveFile(true);
+              resolve();
+            })
+            .catch((err) => reject(err));
+        }
+      );
+    });
+  };
 
   const formAdd = useFormik({
     initialValues: {
@@ -143,6 +147,13 @@ export default function AddSong({reload}) {
     },
     onSubmit: (values) => {
       try {
+        if (!file || !image) {
+          return setShowError("Avatar/File is required");
+        }
+        if (formAdd.values.songName === "") {
+          return setShowError("SongName is requried");
+        }
+        setShowError("Submitting...");
         handleUploadFile();
       } catch (e) {
         console.log(e);
@@ -156,13 +167,14 @@ export default function AddSong({reload}) {
         fileURL: file,
         avatar: image,
       };
-      console.log(data);
-      resetFormFileAndImage();
-      formAdd.resetForm();
-      handleClose();
       UserService.addSong(data)
-        .then((res) => console.log("song added"))
-        .catch((err) => console.log(err));
+        .then((res) => {
+          resetFormFileAndImage();
+          formAdd.resetForm();
+          handleClose();
+          reload(data);
+        })
+        .catch((err) => setShowError(err.response.data.message));
     }
   }, [haveFile, haveImage]);
   return (
@@ -194,7 +206,15 @@ export default function AddSong({reload}) {
           sx={style}
         >
           <div style={{ position: "relative", width: "50%" }}>
-            <h1>Add a new song</h1>
+            <h1
+              style={
+                showError === "" || showError === "Submitting..."
+                  ? { color: "black" }
+                  : { color: "red" }
+              }
+            >
+              {showError === "" ? "Add a new song" : showError}
+            </h1>
             <TextField
               margin="normal"
               required
