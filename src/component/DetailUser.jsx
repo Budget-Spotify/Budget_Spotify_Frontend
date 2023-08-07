@@ -1,19 +1,14 @@
-import PasswordInput from "../component/shared/PasswordInput";
 import { useState } from "react";
 import MenuAppBar from "./NavBar";
-import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import Footer from "./Footer";
-
-
+import EditInfo from "./EditInfo";
 const DetailUser = () => {
     const [search] = useOutletContext();
-    const [isLoading, setisLoading] = useState(false);
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
-    
-return (
-
+    const [userChange, setUserChange] = useState(null);
+    return (
         <div style={{
             marginLeft: "20.5%",
             marginBottom: "155px",
@@ -32,13 +27,19 @@ return (
                     <div className="font-bold mb-4 text-2xl">
                         <h1>Your Profile</h1>
                     </div>
-                    <div class="container">
+                    <div className="container">
                         <div className="avatar">
                             <img src={userLogin.avatar} alt="" />
                         </div>
-                        <div class="name">
+                        <div className="name">
                             <h1>Username: {userLogin.username} </h1>
-                            <ul class="contact">
+                            <ul className="contact">
+                                <li>
+                                    <span>First Name:</span> {userLogin.firstName}
+                                </li>
+                                <li>
+                                    <span>Last Name:</span> {userLogin.lastName}
+                                </li>
                                 <li>
                                     <span>Role:</span> {userLogin.role}
                                 </li>
@@ -51,9 +52,7 @@ return (
                             </ul>
                         </div>
                         <div className="flex justify-end">
-                            <button className="bg-green-400 font-semibold p-3 px-10 rounded-full " type="submit">
-                                Edit
-                            </button>
+                            <EditInfo reload={setUserChange}/>
                         </div>
                     </div>
                 </div>

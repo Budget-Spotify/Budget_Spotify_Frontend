@@ -2,13 +2,12 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import {Add} from "@mui/icons-material";
-import {useFormik} from "formik";
-import {useEffect, useState} from "react";
+import { useFormik } from "formik";
+import { useEffect, useState } from "react";
 import storage from "../config/firebase.config";
-import {ref, getDownloadURL, uploadBytesResumable} from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import UserService from "../services/user.service";
-
+import * as Yup from 'yup';
 const style = {
     position: "absolute",
     top: "50%",
@@ -27,66 +26,42 @@ const imageInputLabelStyle = {
     display: "inline-block",
     width: "20%",
     textAlign: "left",
-    marginBottom: "5px",
+    marginBottom: "5px"
 };
 
 const imageInputStyle = {
     marginLeft: "10px",
     maxWidth: "70%",
-    marginBottom: "5px",
+    marginBottom: "5px"
 };
-
-const fileInputLabelStyle = {
-    display: "inline-block",
-    width: "20%",
-    textAlign: "left",
-};
-
-const fileInputStyle = {
-    marginLeft: "10px",
-    maxWidth: "70%",
-};
-
-export default function AddSong({reload}) {
+const validationSchema = Yup.object({
+    firstName: Yup.string().required('First name is required'),
+    lastName: Yup.string().required('Last name is required'),
+    phoneNumber: Yup.string().required('Phone number is required'),
+    gender: Yup.string().required('Gender is required'),
+});
+export default function EditInfo({ reload }) {
     const [open, setOpen] = useState(false);
-
-    const [file, setFile] = useState(null);
-    const [image, setImage] = useState(null);
-
+    const [image, setImage] = useState("");
     const [imageSrc, setImageSrc] = useState("");
-
-    const [haveFile, setHaveFile] = useState(false);
     const [haveImage, setHaveImage] = useState(false);
-
-    const [showError, setShowError] = useState("");
-
-    const handleOpen = () => {
-        setShowError("");
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setImageSrc("");
-        setOpen(false);
-    };
-    const handleFileInput = (e) => setFile(e.target.files[0]);
+    const userLoginJSON = localStorage.getItem('userLogin');
+    const userLogin = JSON.parse(userLoginJSON);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const handleImageInput = (e) => {
         setImage(e.target.files[0]);
         setImageSrc(URL.createObjectURL(e.target.files[0]));
     };
     const resetFormFileAndImage = () => {
-        setFile(null);
-        setImage(null);
-        setHaveFile(false);
+        setImage("");
         setHaveImage(false);
     };
-
     const handleUploadFile = () => {
         return new Promise((resolve, reject) => {
-            const imgRef = ref(storage, `/images/${image.name}`);
+            console.log(image);
+            const imgRef = ref(storage, `/images/${image?.name}`);
             const imageTask = uploadBytesResumable(imgRef, image);
-            const fileRef = ref(storage, `/songs/${file.name}`);
-            const fileTask = uploadBytesResumable(fileRef, file);
-
             imageTask.on(
                 "state_changed",
                 (snapshot) => {
@@ -102,31 +77,9 @@ export default function AddSong({reload}) {
                 () => {
                     getDownloadURL(imageTask.snapshot.ref)
                         .then((avatarFirebase) => {
+                            console.log(avatarFirebase);
                             setImage(avatarFirebase);
                             setHaveImage(true);
-                            resolve();
-                        })
-                        .catch((err) => reject(err));
-                }
-            );
-
-            fileTask.on(
-                "state_changed",
-                (snapshot) => {
-                    const percent = Math.round(
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    );
-                    if (percent === 100) console.log("file uploaded");
-                },
-                (err) => {
-                    console.log(err);
-                    reject(err);
-                },
-                () => {
-                    getDownloadURL(fileTask.snapshot.ref)
-                        .then((fileFirebase) => {
-                            setFile(fileFirebase);
-                            setHaveFile(true);
                             resolve();
                         })
                         .catch((err) => reject(err));
@@ -137,46 +90,48 @@ export default function AddSong({reload}) {
 
     const formAdd = useFormik({
         initialValues: {
-            songName: "",
-            description: "",
-            singers: [],
-            composers: [],
-            tags: [],
-            uploader: "64ca21378646dc995d7f7683",
-            isPublic: false,
+            firstName: userLogin.firstName,
+            lastName: userLogin.lastName,
+            phoneNumber: userLogin.phoneNumber,
+            gender: userLogin.gender,
         },
+        validationSchema: validationSchema,
         onSubmit: (values) => {
             try {
-                if (!file || !image) {
-                    return setShowError("Avatar/File is required");
-                }
-                if (formAdd.values.songName === "") {
-                    return setShowError("SongName is requried");
-                }
-                setShowError("Submitting...");
                 handleUploadFile();
+
             } catch (e) {
                 console.log(e);
             }
         },
     });
     useEffect(() => {
-        if (haveFile && haveImage) {
+        if (haveImage) {
             let data = {
+                id: userLogin._id,
                 ...formAdd.values,
-                fileURL: file,
                 avatar: image,
             };
-            UserService.addSong(data)
+            console.log(data);
+            resetFormFileAndImage();
+            formAdd.resetForm();
+            handleClose()
+            UserService.editInfo(data)
                 .then((res) => {
-                    resetFormFileAndImage();
-                    formAdd.resetForm();
-                    handleClose();
-                    reload(data);
+                    reload(userLogin)
                 })
-                .catch((err) => setShowError(err.response.data.message));
+                .catch((err) => console.log(err));
+            const dataLogin = {
+                _id: userLogin._id,
+                username: userLogin.username,
+                role: userLogin.role,
+                ...formAdd.values,
+                avatar: image,
+            }
+            const userString = JSON.stringify(dataLogin);
+            localStorage.setItem("userLogin", userString);
         }
-    }, [haveFile, haveImage]);
+    }, [haveImage]);
     return (
         <>
             <Button
@@ -191,7 +146,7 @@ export default function AddSong({reload}) {
                 }}
                 onClick={handleOpen}
             >
-                <Add/>
+                Edit
             </Button>
             <Modal
                 open={open}
@@ -205,65 +160,75 @@ export default function AddSong({reload}) {
                     noValidate
                     sx={style}
                 >
-                    <div style={{position: "relative", width: "50%"}}>
-                        <h1
-                            style={
-                                showError === "" || showError === "Submitting..."
-                                    ? {color: "black"}
-                                    : {color: "red"}
-                            }
-                        >
-                            {showError === "" ? "Add a new song" : showError}
-                        </h1>
+                    <div style={{ position: "relative", width: "50%" }}>
+                        <h1>Edit ProFile</h1>
                         <TextField
                             margin="normal"
                             required
                             fullWidth
-                            value={formAdd.values.songName}
+                            value={formAdd.values.firstName}
                             onChange={formAdd.handleChange}
-                            id="songName"
-                            label="Song Name"
-                            name="songName"
-                            autoComplete="songName"
+                            id="firstName"
+                            label="First Name"
+                            name="firstName"
+                            autoComplete="firstName"
                             autoFocus
                         />
+                        {formAdd.errors.firstName && (
+                            <div style={{ color: 'red' }}>{formAdd.errors.firstName}</div>
+                        )}
                         <TextField
                             margin="normal"
                             required
                             fullWidth
-                            value={formAdd.values.description}
+                            value={formAdd.values.lastName}
                             onChange={formAdd.handleChange}
-                            id="description"
-                            label="Description"
-                            name="description"
-                            autoComplete="description"
+                            id="lastName"
+                            label="Last Name"
+                            name="lastName"
+                            autoComplete="lastName"
                             autoFocus
                         />
-                        <div>
-                            <label htmlFor="avatar" style={imageInputLabelStyle}>
-                                Avatar:
-                            </label>
-                            <input
-                                id="avatar"
-                                type="file"
-                                onChange={handleImageInput}
-                                style={imageInputStyle}
-                            />
-                            <label htmlFor="song" style={fileInputLabelStyle}>
-                                Song:
-                            </label>
-                            <input
-                                id="song"
-                                type="file"
-                                onChange={handleFileInput}
-                                style={fileInputStyle}
-                            />
+                        {formAdd.errors.lastName && (
+                            <div style={{ color: 'red' }}>{formAdd.errors.lastName}</div>
+                        )}
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            value={formAdd.values.phoneNumber}
+                            onChange={formAdd.handleChange}
+                            id="phoneNumber"
+                            label="Phone Number"
+                            name="phoneNumber"
+                            autoComplete="phoneNumber"
+                            autoFocus
+                        />
+                        {formAdd.errors.phoneNumber && (
+                            <div style={{ color: 'red' }}>{formAdd.errors.phoneNumber}</div>
+                        )}
+                        <div className="textInputDiv flex flex-col space-y-2 w-full">
+                            <label className="font-semibold pt-5">Gender</label>
+                            <select
+                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 bg-white text-black"
+                                name="gender"
+                                value={formAdd.values.gender}
+                                onChange={formAdd.handleChange}
+                                required
+                            >
+                                <option value="">Select your gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
+                        <label htmlFor="avatar" style={imageInputLabelStyle}>Avatar:</label>
+                        <input id="avatar" type="file" onChange={handleImageInput} style={imageInputStyle} />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{mt: 3, mb: 2, backgroundColor: "green"}}
+                            sx={{ mt: 3, mb: 2, backgroundColor: "green" }}
                         >
                             Save
                         </Button>
@@ -284,7 +249,7 @@ export default function AddSong({reload}) {
                             <img
                                 src={imageSrc}
                                 alt="Image Preview"
-                                style={{width: "80%", height: "80%"}}
+                                style={{ width: "80%", height: "80%" }}
                             />
                         ) : (
                             <p>Image Preview</p>
