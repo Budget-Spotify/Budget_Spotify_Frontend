@@ -3,16 +3,22 @@ import {styled} from '@mui/system';
 import TablePagination, {
     tablePaginationClasses as classes,
 } from '@mui/base/TablePagination';
-import {useOutletContext} from "react-router-dom";
+import {Link, useOutletContext} from "react-router-dom";
 import MenuAppBar from "./NavBar";
+import AddSong from "./AddSong";
 import {useEffect, useState} from "react";
 import UserService from "../services/user.service";
+import Footer from "./Footer";
+import {useDispatch} from "react-redux";
+import {setSong} from "../redux/features/songs/songSlice";
 
-export default function TableUnstyled() {
+export default function SongUploaded() {
     const [search] = useOutletContext();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [songs, setSongs] = useState([]);
+    const dispatch = useDispatch();
+    const [songsListChange, setSongsListChange] = useState(null);
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - songs.length) : 0;
@@ -34,7 +40,7 @@ export default function TableUnstyled() {
             .catch(err => {
                 console.log(err)
             })
-    }, []);
+    }, [songsListChange]);
 
     return (
         <Root
@@ -49,8 +55,9 @@ export default function TableUnstyled() {
             }}
         >
             <MenuAppBar/>
-            <h1>Songs Uploaded</h1>
+            <h2 className="text-2xl font-semibold">Songs Uploaded</h2>
             <br/>
+            <AddSong reload={setSongsListChange}/>
             <table aria-label="custom pagination table">
                 <thead>
                 <tr>
@@ -68,15 +75,34 @@ export default function TableUnstyled() {
                 ).map((song, index) => (
                     <tr key={song._id}>
                         <td>{index + 1}</td>
-                        <td>{song.avatar}</td>
-                        <td>{song.songName}</td>
+                        <td
+                            onClick={() => dispatch(setSong(song))}
+                            style={{
+                                cursor: "pointer",
+                            }}
+                        >
+                            <img
+                                src={song.avatar}
+                                alt="Error"
+                                style={{
+                                    width: '100px',
+                                    height: '100px',
+                                    borderRadius: '50%',
+                                }}
+                            />
+                        </td>
+                        <td>
+                            <Link to={`/song/detail/${song._id}`}>
+                                {song.songName}
+                            </Link>
+                        </td>
                         <td>
                             {song.singers.map(singer => (
                                 {singer}
                             ))}
                         </td>
                         <td>
-                            {song.uploadTime}
+                            {new Date(song.uploadTime).toLocaleDateString()}
                         </td>
                     </tr>
                 ))}
@@ -109,6 +135,7 @@ export default function TableUnstyled() {
                 </tr>
                 </tfoot>
             </table>
+            <Footer/>
         </Root>
     );
 }
@@ -131,12 +158,18 @@ const Root = styled('div')(
   td,
   th {
     border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
-    text-align: left;
+    text-align: center;
     padding: 8px;
   }
 
   th {
     background-color: ${theme.palette.mode === 'dark' ? grey[900] : 'grey'};
+  }
+  
+  td img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
   }
   `,
 );
