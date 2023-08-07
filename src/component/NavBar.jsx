@@ -64,7 +64,7 @@ export default function MenuAppBar() {
                                         <img src={userLogin.avatar}></img>
                                     </Avatar>
                                 ) : (
-                                    <Avatar sx={{ width: 32, height: 32 }}>{userLogin.firstName}</Avatar>
+                                    <Avatar sx={{ width: 32, height: 32 }}>{userLogin.firstName.charAt(0)}</Avatar>
                                 )
                             ) : (
                                 <Avatar sx={{ width: 32, height: 32 }}>U</Avatar>

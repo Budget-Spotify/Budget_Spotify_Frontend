@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import storage from "../config/firebase.config";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import UserService from "../services/user.service";
+import * as Yup from 'yup';
 const style = {
     position: "absolute",
     top: "50%",
@@ -19,11 +20,29 @@ const style = {
     p: 4,
     display: "flex",
     flexDirection: "row",
+    color: "black",
+};
+const imageInputLabelStyle = {
+    display: "inline-block",
+    width: "20%",
+    textAlign: "left",
+    marginBottom: "5px"
 };
 
+const imageInputStyle = {
+    marginLeft: "10px",
+    maxWidth: "70%",
+    marginBottom: "5px"
+};
+const validationSchema = Yup.object({
+    firstName: Yup.string().required('First name is required'),
+    lastName: Yup.string().required('Last name is required'),
+    phoneNumber: Yup.string().required('Phone number is required'),
+    gender: Yup.string().required('Gender is required'),
+});
 export default function EditInfo({ reload }) {
     const [open, setOpen] = useState(false);
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState("");
     const [imageSrc, setImageSrc] = useState("");
     const [haveImage, setHaveImage] = useState(false);
     const userLoginJSON = localStorage.getItem('userLogin');
@@ -35,16 +54,13 @@ export default function EditInfo({ reload }) {
         setImageSrc(URL.createObjectURL(e.target.files[0]));
     };
     const resetFormFileAndImage = () => {
-        setImage(null);
+        setImage("");
         setHaveImage(false);
     };
-
-
-
     const handleUploadFile = () => {
         return new Promise((resolve, reject) => {
             console.log(image);
-            const imgRef = ref(storage, `/images/${image.name}`);
+            const imgRef = ref(storage, `/images/${image?.name}`);
             const imageTask = uploadBytesResumable(imgRef, image);
             imageTask.on(
                 "state_changed",
@@ -74,14 +90,16 @@ export default function EditInfo({ reload }) {
 
     const formAdd = useFormik({
         initialValues: {
-            firstName: "",
-            lastName: "",
-            phoneNumber: "",
-            gender: "",
+            firstName: userLogin.firstName,
+            lastName: userLogin.lastName,
+            phoneNumber: userLogin.phoneNumber,
+            gender: userLogin.gender,
         },
+        validationSchema: validationSchema,
         onSubmit: (values) => {
             try {
                 handleUploadFile();
+
             } catch (e) {
                 console.log(e);
             }
@@ -156,6 +174,9 @@ export default function EditInfo({ reload }) {
                             autoComplete="firstName"
                             autoFocus
                         />
+                        {formAdd.errors.firstName && (
+                            <div style={{ color: 'red' }}>{formAdd.errors.firstName}</div>
+                        )}
                         <TextField
                             margin="normal"
                             required
@@ -168,6 +189,9 @@ export default function EditInfo({ reload }) {
                             autoComplete="lastName"
                             autoFocus
                         />
+                        {formAdd.errors.lastName && (
+                            <div style={{ color: 'red' }}>{formAdd.errors.lastName}</div>
+                        )}
                         <TextField
                             margin="normal"
                             required
@@ -180,6 +204,9 @@ export default function EditInfo({ reload }) {
                             autoComplete="phoneNumber"
                             autoFocus
                         />
+                        {formAdd.errors.phoneNumber && (
+                            <div style={{ color: 'red' }}>{formAdd.errors.phoneNumber}</div>
+                        )}
                         <div className="textInputDiv flex flex-col space-y-2 w-full">
                             <label className="font-semibold pt-5">Gender</label>
                             <select
@@ -195,8 +222,8 @@ export default function EditInfo({ reload }) {
                                 <option value="other">Other</option>
                             </select>
                         </div>
-                        <label htmlFor="avatar">Avatar:</label>
-                        <input id="avatar" type="file" onChange={handleImageInput} />
+                        <label htmlFor="avatar" style={imageInputLabelStyle}>Avatar:</label>
+                        <input id="avatar" type="file" onChange={handleImageInput} style={imageInputStyle} />
                         <Button
                             type="submit"
                             fullWidth
@@ -218,7 +245,15 @@ export default function EditInfo({ reload }) {
                             alignItems: "center",
                         }}
                     >
-                        <img src={imageSrc} alt="Image Preview" />
+                        {imageSrc !== "" ? (
+                            <img
+                                src={imageSrc}
+                                alt="Image Preview"
+                                style={{ width: "80%", height: "80%" }}
+                            />
+                        ) : (
+                            <p>Image Preview</p>
+                        )}
                     </div>
                 </Box>
             </Modal>
