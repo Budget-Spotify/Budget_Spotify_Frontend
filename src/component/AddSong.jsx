@@ -10,17 +10,41 @@ import {ref, getDownloadURL, uploadBytesResumable} from "firebase/storage";
 import UserService from "../services/user.service";
 
 const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 800,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-    display: "flex",
-    flexDirection: "row",
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 800,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  display: "flex",
+  flexDirection: "row",
+  color: "black",
+};
+const imageInputLabelStyle = {
+  display: "inline-block",
+  width: "20%",
+  textAlign: "left",
+  marginBottom: "5px"
+};
+
+const imageInputStyle = {
+  marginLeft: "10px",
+  maxWidth: "70%",
+  marginBottom:"5px"
+};
+
+const fileInputLabelStyle = {
+  display: "inline-block",
+  width: "20%",
+  textAlign: "left",
+};
+
+const fileInputStyle = {
+  marginLeft: "10px",
+  maxWidth: "70%",
 };
 
 export default function AddSong({reload}) {
@@ -107,123 +131,147 @@ export default function AddSong({reload}) {
         });
     };
 
-    const formAdd = useFormik({
-        initialValues: {
-            songName: "",
-            description: "",
-            singers: [],
-            composers: [],
-            tags: [],
-            uploader: "64ca21378646dc995d7f7683",
-            isPublic: false,
-        },
-        onSubmit: (values) => {
-            try {
-                handleUploadFile();
-            } catch (e) {
-                console.log(e);
-            }
-        },
-    });
-    useEffect(() => {
-        if (haveFile && haveImage) {
-            let data = {
-                ...formAdd.values,
-                fileURL: file,
-                avatar: image,
-            };
-            console.log(data);
-            resetFormFileAndImage();
-            formAdd.resetForm();
-            handleClose()
-            UserService.addSong(data)
-                .then((res) => reload(res))
-                .catch((err) => console.log(err));
-        }
-    }, [haveFile, haveImage]);
-    return (
-        <>
+  const formAdd = useFormik({
+    initialValues: {
+      songName: "",
+      description: "",
+      singers: [],
+      composers: [],
+      tags: [],
+      uploader: "64ca21378646dc995d7f7683",
+      isPublic: false,
+    },
+    onSubmit: (values) => {
+      try {
+        handleUploadFile();
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  });
+  useEffect(() => {
+    if (haveFile && haveImage) {
+      let data = {
+        ...formAdd.values,
+        fileURL: file,
+        avatar: image,
+      };
+      console.log(data);
+      resetFormFileAndImage();
+      formAdd.resetForm();
+      handleClose();
+      UserService.addSong(data)
+        .then((res) => console.log("song added"))
+        .catch((err) => console.log(err));
+    }
+  }, [haveFile, haveImage]);
+  return (
+    <>
+      <Button
+        sx={{
+          backgroundColor: "green",
+          color: "white",
+          margin: "10px",
+          "&:hover": {
+            backgroundColor: "grey",
+            color: "white",
+          },
+        }}
+        onClick={handleOpen}
+      >
+        <Add />
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          component="form"
+          onSubmit={formAdd.handleSubmit}
+          noValidate
+          sx={style}
+        >
+          <div style={{ position: "relative", width: "50%" }}>
+            <h1>Add a new song</h1>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              value={formAdd.values.songName}
+              onChange={formAdd.handleChange}
+              id="songName"
+              label="Song Name"
+              name="songName"
+              autoComplete="songName"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              value={formAdd.values.description}
+              onChange={formAdd.handleChange}
+              id="description"
+              label="Description"
+              name="description"
+              autoComplete="description"
+              autoFocus
+            />
+            <div>
+              <label htmlFor="avatar" style={imageInputLabelStyle}>
+                Avatar:
+              </label>
+              <input
+                id="avatar"
+                type="file"
+                onChange={handleImageInput}
+                style={imageInputStyle}
+              />
+              <label htmlFor="song" style={fileInputLabelStyle}>
+                Song:
+              </label>
+              <input
+                id="song"
+                type="file"
+                onChange={handleFileInput}
+                style={fileInputStyle}
+              />
+            </div>
             <Button
-                sx={{
-                    backgroundColor: "green",
-                    color: "white",
-                    margin: "10px",
-                    "&:hover": {
-                        backgroundColor: "grey",
-                        color: "white",
-                    },
-                }}
-                onClick={handleOpen}
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, backgroundColor: "green" }}
             >
-                <Add/>
+              Save
             </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box
-                    component="form"
-                    onSubmit={formAdd.handleSubmit}
-                    noValidate
-                    sx={style}
-                >
-                    <div style={{position: "relative", width: "50%"}}>
-                        <h1>Add a new song</h1>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            value={formAdd.values.songName}
-                            onChange={formAdd.handleChange}
-                            id="songName"
-                            label="Song Name"
-                            name="songName"
-                            autoComplete="songName"
-                            autoFocus
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            value={formAdd.values.description}
-                            onChange={formAdd.handleChange}
-                            id="description"
-                            label="Description"
-                            name="description"
-                            autoComplete="description"
-                            autoFocus
-                        />
-                        <label htmlFor="avatar">Avatar:</label>
-                        <input id="avatar" type="file" onChange={handleImageInput}/>
-                        <label htmlFor="song">Song:</label>
-                        <input id="song" type="file" onChange={handleFileInput}/>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 3, mb: 2, backgroundColor: "green"}}
-                        >
-                            Save
-                        </Button>
-                    </div>
-                    <div
-                        style={{
-                            position: "absolute",
-                            width: "50%",
-                            height: "100%",
-                            top: 0,
-                            right: 0,
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <img src={imageSrc} alt="Image Preview"/>
-                    </div>
-                </Box>
-            </Modal>
-        </>
-    );
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              width: "50%",
+              height: "100%",
+              top: 0,
+              right: 0,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {imageSrc !== "" ? (
+              <img
+                src={imageSrc}
+                alt="Image Preview"
+                style={{ width: "80%", height: "80%" }}
+              />
+            ) : (
+              <p>Image Preview</p>
+            )}
+          </div>
+        </Box>
+      </Modal>
+    </>
+  );
 }
