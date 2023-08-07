@@ -7,6 +7,8 @@ const DetailUser = () => {
     const [search] = useOutletContext();
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
+    const [userChange, setUserChange] = useState(null);
+    console.log(userLogin);
     return (
         <div style={{
             marginLeft: "20.5%",
@@ -26,13 +28,13 @@ const DetailUser = () => {
                     <div className="font-bold mb-4 text-2xl">
                         <h1>Your Profile</h1>
                     </div>
-                    <div class="container">
+                    <div className="container">
                         <div className="avatar">
                             <img src={userLogin.avatar} alt="" />
                         </div>
-                        <div class="name">
+                        <div className="name">
                             <h1>Username: {userLogin.username} </h1>
-                            <ul class="contact">
+                            <ul className="contact">
                                 <li>
                                     <span>First Name:</span> {userLogin.firstName}
                                 </li>
@@ -51,7 +53,7 @@ const DetailUser = () => {
                             </ul>
                         </div>
                         <div className="flex justify-end">
-                            <EditInfo />
+                            <EditInfo reload={setUserChange}/>
                         </div>
                     </div>
                 </div>

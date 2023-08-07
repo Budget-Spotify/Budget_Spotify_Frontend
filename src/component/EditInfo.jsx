@@ -39,6 +39,8 @@ export default function EditInfo({ reload }) {
         setHaveImage(false);
     };
 
+
+
     const handleUploadFile = () => {
         return new Promise((resolve, reject) => {
             console.log(image);
@@ -98,19 +100,18 @@ export default function EditInfo({ reload }) {
             handleClose()
             UserService.editInfo(data)
                 .then((res) => {
-                    reload(res)
+                    reload(userLogin)
                 })
                 .catch((err) => console.log(err));
             const dataLogin = {
-                id: userLogin._id,
-                username:userLogin.username,
-                role:userLogin.role,
+                _id: userLogin._id,
+                username: userLogin.username,
+                role: userLogin.role,
                 ...formAdd.values,
                 avatar: image,
             }
             const userString = JSON.stringify(dataLogin);
             localStorage.setItem("userLogin", userString);
-            window.location.reload()
         }
     }, [haveImage]);
     return (
