@@ -11,6 +11,10 @@ import UserService from "../services/user.service";
 import Footer from "./Footer";
 import {useDispatch} from "react-redux";
 import {setSong} from "../redux/features/songs/songSlice";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteModal from "./DeleteSong";
 
 export default function SongUploaded() {
     const [search] = useOutletContext();
@@ -66,6 +70,7 @@ export default function SongUploaded() {
                     <th>Name of the song</th>
                     <th>Singer</th>
                     <th>Listens</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -104,11 +109,21 @@ export default function SongUploaded() {
                         <td>
                             {new Date(song.uploadTime).toLocaleDateString()}
                         </td>
+                        <td>
+                            <IconButton aria-label="delete">
+                                <EditIcon
+                                    sx={{
+                                        color: '#4f48cb',
+                                    }}
+                                />
+                            </IconButton>
+                            <DeleteModal song={song} reload={setSongsListChange}/>
+                        </td>
                     </tr>
                 ))}
                 {emptyRows > 0 && (
                     <tr style={{height: 41 * emptyRows}}>
-                        <td colSpan={5}/>
+                        <td colSpan={6}/>
                     </tr>
                 )}
                 </tbody>
@@ -116,7 +131,7 @@ export default function SongUploaded() {
                 <tr>
                     <CustomTablePagination
                         rowsPerPageOptions={[10, 15, 20, {label: 'All', value: -1}]}
-                        colSpan={5}
+                        colSpan={6}
                         count={songs.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
@@ -157,7 +172,7 @@ const Root = styled('div')(
 
   td,
   th {
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
+    border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[800]};
     text-align: center;
     padding: 8px;
   }
