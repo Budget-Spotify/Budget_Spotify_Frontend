@@ -17,8 +17,9 @@ export default function UserList() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     function getData() {
+        const accessToken = localStorage.getItem("token"); // get token and user
         setisLoading(true);
-        AdminService.getUserList().then(res => {
+        AdminService.getUserList(accessToken).then(res => {
             console.log(res.data);
             setData(res.data)
             setisLoading(false)
