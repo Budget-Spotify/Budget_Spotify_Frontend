@@ -53,20 +53,24 @@ export function SignupComponent() {
     const navigate = useNavigate();
     const validateSignup = Yup.object({
         username: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, 'Username cannot have special characters.'),
+            .required('Username is required')
+            .matches(/^[a-z0-9]+$/, 'Username cannot contain uppercase letters or special characters'),
         password: Yup.string()
+            .required('Password is required')
             .matches(
                 /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/,
-                'Minimum of 8 characters that contains uppercases, numbers and symbols.'
+                'Minimum of 8 characters that contains uppercase, numbers and symbols'
             ),
-        confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match.'),
+        confirmPassword: Yup.string()
+            .required('Confirm password is required')
+            .oneOf([Yup.ref('password'), null], 'Passwords must match'),
         phoneNumber: Yup.string()
             .nullable()
-            .matches(/^\d{9,10}$/, 'Phone number must have 9 to 10 digits.'),
+            .matches(/^\d{9,10}$/, 'Phone number must have 9 to 10 digits'),
         firstName: Yup.string()
-            .matches(/^[A-Za-z ]+$/, 'First name cannot contain numbers or special characters.'),
+            .matches(/^[A-Za-z ]+$/, 'First name cannot contain numbers or special characters'),
         lastName: Yup.string()
-            .matches(/^[A-Za-z ]+$/, 'Last name cannot contain numbers or special characters.'),
+            .matches(/^[A-Za-z ]+$/, 'Last name cannot contain numbers or special characters'),
     });
 
     const formik = useFormik({
