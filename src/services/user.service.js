@@ -1,33 +1,52 @@
 import axios from "axios";
 
 class UserService {
-    static async getSongs() {
-        return await axios.get('http://localhost:8000/user/list/songs');
+    static async getSongs(accessToken) {
+        return await axios.get('http://localhost:8000/user/list/songs',{
+            headers: {
+                token: `Bearer ${accessToken}`
+            }
+        });
     }
 
-    static async getOneSong(songId) {
-        return await axios.get('http://localhost:8000/user/song/detail/' + songId);
+    static async getOneSong(songId, accessToken) {
+        return await axios.get('http://localhost:8000/user/song/detail/' + songId,{
+            headers: {
+                token: `Bearer ${accessToken}`
+            }
+        });
     }
 
-    static async addSong(data) {
-        return await axios.post('http://localhost:8000/user/upload/song', data)
+    static async addSong(data, accessToken) {
+        return await axios.post('http://localhost:8000/user/upload/song', data,{
+            headers: {
+                token: `Bearer ${accessToken}`
+            }
+        })
     }
 
-    static async editPassword(data) {
-        return await axios.put('http://localhost:8000/user/editpassword', data);
+    static async editPassword(data, accessToken) {
+        return await axios.put('http://localhost:8000/user/editpassword', data,{
+            headers: {
+                token: `Bearer ${accessToken}`
+            }
+        });
     }
 
-    static async getInfo(id) {
+    static async getInfo(id, accessToken) {
 
-        return await axios.get('http://localhost:8000/user/info/' + id)
-
+        return await axios.get('http://localhost:8000/user/info/' + id,{
+            headers: {
+                token: `Bearer ${accessToken}`
+            }
+        })
     }
 
-    static async editInfo(data) {
+    static async editInfo(data, accessToken) {
         return await axios.put('http://localhost:8000/user/editinfo', data)
     }
 
-    static async deleteSong(data) {
+    static async deleteSong(data, accessToken) {
         return await axios.delete('http://localhost:8000/user/song/delete', {data});
     }
 }

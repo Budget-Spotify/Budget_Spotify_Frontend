@@ -38,7 +38,8 @@ export default function SongUploaded() {
     };
 
     useEffect(() => {
-        UserService.getSongs()
+        const accessToken = localStorage.getItem("token");
+        UserService.getSongs(accessToken)
             .then(res => {
                 setSongs(res.data.songs);
             })
