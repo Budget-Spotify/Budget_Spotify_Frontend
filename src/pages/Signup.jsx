@@ -53,16 +53,20 @@ export function SignupComponent() {
     const navigate = useNavigate();
     const validateSignup = Yup.object({
         username: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, 'Username không được ký tự đặc biệt'),
+            .matches(/^[a-zA-Z0-9]+$/, 'Username cannot have special characters.'),
         password: Yup.string()
             .matches(
                 /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/,
-                'Mật khẩu cần chứa ít nhất 8 ký tự, 1 ký tự hoa, 1 số và 1 đặc biệt.'
+                'Minimum of 8 characters that contains uppercases, numbers and symbols.'
             ),
-        confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
+        confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match.'),
         phoneNumber: Yup.string()
             .nullable()
-            .max(10, 'Tối đa 10 ký tự'),
+            .matches(/^\d{9,10}$/, 'Phone number must have 9 to 10 digits.'),
+        firstName: Yup.string()
+            .matches(/^[A-Za-z ]+$/, 'First name cannot contain numbers or special characters.'),
+        lastName: Yup.string()
+            .matches(/^[A-Za-z ]+$/, 'Last name cannot contain numbers or special characters.'),
     });
 
     const formik = useFormik({
@@ -75,11 +79,22 @@ export function SignupComponent() {
             phoneNumber: "",
             gender: "",
             avatar: "",
+            countryCode: "",
         },
         validationSchema: validateSignup,
         onSubmit: async (values) => {
             try {
-                await axios.post("http://localhost:8000/auth/register", values);
+                let data = {
+                    username: values.username,
+                    password: values.password,
+                    confirmPassword: values.confirmPassword,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    phoneNumber: values.countryCode + values.phoneNumber,
+                    gender: values.gender,
+                    avatar: values.avatar,
+                }
+                await axios.post("http://localhost:8000/auth/register", data);
                 navigate('/login');
             } catch (error) {
                 set_alert_exist_user(true);
@@ -95,10 +110,11 @@ export function SignupComponent() {
             <div className="w-full h-full flex flex-col items-center">
                 <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
                     <h1 className="text-4xl font-bold">
-                        Music<span className="text-green-500">Mix</span>
+                        DieC<span className="text-green-500">Team</span>
                     </h1>
                 </div>
-                <div className="inputRegion w-full px-4 sm:w-2/3 md:w-1/2 lg:w-1/3 py-10 flex flex-col items-center">
+                <div
+                    className="inputRegion w-full px-4 sm:w-2/3 md:w-1/2 lg:w-1/3 py-10 flex flex-col items-center">
                     <div className="font-bold mb-4 text-2xl">
                         Sign up for free to start listening.
                     </div>
@@ -117,7 +133,6 @@ export function SignupComponent() {
                                             name="username"
                                             sx={{borderColor: "white"}}
                                             required
-                                            borderColor="white"
                                             error={showErrorMessage}
                                             helperText={formik.errors.username ? formik.errors.username : " "}
                                         />
@@ -133,7 +148,6 @@ export function SignupComponent() {
                                             name="password"
                                             type="password"
                                             required
-                                            borderColor="white"
                                             error={showErrorMessage}
                                             helperText={formik.errors.password ? formik.errors.password : " "}
                                         />
@@ -149,7 +163,6 @@ export function SignupComponent() {
                                             name="confirmPassword"
                                             type="password"
                                             required
-                                            borderColor="white"
                                             error={showErrorMessage}
                                             helperText={formik.errors.confirmPassword ? formik.errors.confirmPassword : " "}
                                         />
@@ -173,7 +186,8 @@ export function SignupComponent() {
                                     </button>
                                 </div>
                                 <div style={{display: "flex", justifyContent: "center"}}>
-                                    {showErrorMessage && <div style={{color: 'red'}}>{"Need to complete field"}</div>}
+                                    {showErrorMessage &&
+                                        <div style={{color: 'red'}}>{"Need to complete field"}</div>}
                                 </div>
                             </>
                         )}
@@ -182,39 +196,54 @@ export function SignupComponent() {
                             <>
                                 <div style={{marginBottom: '10px'}}>
                                     <TextField
-                                        label="FirstName"
+                                        label="First Name"
                                         placeholder="Enter your firstName"
                                         className="textFieldSignup-width"
                                         value={formik.values.firstName}
                                         onChange={formik.handleChange}
                                         name="firstName"
-                                        borderColor="white"
                                         helperText={formik.errors.firstName ? formik.errors.firstName : null}
                                     />
                                 </div>
 
                                 <div style={{marginBottom: '10px'}}>
                                     <TextField
-                                        label="LastName"
+                                        label="Last Name"
                                         placeholder="Enter your lastName"
                                         className="textFieldSignup-width"
                                         value={formik.values.lastName}
                                         onChange={formik.handleChange}
                                         name="lastName"
-                                        borderColor="white"
                                         helperText={formik.errors.lastName ? formik.errors.lastName : null}
                                     />
                                 </div>
 
-                                <div style={{marginBottom: '10px'}}>
+                                <div style={{marginBottom: '10px', display: 'flex', flexDirection: 'row'}}>
+                                    <select
+                                        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 bg-black text-white"
+                                        name="countryCode"
+                                        value={formik.values.countryCode}
+                                        onChange={formik.handleChange}
+                                        style={{
+                                            width: '50%',
+                                            borderWidth: 2,
+                                            borderColor: '#ffffff',
+                                            marginRight: '5px',
+                                        }}
+                                    >
+                                        <option value="" hidden>Country code</option>
+                                        <option value="+1">US (+1)</option>
+                                        <option value="+44">UK (+44)</option>
+                                        <option value="+81">JP (+81)</option>
+                                        <option value="+84">VN (+84)</option>
+                                    </select>
                                     <TextField
-                                        label="PhoneNumber"
+                                        label="Phone Number"
                                         placeholder="Enter your phoneNumber"
                                         className="textFieldSignup-width"
                                         value={formik.values.phoneNumber}
                                         onChange={formik.handleChange}
                                         name="phoneNumber"
-                                        borderColor="white"
                                         helperText={formik.errors.phoneNumber ? formik.errors.phoneNumber : null}
                                     />
                                 </div>
@@ -226,23 +255,28 @@ export function SignupComponent() {
                                         name="gender"
                                         value={formik.values.gender}
                                         onChange={formik.handleChange}
+                                        style={{
+                                            borderWidth: 2,
+                                            borderColor: '#ffffff',
+                                        }}
                                     >
-                                        <option value="">Select your gender</option>
+                                        <option value="" hidden>Select your gender</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                         <option value="other">Other</option>
                                     </select>
                                 </div>
 
+                                <div className="w-full flex items-center justify-center my-8">
+                                    <button className="bg-green-400 font-semibold p-3 px-10 rounded-full"
+                                            type="submit">
+                                        Sign Up
+                                    </button>
+                                </div>
+
                                 <div style={{display: 'flex', justifyContent: 'center'}}>
                                     {alert_exist_user &&
                                         <div style={{color: 'red'}}><p>This user is already exist</p></div>}
-                                </div>
-
-                                <div className="w-full flex items-center justify-center my-8">
-                                    <button className="bg-green-400 font-semibold p-3 px-10 rounded-full" type="submit">
-                                        Sign Up
-                                    </button>
                                 </div>
                             </>
                         )}

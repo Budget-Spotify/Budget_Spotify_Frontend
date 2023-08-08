@@ -68,47 +68,47 @@ export default function MenuAppBar() {
                                 )
                             ) : (
                                 <>
-                                    <Link to='/signup'>
-                                        <Button color="inherit"
-                                                sx={{
+                                    <Button color="inherit"
+                                            component={Link}
+                                            to='/signup'
+                                            sx={{
+                                                backgroundColor: "black",
+                                                borderRadius: "30px",
+                                                color: "#fffa",
+                                                textDecoration: "none",
+                                                width: "120px",
+                                                height: "55px",
+                                                '&:hover': {
                                                     backgroundColor: "black",
+                                                    color: "white",
+                                                    fontWeight: 'bold',
+                                                },
+                                            }}
+                                    >
+                                        <b>Sign up</b>
+                                    </Button>
+                                    <div style={{position: 'relative', width: '145px', height: '50px'}}>
+                                        <Button color="inherit"
+                                                component={Link}
+                                                to='/login'
+                                                sx={{
+                                                    backgroundColor: "white",
                                                     borderRadius: "30px",
-                                                    color: "#fffa",
+                                                    color: "black",
                                                     textDecoration: "none",
-                                                    width: "120px",
-                                                    height: "55px",
+                                                    width: "100%",
+                                                    height: "100%",
                                                     '&:hover': {
-                                                        backgroundColor: "black",
-                                                        color: "white",
+                                                        backgroundColor: "white",
+                                                        color: "black",
+                                                        height: "51px",
+                                                        width: "146px",
                                                         fontWeight: 'bold',
                                                     },
                                                 }}
                                         >
-                                            <b>Sign up</b>
+                                            <b>Log in</b>
                                         </Button>
-                                    </Link>
-                                    <div style={{position: 'relative', width: '145px', height: '50px'}}>
-                                        <Link to='/login'>
-                                            <Button color="inherit"
-                                                    sx={{
-                                                        backgroundColor: "white",
-                                                        borderRadius: "30px",
-                                                        color: "black",
-                                                        textDecoration: "none",
-                                                        width: "100%",
-                                                        height: "100%",
-                                                        '&:hover': {
-                                                            backgroundColor: "white",
-                                                            color: "black",
-                                                            height: "51px",
-                                                            width: "146px",
-                                                            fontWeight: 'bold',
-                                                        },
-                                                    }}
-                                            >
-                                                <b>Log in</b>
-                                            </Button>
-                                        </Link>
                                     </div>
                                 </>
                             )}
