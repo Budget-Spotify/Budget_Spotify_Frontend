@@ -39,15 +39,23 @@ class UserService {
             headers: {
                 token: `Bearer ${accessToken}`
             }
-        })
+        });
     }
 
     static async editInfo(data, accessToken) {
-        return await axios.put('http://localhost:8000/user/editinfo', data)
+        return await axios.put('http://localhost:8000/user/editinfo', data, {
+            headers: {
+                token: `Bearer ${accessToken}`
+            }
+        });
     }
 
     static async deleteSong(data, accessToken) {
-        return await axios.delete('http://localhost:8000/user/song/delete', {data});
+        return await axios.delete('http://localhost:8000/user/song/delete', {data}, {
+            headers: {
+                token: `Bearer ${accessToken}`
+            }
+        });
     }
 }
 
