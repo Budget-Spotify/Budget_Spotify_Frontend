@@ -161,14 +161,13 @@ export default function AddSong({reload}) {
         },
     });
     useEffect(() => {
-        const accessToken = localStorage.getItem("token");
         if (haveFile && haveImage) {
             let data = {
                 ...formAdd.values,
                 fileURL: file,
                 avatar: image,
             };
-            UserService.addSong(data, accessToken)
+            UserService.addSong(data)
                 .then((res) => {
                     resetFormFileAndImage();
                     formAdd.resetForm();

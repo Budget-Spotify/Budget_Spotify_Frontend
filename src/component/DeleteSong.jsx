@@ -26,8 +26,7 @@ export default function DeleteModal({song, reload}) {
     const handleClose = () => setOpen(false);
 
     const handleDelete = () => {
-        const accessToken = localStorage.getItem("token");
-        UserService.deleteSong({_id: song._id}, accessToken)
+        UserService.deleteSong({_id: song._id})
             .then(res => {
                 reload(res);
             })
