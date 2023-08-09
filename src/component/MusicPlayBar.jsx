@@ -71,23 +71,100 @@ export default function MusicPlayBar() {
                             padding: "16px 20px 16px 20px",
                             borderRadius: "10px",
                         }}
-                    /> :
-                    <ReactH5AudioPlayer
-                        src={"https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/03_-_Voyage_I_-_Waterfall.mp3"}
-                        layout="stacked-reverse"
-                        volume={0.6}
-                        showSkipControls={true}
-                        progressJumpStep={5000}
-                        style={{
-                            color: "white",
-                            width: "62%",
-                            margin: "0 auto",
-                            backgroundColor: "#131313",
-                            padding: "16px 20px 16px 20px",
-                            borderRadius: "10px",
-                        }}
-                    />
-            }
-        </div>
+                        onClick={handleCollapse}
+                    >
+                        <DownIcon/>
+                    </Fab>
+                </div>
+            )}
+
+
+            <div
+                style={{
+                    backgroundColor: "black",
+                    width: "100%",
+                    height: isPlaying ? "130px" : "0%",
+                    // padding: "0px 30px 20px 30px",
+                    boxSizing: "borser-box",
+                    position: "fixed",
+                    bottom: "0",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    zIndex: "10",
+                    borderTop: "1px solid rgb(37, 37, 37)"
+                }}
+            >
+
+                <div
+                    style={{
+                        background: "black",
+                        width: "29%",
+                        height: "91%",
+                        objectFit: "cover",
+                        display: "flex",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    {song ? (
+
+                        <img
+                            src={song.avatar}
+                            alt="img"
+                            style={{width: "70px", height: "100%", borderRadius: "5px"}}
+                        />
+                    ) : (
+                        <img
+                            src="https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/art.jpg"
+                            alt="img"
+                            style={{width: "70px", height: "100%", borderRadius: "5px"}}
+                        />
+                    )}
+
+                    <div style={{color: "#fff", background: "black", width: "78%"}}>
+                        {song ? <h3 style={{background: "black", marginTop: "4px"}}>{song.songName}</h3> :
+                            <h3 style={{marginTop: "4px", background: "black"}}>Voyage I - Waterfall</h3>}
+                        {song ?
+                            <p style={{fontSize: "13px", background: "black", marginTop: "20px"}}>{song.songName}</p> :
+                            <p style={{background: "black", fontSize: "13px", marginTop: "20px"}}>The Kyoto
+                                Connection</p>}
+                    </div>
+                </div>
+                {
+                    song ? <ReactH5AudioPlayer
+                            src={song.fileURL}
+                            layout="stacked-reverse"
+                            volume={0.6}
+                            showSkipControls={true}
+                            progressJumpStep={5000}
+                            style={{
+                                color: "white",
+                                width: "60%",
+                                height: isPlaying ? "100px" : "0%",
+                                margin: "0 auto",
+                                backgroundColor: "#131313",
+                                // padding: "0% 20px 16px 20px",
+                                borderRadius: "10px",
+                            }}
+                        /> :
+                        <ReactH5AudioPlayer
+                            src={"https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/03_-_Voyage_I_-_Waterfall.mp3"}
+                            layout="stacked-reverse"
+                            volume={0.6}
+                            showSkipControls={true}
+                            progressJumpStep={5000}
+                            style={{
+                                color: "white",
+                                width: "62%",
+                                height: isPlaying ? "100px" : "0%",
+                                margin: "0 auto",
+                                backgroundColor: "#131313",
+                                // padding: "0% 20px 16px 20px",
+                                borderRadius: "10px",
+                            }}
+                        />
+                }
+            </div>
+        </>
     );
 }
