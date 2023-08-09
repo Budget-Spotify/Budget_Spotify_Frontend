@@ -88,7 +88,7 @@ function UploadImageDragAndDrop({ imageSrc }) {
   );
 }
 
-function AddSong({reload}) {
+function UserAddSong({reload}) {
   const [file, setFile] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [haveFile, setHaveFile] = useState(false);
@@ -303,4 +303,4 @@ function AddSong({reload}) {
   );
 }
 
-export default AddSong;
+export default UserAddSong;

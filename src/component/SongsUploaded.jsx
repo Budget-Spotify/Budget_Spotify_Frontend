@@ -5,7 +5,7 @@ import TablePagination, {
 } from '@mui/base/TablePagination';
 import {Link, useOutletContext} from "react-router-dom";
 import MenuAppBar from "./NavBar";
-import AddSong from "./AddSong";
+import UserAddSong from "./UserAddSong";
 import {useEffect, useState} from "react";
 import UserService from "../services/user.service";
 import Footer from "./Footer";
@@ -61,7 +61,7 @@ export default function SongUploaded() {
             <MenuAppBar/>
             <h2 className="text-2xl font-semibold">Songs Uploaded</h2>
             <br/>
-            <AddSong reload={setSongsListChange}/>
+            <UserAddSong reload={setSongsListChange}/>
             <table aria-label="custom pagination table">
                 <thead>
                 <tr>
