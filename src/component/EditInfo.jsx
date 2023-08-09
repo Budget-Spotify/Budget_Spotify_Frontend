@@ -8,19 +8,52 @@ import storage from "../config/firebase.config";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import UserService from "../services/user.service";
 import * as Yup from 'yup';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#ffffff', // Đổi màu chữ (text) thành trắng
+        },
+        text: {
+            primary: '#ffffff', // Đổi màu chữ (text) thành trắng
+            secondary: '#ffffff', // Đổi màu chữ phụ (secondary text) thành trắng
+        },
+    },
+    components: {
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& label.Mui-focused': {
+                        color: '#ffffff', // Màu chữ (text) khi label được focus
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderWidth: 2,
+                        borderColor: '#ffffff', // Màu viền (border) ban đầu
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#ffffff', // Màu viền khi hover
+                    },
+                    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#ffffff', // Màu viền khi input được chọn (focus)
+                    },
+                },
+            },
+        },
+    },
+});
 const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 800,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
+    bgcolor: "black",
+    border: "2px solid #fff",
     boxShadow: 24,
     p: 4,
     display: "flex",
     flexDirection: "row",
-    color: "black",
+    color: "white",
 };
 const imageInputLabelStyle = {
     display: "inline-block",
@@ -47,6 +80,7 @@ export default function EditInfo({ reload }) {
     const [haveImage, setHaveImage] = useState(false);
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
+    const [showError, setShowError] = useState("");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleImageInput = (e) => {
@@ -98,8 +132,8 @@ export default function EditInfo({ reload }) {
         validationSchema: validationSchema,
         onSubmit: (values) => {
             try {
+                setShowError("Submitting...");
                 handleUploadFile();
-
             } catch (e) {
                 console.log(e);
             }
@@ -154,108 +188,120 @@ export default function EditInfo({ reload }) {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box
-                    component="form"
-                    onSubmit={formAdd.handleSubmit}
-                    noValidate
-                    sx={style}
-                >
-                    <div style={{ position: "relative", width: "50%" }}>
-                        <h1>Edit ProFile</h1>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            value={formAdd.values.firstName}
-                            onChange={formAdd.handleChange}
-                            id="firstName"
-                            label="First Name"
-                            name="firstName"
-                            autoComplete="firstName"
-                            autoFocus
-                        />
-                        {formAdd.errors.firstName && (
-                            <div style={{ color: 'red' }}>{formAdd.errors.firstName}</div>
-                        )}
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            value={formAdd.values.lastName}
-                            onChange={formAdd.handleChange}
-                            id="lastName"
-                            label="Last Name"
-                            name="lastName"
-                            autoComplete="lastName"
-                            autoFocus
-                        />
-                        {formAdd.errors.lastName && (
-                            <div style={{ color: 'red' }}>{formAdd.errors.lastName}</div>
-                        )}
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            value={formAdd.values.phoneNumber}
-                            onChange={formAdd.handleChange}
-                            id="phoneNumber"
-                            label="Phone Number"
-                            name="phoneNumber"
-                            autoComplete="phoneNumber"
-                            autoFocus
-                        />
-                        {formAdd.errors.phoneNumber && (
-                            <div style={{ color: 'red' }}>{formAdd.errors.phoneNumber}</div>
-                        )}
-                        <div className="textInputDiv flex flex-col space-y-2 w-full">
-                            <label className="font-semibold pt-5">Gender</label>
-                            <select
-                                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 bg-white text-black"
-                                name="gender"
-                                value={formAdd.values.gender}
-                                onChange={formAdd.handleChange}
-                                required
-                            >
-                                <option value="">Select your gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <label htmlFor="avatar" style={imageInputLabelStyle}>Avatar:</label>
-                        <input id="avatar" type="file" onChange={handleImageInput} style={imageInputStyle} />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2, backgroundColor: "green" }}
-                        >
-                            Save
-                        </Button>
-                    </div>
-                    <div
-                        style={{
-                            position: "absolute",
-                            width: "50%",
-                            height: "100%",
-                            top: 0,
-                            right: 0,
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
+                <ThemeProvider theme={theme}>
+                    <Box
+                        component="form"
+                        onSubmit={formAdd.handleSubmit}
+                        noValidate
+                        sx={style}
                     >
-                        {imageSrc !== "" ? (
-                            <img
-                                src={imageSrc}
-                                alt="Image Preview"
-                                style={{ width: "80%", height: "80%" }}
+                        <div style={{ position: "relative", width: "50%" }}>
+                            <h1
+                                style={
+                                    showError === "" || showError === "Submitting..."
+                                        ? { color: "black" }
+                                        : { color: "red" }
+                                }
+                            >
+                                {showError === "" ? "Edit Profile" : showError}
+                            </h1>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                value={formAdd.values.firstName}
+                                onChange={formAdd.handleChange}
+                                id="firstName"
+                                label="First Name"
+                                name="firstName"
+                                autoComplete="firstName"
+                                autoFocus
                             />
-                        ) : (
-                            <p>Image Preview</p>
-                        )}
-                    </div>
-                </Box>
+                            {formAdd.errors.firstName && (
+                                <div style={{ color: 'red' }}>{formAdd.errors.firstName}</div>
+                            )}
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                value={formAdd.values.lastName}
+                                onChange={formAdd.handleChange}
+                                id="lastName"
+                                label="Last Name"
+                                name="lastName"
+                                autoComplete="lastName"
+                                autoFocus
+                            />
+                            {formAdd.errors.lastName && (
+                                <div style={{ color: 'red' }}>{formAdd.errors.lastName}</div>
+                            )}
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                value={formAdd.values.phoneNumber}
+                                onChange={formAdd.handleChange}
+                                id="phoneNumber"
+                                label="Phone Number"
+                                name="phoneNumber"
+                                autoComplete="phoneNumber"
+                                autoFocus
+                            />
+
+                            {formAdd.errors.phoneNumber && (
+                                <div style={{ color: 'red' }}>{formAdd.errors.phoneNumber}</div>
+                            )}
+                            <div className="textInputDiv flex flex-col space-y-2 w-full">
+                                <label className="font-semibold pt-5">Gender</label>
+                                <select
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 bg-black text-white"
+                                    name="gender"
+                                    value={formAdd.values.gender}
+                                    onChange={formAdd.handleChange}
+                                    required
+                                >
+                                    <option value="">Select your gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <label htmlFor="avatar" style={imageInputLabelStyle}>Avatar:</label>
+                            <input id="avatar" type="file" onChange={handleImageInput} style={imageInputStyle} />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2, backgroundColor: "green" }}
+                            >
+                                Save
+                            </Button>
+                        </div>
+                        <div
+                            style={{
+                                position: "absolute",
+                                width: "50%",
+                                height: "100%",
+                                top: 0,
+                                right: 0,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                        >
+                            {imageSrc !== "" ? (
+                                <img
+                                    src={imageSrc}
+                                    alt="Image Preview"
+                                    style={{ width: "80%", height: "80%" }}
+                                />
+                            ) : (
+                                <p>Image Preview</p>
+                            )}
+                        </div>
+                    </Box>
+                </ThemeProvider>
+
             </Modal>
         </>
     );

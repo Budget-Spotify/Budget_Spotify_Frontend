@@ -82,9 +82,9 @@ export default function AddSong({reload}) {
 
     const handleUploadFile = () => {
         return new Promise((resolve, reject) => {
-            const imgRef = ref(storage, `/images/${image.name}`);
+            const imgRef = ref(storage, `/images/${image?.name}`);
             const imageTask = uploadBytesResumable(imgRef, image);
-            const fileRef = ref(storage, `/songs/${file.name}`);
+            const fileRef = ref(storage, `/songs/${file?.name}`);
             const fileTask = uploadBytesResumable(fileRef, file);
 
             imageTask.on(

@@ -23,7 +23,6 @@ export default function MenuAppBar() {
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -32,7 +31,6 @@ export default function MenuAppBar() {
         localStorage.removeItem('userLogin');
         navigate('/');
     }
-
     return (
         <Box sx={{ flexGrow: 1, position: 'fixed', top: 0, zIndex: 999, width: '77%' }}>
             <AppBar position="static" sx={{ backgroundColor: 'black' }}>

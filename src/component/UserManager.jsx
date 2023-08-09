@@ -15,10 +15,13 @@ export default function UserList() {
     const [isLoading, setisLoading] = useState(false);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+    const user = localStorage.getItem("userLogin"); 
+    const accessToken = localStorage.getItem("token"); 
+    const userRole = JSON.parse(user)?.role 
     function getData() {
+          
         setisLoading(true);
-        AdminService.getUserList().then(res => {
+        AdminService.getUserList(accessToken,userRole).then(res => {
             console.log(res.data);
             setData(res.data)
             setisLoading(false)
