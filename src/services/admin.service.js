@@ -1,11 +1,12 @@
 import axios from "axios";
 
 class AdminService{
-    static async getUserList(accessToken,userRole){
+    static async getUserList(accessToken){
         return await axios.get('http://localhost:8000/admin/userlist',{
-            headers:{ Authorization: `Bearer ${accessToken}`, 
-            Role: userRole 
-        }})
+            headers: {
+                token: `Bearer ${accessToken}`
+            }
+        })
     }
 }
 

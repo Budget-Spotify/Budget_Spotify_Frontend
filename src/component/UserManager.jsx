@@ -19,9 +19,9 @@ export default function UserList() {
     const accessToken = localStorage.getItem("token"); 
     const userRole = JSON.parse(user)?.role 
     function getData() {
-          
+        const accessToken = localStorage.getItem("token"); // get token and user
         setisLoading(true);
-        AdminService.getUserList(accessToken,userRole).then(res => {
+        AdminService.getUserList(accessToken).then(res => {
             console.log(res.data);
             setData(res.data)
             setisLoading(false)
