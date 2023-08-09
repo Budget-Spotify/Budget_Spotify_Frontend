@@ -1,5 +1,5 @@
 import { FileUploader } from "react-drag-drop-files";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
@@ -88,7 +88,7 @@ function UploadImageDragAndDrop({ imageSrc }) {
   );
 }
 
-function UserAddSong({reload}) {
+function UserAddSong({ reload }) {
   const [file, setFile] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [haveFile, setHaveFile] = useState(false);
@@ -186,12 +186,12 @@ function UserAddSong({reload}) {
     onSubmit: (values) => {
       try {
         if (!file || !avatar) {
-          return console.log('no file')
+          return console.log("no file");
         }
         if (formAdd.values.songName === "") {
-          return console.log('no song name')
+          return console.log("no song name");
         }
-        console.log('submitting');
+        console.log("submitting");
         handleUploadFile();
       } catch (e) {
         console.log(e);
@@ -205,7 +205,8 @@ function UserAddSong({reload}) {
         fileURL: file,
         avatar: avatar,
       };
-      UserService.addSong(data)
+      const accessToken = localStorage.getItem("token");
+      UserService.addSong(data, accessToken)
         .then((res) => {
           resetFormFileAndImage();
           formAdd.resetForm();
@@ -234,7 +235,7 @@ function UserAddSong({reload}) {
       >
         <Box
           component="form"
-          //   onSubmit={formAdd.handleSubmit}
+          onSubmit={formAdd.handleSubmit}
           noValidate
           sx={BoxStyle}
         >
@@ -268,8 +269,8 @@ function UserAddSong({reload}) {
               margin="normal"
               required
               fullWidth
-              //   value={formAdd.values.songName}
-              //   onChange={formAdd.handleChange}
+              value={formAdd.values.songName}
+              onChange={formAdd.handleChange}
               id="songName"
               label="Song Name"
               name="songName"
@@ -280,8 +281,8 @@ function UserAddSong({reload}) {
               margin="normal"
               required
               fullWidth
-              //   value={formAdd.values.description}
-              //   onChange={formAdd.handleChange}
+              value={formAdd.values.description}
+              onChange={formAdd.handleChange}
               id="description"
               label="Description"
               name="description"
