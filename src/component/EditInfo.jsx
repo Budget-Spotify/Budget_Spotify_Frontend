@@ -106,7 +106,6 @@ export default function EditInfo({ reload }) {
         },
     });
     useEffect(() => {
-        const accessToken = localStorage.getItem("token");
         if (haveImage) {
             let data = {
                 id: userLogin._id,
@@ -117,7 +116,7 @@ export default function EditInfo({ reload }) {
             resetFormFileAndImage();
             formAdd.resetForm();
             handleClose()
-            UserService.editInfo(data,accessToken)
+            UserService.editInfo(data)
                 .then((res) => {
                     reload(userLogin)
                 })
