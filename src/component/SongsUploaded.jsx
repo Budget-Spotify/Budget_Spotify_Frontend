@@ -14,6 +14,7 @@ import {setSong} from "../redux/features/songs/songSlice";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteModal from "./DeleteSong";
+import {setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 
 export default function SongUploaded() {
     const [search] = useOutletContext();
@@ -36,7 +37,8 @@ export default function SongUploaded() {
     };
 
     useEffect(() => {
-        UserService.getSongs()
+        const accessToken = localStorage.getItem("token");
+        UserService.getSongs(accessToken)
             .then(res => {
                 setSongs(res.data.songs);
             })
@@ -80,7 +82,10 @@ export default function SongUploaded() {
                     <tr key={song._id}>
                         <td>{index + 1}</td>
                         <td
-                            onClick={() => dispatch(setSong(song))}
+                            onClick={() => {
+                                dispatch(setSong(song))
+                                dispatch(setPlayBar(true));
+                            }}
                             style={{
                                 cursor: "pointer",
                             }}
