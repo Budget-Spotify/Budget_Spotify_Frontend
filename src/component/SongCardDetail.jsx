@@ -51,8 +51,7 @@ export default function SongCardDetail() {
     let songId = useParams();
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("token");
-        UserService.getOneSong(songId.id, accessToken)
+        UserService.getOneSong(songId.id)
             .then(res => {
                 setSong(res.data.song);
             })
