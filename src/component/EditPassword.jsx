@@ -68,13 +68,14 @@ const EditPassword = () => {
         },
         validationSchema: editpasswordSchema,
         onSubmit: values => {
+            const accessToken = localStorage.getItem("token");
             let data = {
                 id: userLogin._id,
                 oldpassword: values.oldpassword,
                 newpassword: values.newpassword,
                 newpasswordconfirm: values.newpasswordconfirm
             }
-            UserService.editPassword(data).then(res => {
+            UserService.editPassword(data, accessToken).then(res => {
                 if (res.data.status === "failed") {
                     setErrorMessage(res.data.message)
                 } else {
