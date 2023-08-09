@@ -103,7 +103,11 @@ export default function MusicPlayBar() {
                             {song ? <h3 style={{background: "black", marginTop: "4px"}}>{song.songName}</h3> :
                                 <h3 style={{marginTop: "4px", background: "black"}}>Voyage I - Waterfall</h3>}
                             {song ?
-                                <p style={{fontSize: "13px", background: "black", marginTop: "20px"}}>{song.songName}</p> :
+                                <p style={{
+                                    fontSize: "13px",
+                                    background: "black",
+                                    marginTop: "20px"
+                                }}>{song.songName}</p> :
                                 <p style={{background: "black", fontSize: "13px", marginTop: "20px"}}>The Kyoto
                                     Connection</p>}
                         </div>
@@ -113,6 +117,7 @@ export default function MusicPlayBar() {
                                 src={song.fileURL}
                                 layout="stacked-reverse"
                                 volume={0.6}
+                                autoPlay
                                 showSkipControls={true}
                                 progressJumpStep={5000}
                                 style={{
