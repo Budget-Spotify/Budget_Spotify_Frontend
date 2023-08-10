@@ -15,9 +15,7 @@ export default function UserList() {
     const [isLoading, setisLoading] = useState(false);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const user = localStorage.getItem("userLogin"); 
-    const accessToken = localStorage.getItem("token"); 
-    const userRole = JSON.parse(user)?.role 
+
     function getData() {
         const accessToken = localStorage.getItem("token");
         setisLoading(true);
