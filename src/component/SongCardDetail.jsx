@@ -18,6 +18,9 @@ import {useEffect} from "react";
 import UserService from "../services/user.service";
 import {useParams} from "react-router-dom";
 import Footer from "./Footer";
+import {useDispatch, useSelector} from "react-redux";
+import {setSong as setCurrentSong} from "../redux/features/songs/songSlice";
+import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 
 const ExpandMore = styled((props) => {
     const {expand, ...other} = props;
@@ -35,6 +38,9 @@ export default function SongCardDetail() {
     const [favorite, setFavorite] = React.useState(false);
     const [isPlay, setIsPlay] = React.useState(false);
     const [song, setSong] = React.useState({});
+    const dispatch = useDispatch();
+    const currentSong = useSelector(state => state.song.song);
+    const playingMusic = useSelector(state => state.playBar.playingMusic);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -44,14 +50,11 @@ export default function SongCardDetail() {
         setFavorite(!favorite);
     }
 
-    const handlePlayClick = () => {
-        setIsPlay(!isPlay);
-    }
-
     let songId = useParams();
 
     useEffect(() => {
-        UserService.getOneSong(songId.id)
+        const accessToken = localStorage.getItem("token");
+        UserService.getOneSong(songId.id, accessToken)
             .then(res => {
                 setSong(res.data.song);
             })
@@ -59,6 +62,14 @@ export default function SongCardDetail() {
                 console.log(err);
             })
     }, []);
+
+    useEffect(() => {
+        if (song.songName !== currentSong.songName) setIsPlay(false);
+    }, [currentSong]);
+
+    useEffect(() => {
+        if (song.songName === currentSong.songName) setIsPlay(playingMusic);
+    }, [playingMusic])
 
     return (
         <div
@@ -84,7 +95,7 @@ export default function SongCardDetail() {
                     <CardMedia
                         component="img"
                         height="194"
-                        image="https://images.genius.com/64e8b829027624906b9832567259a0e1.1000x1000x1.jpg"
+                        image={song.avatar}
                         alt="Paella dish"
                         sx={{
                             width: '192px',
@@ -122,10 +133,16 @@ export default function SongCardDetail() {
                     </CardContent>
                 </Stack>
                 <CardActions disableSpacing>
-                    <IconButton aria-label="play" onClick={handlePlayClick}>
-                        {
-                            isPlay ?
-                                (
+                    {
+                        isPlay ?
+                            (
+                                <IconButton
+                                    aria-label="pause"
+                                    onClick={() => {
+                                        dispatch(setPlay(false));
+                                        setIsPlay(false);
+                                    }}
+                                >
                                     <PauseCircleIcon
                                         fontSize='large'
                                         sx={{
@@ -133,8 +150,20 @@ export default function SongCardDetail() {
                                             fontSize: 60,
                                         }}
                                     />
-                                ) :
-                                (
+                                </IconButton>
+                            ) :
+                            (
+                                <IconButton
+                                    aria-label="play"
+                                    onClick={() => {
+                                        if (song.songName !== currentSong.songName) {
+                                            dispatch(setCurrentSong(song));
+                                        }
+                                        dispatch(setPlay(true));
+                                        dispatch(setPlayBar(true));
+                                        setIsPlay(true);
+                                    }}
+                                >
                                     <PlayCircleIcon
                                         fontSize='large'
                                         sx={{
@@ -142,9 +171,9 @@ export default function SongCardDetail() {
                                             fontSize: 60,
                                         }}
                                     />
-                                )
-                        }
-                    </IconButton>
+                                </IconButton>
+                            )
+                    }
                     <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
                         {
                             favorite ?

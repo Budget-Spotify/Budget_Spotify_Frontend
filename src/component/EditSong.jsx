@@ -47,7 +47,7 @@ const fileInputStyle = {
   maxWidth: "70%",
 };
 
-export default function AddSong({ reload }) {
+export default function EditSong({ reload }) {
   const [open, setOpen] = useState(false);
 
   const [file, setFile] = useState(null);
@@ -205,7 +205,35 @@ export default function AddSong({ reload }) {
           noValidate
           sx={style}
         >
-          <div style={{ position: "relative", width: "50%" }}>
+          <div
+            style={{
+              position: "absolute",
+              width: "50%",
+              height: "100%",
+              top: 0,
+              left: 0,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {imageSrc !== "" ? (
+              <img
+                src={imageSrc}
+                alt="Image Preview"
+                style={{ width: "80%", height: "80%" }}
+              />
+            ) : (
+              <p>Image Preview</p>
+            )}
+          </div>
+          <div
+            style={{
+              position: "relative",
+              width: "50%",
+              marginLeft: "50%"
+            }}
+          >
             <h1
               style={
                 showError === "" || showError === "Submitting..."
@@ -267,28 +295,6 @@ export default function AddSong({ reload }) {
             >
               Save
             </Button>
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              width: "50%",
-              height: "100%",
-              top: 0,
-              right: 0,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {imageSrc !== "" ? (
-              <img
-                src={imageSrc}
-                alt="Image Preview"
-                style={{ width: "80%", height: "80%" }}
-              />
-            ) : (
-              <p>Image Preview</p>
-            )}
           </div>
         </Box>
       </Modal>
