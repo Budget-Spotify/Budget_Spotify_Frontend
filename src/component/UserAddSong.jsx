@@ -8,6 +8,7 @@ import {useFormik} from "formik";
 import UserService from "../services/user.service";
 import storage from "../config/firebase.config";
 import {ref, getDownloadURL, uploadBytesResumable} from "firebase/storage";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const fileTypes = ["MP3"];
 const BoxStyle = {
@@ -123,6 +124,7 @@ function UserAddSong({reload}) {
     const [avatar, setAvatar] = useState(null);
     const [haveFile, setHaveFile] = useState(false);
     const [haveAvatar, setHaveAvatar] = useState(false);
+    const [isSubmit, setIsSubmit] = useState(false);
 
     const [open, setOpen] = useState(false);
     const [imageSrc, setImageSrc] = useState("");
@@ -136,6 +138,7 @@ function UserAddSong({reload}) {
     };
     const handleClose = () => {
         setImageSrc('')
+        formAdd.resetForm();
         setOpen(false);
     };
     const resetFormFileAndImage = () => {
@@ -227,6 +230,7 @@ function UserAddSong({reload}) {
                     return console.log("no song name");
                 }
                 console.log("submitting");
+                setIsSubmit(true);
                 handleUploadFile();
             } catch (e) {
                 console.log(e);
@@ -243,10 +247,10 @@ function UserAddSong({reload}) {
             const accessToken = localStorage.getItem("token");
             UserService.addSong(data, accessToken)
                 .then((res) => {
+                    setIsSubmit(false);
                     resetFormFileAndImage();
-                    formAdd.resetForm();
-                    handleClose();
                     reload(data);
+                    handleClose();
                 })
                 .catch((err) => console.log(err.response.data.message));
         }
@@ -323,14 +327,26 @@ function UserAddSong({reload}) {
                             autoComplete="description"
                             autoFocus
                         />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 3, mb: 2, backgroundColor: "green"}}
-                        >
-                            Save
-                        </Button>
+                        {
+                            isSubmit ? (
+                                <div
+                                    style={{
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    <CircularProgress/>
+                                </div>
+                            ) : (
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{mt: 3, mb: 2, backgroundColor: "green"}}
+                                >
+                                    Save
+                                </Button>
+                            )
+                        }
                     </div>
                 </Box>
             </Modal>
