@@ -5,22 +5,28 @@ import TablePagination, {
 } from '@mui/base/TablePagination';
 import {Link, useOutletContext} from "react-router-dom";
 import MenuAppBar from "./NavBar";
-import AddSong from "./AddSong";
+import UserAddSong from "./UserAddSong";
 import {useEffect, useState} from "react";
 import UserService from "../services/user.service";
 import Footer from "./Footer";
 import {useDispatch} from "react-redux";
 import {setSong} from "../redux/features/songs/songSlice";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteModal from "./DeleteSong";
 import {setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
+import Stack from "@mui/material/Stack";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import CardActions from "@mui/material/CardActions";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import Card from "@mui/material/Card";
 
 export default function SongUploaded() {
     const [search] = useOutletContext();
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [songs, setSongs] = useState([]);
     const dispatch = useDispatch();
     const [songsListChange, setSongsListChange] = useState(null);
@@ -63,66 +69,110 @@ export default function SongUploaded() {
             <MenuAppBar/>
             <h2 className="text-2xl font-semibold">Songs Uploaded</h2>
             <br/>
-            <AddSong reload={setSongsListChange}/>
+            <UserAddSong reload={setSongsListChange}/>
             <table aria-label="custom pagination table">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Avatar</th>
-                    <th>Name of the song</th>
-                    <th>Singer</th>
-                    <th>Listens</th>
-                    <th>Actions</th>
+                    <th>Song</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Time</th>
                 </tr>
                 </thead>
                 <tbody>
                 {(rowsPerPage > 0
                         ? songs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         : songs
-                ).map((song, index) => (
+                ).map(song => (
                     <tr key={song._id}>
-                        <td>{index + 1}</td>
-                        <td
-                            onClick={() => {
-                                dispatch(setSong(song))
-                                dispatch(setPlayBar(true));
-                            }}
-                            style={{
-                                cursor: "pointer",
-                            }}
-                        >
-                            <img
-                                src={song.avatar}
-                                alt="Error"
-                                style={{
-                                    width: '100px',
-                                    height: '100px',
-                                    borderRadius: '50%',
+                        <td colSpan={6} style={{backgroundColor: 'grey'}}>
+                            <Card
+                                sx={{
+                                    backgroundColor: 'black'
                                 }}
-                            />
-                        </td>
-                        <td>
-                            <Link to={`/song/detail/${song._id}`}>
-                                {song.songName}
-                            </Link>
-                        </td>
-                        <td>
-                            {song.singers.map(singer => (
-                                {singer}
-                            ))}
-                        </td>
-                        <td>
-                            {new Date(song.uploadTime).toLocaleDateString()}
-                        </td>
-                        <td>
-                            <IconButton aria-label="delete">
-                                <EditIcon
-                                    sx={{
-                                        color: '#4f48cb',
-                                    }}
-                                />
-                            </IconButton>
-                            <DeleteModal song={song} reload={setSongsListChange}/>
+                            >
+                                <Stack direction={'row'}>
+                                    <CardMedia
+                                        component="img"
+                                        height="194"
+                                        image={song.avatar}
+                                        alt="Paella dish"
+                                        onClick={() => {
+                                            dispatch(setSong(song));
+                                            dispatch(setPlayBar(true));
+                                        }}
+                                        sx={{
+                                            width: '100px',
+                                            height: '100px',
+                                            cursor: "pointer",
+                                        }}
+                                    />
+                                    <CardContent
+                                        sx={{
+                                            flexGrow: '1',
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            justifyContent: 'flex-start',
+                                        }}
+                                    >
+                                        <Stack direction={'column'}>
+                                            <Typography
+                                                variant="body2"
+                                                style={{
+                                                    color: 'white',
+                                                    fontSize: '14px',
+                                                    fontWeight: '500',
+                                                }}>
+                                                <Link to={`/song/detail/${song._id}`}>
+                                                    {song.songName}
+                                                </Link>
+                                            </Typography>
+                                            <Typography
+                                                variant="body2"
+                                                style={{
+                                                    color: 'white',
+                                                    fontSize: '12px',
+                                                    fontWeight: '400',
+                                                }}>
+                                                {new Date(song.uploadTime).toLocaleDateString()}
+                                            </Typography>
+                                        </Stack>
+                                    </CardContent>
+                                    <CardContent>
+                                        <Typography
+                                            variant="body2"
+                                            style={{
+                                                color: 'white',
+                                                fontSize: '14px',
+                                                fontWeight: '500',
+                                                paddingRight: '142.5px',
+                                                paddingTop: '25px',
+                                            }}>
+                                            Time
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions disableSpacing>
+                                        <IconButton aria-label="add to favorites">
+                                            <FavoriteBorderIcon
+                                                fontSize='large'
+                                                sx={{
+                                                    color: '#1ed760',
+                                                }}
+                                            />
+                                        </IconButton>
+                                        <IconButton aria-label="delete">
+                                            <EditIcon
+                                                sx={{
+                                                    color: '#4f48cb',
+                                                }}
+                                            />
+                                        </IconButton>
+                                        <DeleteModal song={song} reload={setSongsListChange}/>
+                                    </CardActions>
+                                </Stack>
+                            </Card>
                         </td>
                     </tr>
                 ))}
@@ -135,7 +185,7 @@ export default function SongUploaded() {
                 <tfoot>
                 <tr>
                     <CustomTablePagination
-                        rowsPerPageOptions={[10, 15, 20, {label: 'All', value: -1}]}
+                        rowsPerPageOptions={[5, 10, 15, {label: 'All', value: -1}]}
                         colSpan={6}
                         count={songs.length}
                         rowsPerPage={rowsPerPage}
@@ -177,13 +227,12 @@ const Root = styled('div')(
 
   td,
   th {
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[800]};
-    text-align: center;
+    text-align: left;
     padding: 8px;
   }
 
   th {
-    background-color: ${theme.palette.mode === 'dark' ? grey[900] : 'grey'};
+    background-color: ${theme.palette.mode === 'dark' ? grey[900] : 'black'};
   }
   
   td img {
