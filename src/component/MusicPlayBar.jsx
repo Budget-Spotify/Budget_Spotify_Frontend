@@ -157,7 +157,7 @@ export default function MusicPlayBar() {
                             style={{
                                 color: "white",
                                 width: "62%",
-                                height: isPlaying ? "100px" : "0%",
+                                height: "0%",
                                 margin: "0 auto",
                                 backgroundColor: "#131313",
                                 // padding: "0% 20px 16px 20px",
