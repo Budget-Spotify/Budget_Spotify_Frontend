@@ -73,6 +73,13 @@ class UserService {
             },
         });
     }
+    static async addPlayList(data, accessToken) {
+        return await axios.post("http://localhost:8000/user/playlist/create", data, {
+            headers: {
+                token: `Bearer ${accessToken}`,
+            },
+        });
+    }
 }
 
 export default UserService;

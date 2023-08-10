@@ -3,11 +3,20 @@ import MenuAppBar from "./NavBar";
 import { useOutletContext } from "react-router-dom";
 import Footer from "./Footer";
 import EditInfo from "./EditInfo";
+import * as React from 'react';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 const DetailUser = () => {
     const [search] = useOutletContext();
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
     const [userChange, setUserChange] = useState(null);
+    console.log(userLogin);
     return (
         <div style={{
             marginLeft: "20.5%",
@@ -20,42 +29,66 @@ const DetailUser = () => {
         }} >
             <MenuAppBar />
             <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
-                <div>
-                    {/* <Icon icon="logos:spotify" width="150" /> */}
+                <style>
+                    {`
+          .custom-table {
+            background-color: black;
+          }
+
+          .custom-cell {
+            color: white;
+          }
+        `}
+                </style>
+                <div style={{ textAlign: 'left' }}>
+                    <img src={userLogin.avatar} style={{ width: '250px', height: '250px' }} />
                 </div>
-                <div className="inputRegion w-full px-4 sm:w-2/3 md:w-1/2 lg:w-1/3 py-10 flex flex-col items-center">
-                    <div className="font-bold mb-4 text-2xl">
-                        <h1>Your Profile</h1>
-                    </div>
-                    <div className="container">
-                        <div className="avatar">
-                            <img src={userLogin.avatar} alt="" />
-                        </div>
-                        <div className="name">
-                            <h1>Username: {userLogin.username} </h1>
-                            <ul className="contact">
-                                <li>
-                                    <span>First Name:</span> {userLogin.firstName}
-                                </li>
-                                <li>
-                                    <span>Last Name:</span> {userLogin.lastName}
-                                </li>
-                                <li>
-                                    <span>Role:</span> {userLogin.role}
-                                </li>
-                                <li>
-                                    <span>PhoneNumber:</span> {userLogin.phoneNumber}
-                                </li>
-                                <li>
-                                    <span>Gender:</span> {userLogin.gender}
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="flex justify-end">
-                            <EditInfo reload={setUserChange}/>
-                        </div>
-                    </div>
-                </div>
+                <TableContainer component={Paper} style={{ maxWidth: '500px' }}>
+                    <Table className="custom-table" sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell className="custom-cell"><h1>Your Profile</h1></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell className="custom-cell">Username</TableCell>
+                                <TableCell className="custom-cell">{userLogin.username}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="custom-cell">First Name</TableCell>
+                                <TableCell className="custom-cell">{userLogin.firstName}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="custom-cell">Last Name</TableCell>
+                                <TableCell className="custom-cell">{userLogin.lastName}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="custom-cell">Role</TableCell>
+                                <TableCell className="custom-cell">{userLogin.role}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="custom-cell">Phone Number</TableCell>
+                                <TableCell className="custom-cell">{userLogin.phoneNumber}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="custom-cell">Gender</TableCell>
+                                <TableCell className="custom-cell">{userLogin.gender}</TableCell>
+                            </TableRow>
+
+                            {/* Add a new row for the Edit button */}
+                            <TableRow>
+                                <TableCell colSpan={2}>
+                                    {/* Align the Edit button to the left */}
+                                    <div style={{ textAlign: 'left' }}>
+                                        <EditInfo reload={setUserChange} />
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </div>
             <Footer />
         </div>

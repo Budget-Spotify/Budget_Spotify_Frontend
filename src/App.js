@@ -12,6 +12,8 @@ import EditPassword from './component/EditPassword';
 import DetailUser from './component/DetailUser';
 import Playlist from './component/Playlist';
 import SongInPlaylist from "./component/SongInPlaylist";
+import UserPlaylist from './component/UserPlayList';
+
 
 
 function App() {

@@ -7,10 +7,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlay} from "@fortawesome/free-solid-svg-icons";
 import MusicPlayBar from "./MusicPlayBar";
 import UserService from "../services/user.service";
-import {setSong} from "../redux/features/songs/songSlice";
-import SongCard from "./SongCard";
-
-function PlayListCard({songUrl, image, title, artist, id}) {
+import AddPlaylist from "./AddPlaylist";
+function PlayListCard({image, title, artist}) {
     const [flag, setFlag] = useState(false)
     return (
         <div className='songCardDiv'>
@@ -20,13 +18,13 @@ function PlayListCard({songUrl, image, title, artist, id}) {
             }}><FontAwesomeIcon icon={faPlay}/></button>
             <h3>{title}</h3>
             <p>{artist}</p>
-            {flag && <MusicPlayBar id={id} songUrl={songUrl} image={image} title={title} artist={artist}/>}
+            {flag && <MusicPlayBar image={image} title={title} artist={artist}/>}
         </div>
     )
 }
-
-export default function Playlist() {
+export default function UserPlaylist() {
     const [data, setData] = useState([]);
+    const [playListChange, setPlayListChange] = useState(null);
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
         UserService.getPlaylist(accessToken)
@@ -36,7 +34,7 @@ export default function Playlist() {
             .catch(e => {
                 console.log(e)
             })
-    }, []);
+    }, [playListChange]);
 
     return (
         <Root
@@ -58,11 +56,11 @@ export default function Playlist() {
                     marginTop: "40px",
                     gap: "30px 20px",
                 }}
-            >
+            >   <AddPlaylist reload={setPlayListChange}/>
                 {data.map((e, index) => {
 
                     return (
-                        <SongCard
+                        <PlayListCard
                             image={e.avatar}
                             title={e.playlistName}
                             artist={e.description}
