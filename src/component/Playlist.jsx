@@ -3,11 +3,7 @@ import MenuAppBar from "./NavBar";
 import Footer from "./Footer";
 import {styled} from "@mui/system";
 import {useEffect, useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlay} from "@fortawesome/free-solid-svg-icons";
-import MusicPlayBar from "./MusicPlayBar";
 import UserService from "../services/user.service";
-import {setSong} from "../redux/features/songs/songSlice";
 import SongCard from "./SongCard";
 import AddPlaylist from "./AddPlaylist";
 export default function Playlist() {
