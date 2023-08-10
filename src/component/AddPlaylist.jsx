@@ -76,7 +76,6 @@ export default function AddPlaylist({ reload }) {
     const [imageSrc, setImageSrc] = useState("");
     const [haveImage, setHaveImage] = useState(false);
     const userLoginJSON = localStorage.getItem('userLogin');
-    const userLogin = JSON.parse(userLoginJSON);
     const [showError, setShowError] = useState("");
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
