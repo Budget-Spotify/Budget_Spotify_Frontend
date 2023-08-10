@@ -10,7 +10,7 @@ import UserService from "../services/user.service";
 import {setSong} from "../redux/features/songs/songSlice";
 import SongCard from "./SongCard";
 import AddPlaylist from "./AddPlaylist";
-export default function Playlist() {
+export default function UserPlaylist() {
     const [data, setData] = useState([]);
     const [playListChange, setPlayListChange] = useState(null);
     useEffect(() => {
