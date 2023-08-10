@@ -12,6 +12,9 @@ export default function SongCard({songUrl, image, title, artist, id, song}) {
     const currentSong = useSelector(state => state.song.song)
     const playingMusic = useSelector(state => state.playBar.playingMusic);
     useEffect(()=>{
+        if(song.songName!==currentSong.songName) setFlag(false)
+    },[currentSong]);
+    useEffect(()=>{
         if(song.songName===currentSong.songName) setFlag(playingMusic)
     },[playingMusic])
 
