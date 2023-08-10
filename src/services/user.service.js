@@ -72,6 +72,14 @@ class UserService {
             },
         });
     }
+    static async deletePlaylist(data, accessToken) {
+        return await axios.delete("http://localhost:8000/user/playlist/delete", {
+            headers: {
+                token: `Bearer ${accessToken}`,
+            },
+            data: data,
+        });
+    }
 }
 
 export default UserService;
