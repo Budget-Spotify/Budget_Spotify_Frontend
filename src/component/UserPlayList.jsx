@@ -7,9 +7,21 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlay} from "@fortawesome/free-solid-svg-icons";
 import MusicPlayBar from "./MusicPlayBar";
 import UserService from "../services/user.service";
-import {setSong} from "../redux/features/songs/songSlice";
-import SongCard from "./SongCard";
 import AddPlaylist from "./AddPlaylist";
+function PlayListCard({image, title, artist}) {
+    const [flag, setFlag] = useState(false)
+    return (
+        <div className='songCardDiv'>
+            <img src={image} alt="image"/>
+            <button onClick={() => {
+                setFlag(true)
+            }}><FontAwesomeIcon icon={faPlay}/></button>
+            <h3>{title}</h3>
+            <p>{artist}</p>
+            {flag && <MusicPlayBar image={image} title={title} artist={artist}/>}
+        </div>
+    )
+}
 export default function UserPlaylist() {
     const [data, setData] = useState([]);
     const [playListChange, setPlayListChange] = useState(null);
@@ -48,7 +60,7 @@ export default function UserPlaylist() {
                 {data.map((e, index) => {
 
                     return (
-                        <SongCard
+                        <PlayListCard
                             image={e.avatar}
                             title={e.playlistName}
                             artist={e.description}
