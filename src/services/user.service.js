@@ -89,6 +89,22 @@ class UserService {
             },
         });
     }
+
+    static async addSongToPlaylist(playlistId, songId, accessToken) {
+        return await axios.post(`http://localhost:8000/user/playlist/add-song/` + playlistId, { songId: songId },{
+            headers: {
+                token: `Bearer ${accessToken}`,
+            }, data: songId
+        });
+    }
+
+    static async removeSongFromPlaylist(playlistId, songId, accessToken) {
+        return await axios.post(`http://localhost:8000/user/playlist/remove-song/` + playlistId, { songId: songId },{
+            headers: {
+                token: `Bearer ${accessToken}`,
+            }, data: songId
+        });
+    }
 }
 
 export default UserService;

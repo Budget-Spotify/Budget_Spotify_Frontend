@@ -16,8 +16,11 @@ import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteModal from "./DeleteSong";
 import {useDispatch} from "react-redux";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 export default function SongInPlaylist() {
     const dispatch = useDispatch();
@@ -26,6 +29,10 @@ export default function SongInPlaylist() {
     const [data, setData] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const [searchData, setSearchData] = useState([]);
+    const [flagUpdate, setFlagUpdate] = useState(0);
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
@@ -33,9 +40,8 @@ export default function SongInPlaylist() {
             .then(res => setData(res.data.playlist))
             .catch(e => {
                 console.log(e)
-            })
-    }, [songsListChange]);
-    console.log(searchData.data)
+            });
+    }, [songsListChange, data]);
 
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
@@ -43,8 +49,28 @@ export default function SongInPlaylist() {
             .then(res => setSearchData(res))
             .catch(e => {
                 console.log(e)
-            })
+            });
     }, [searchInput]);
+
+    const addSongToPlaylist = (songId) => {
+        const accessToken = localStorage.getItem("token");
+        UserService.addSongToPlaylist(params.playlistId, songId, accessToken)
+            .then()
+            .catch(e => {
+                console.log(e)
+            });
+        setFlagUpdate(flagUpdate + 1);
+    }
+    const removeSongToPlaylist = (songId) => {
+        const accessToken = localStorage.getItem("token");
+        UserService.removeSongFromPlaylist(params.playlistId, songId, accessToken)
+            .then()
+            .catch(e => {
+                console.log(e)
+            });
+        setFlagUpdate(flagUpdate + 1);
+        handleClose();
+    }
 
     return (
         <Root>
@@ -178,7 +204,42 @@ export default function SongInPlaylist() {
                                                 }}
                                             />
                                         </IconButton>
-                                        <DeleteModal song={song} reload={setSongsListChange}/>
+                                        <div>
+                                            <IconButton
+                                                aria-label="delete"
+                                                onClick={handleOpen}
+                                            >
+                                                <DeleteIcon
+                                                    sx={{
+                                                        color: '#ce4242',
+                                                    }}
+                                                />
+                                            </IconButton>
+                                            <Modal
+                                                open={open}
+                                                onClose={handleClose}
+                                                aria-labelledby="modal-modal-title"
+                                                aria-describedby="modal-modal-description"
+                                            >
+                                                <Box sx={style}>
+                                                    <Typography variant="h6" component="h2" gutterBottom>
+                                                        <span style={{color: 'white', backgroundColor: 'black'}}>FBI </span>
+                                                        <span style={{color: 'black', backgroundColor: 'orange'}}>WARNING!</span>
+                                                    </Typography>
+                                                    <Typography variant="body1" gutterBottom>
+                                                        Are you sure you want to delete this item? This action cannot be undone.
+                                                    </Typography>
+                                                    <Box sx={{display: 'flex', justifyContent: 'flex-end', mt: 2}}>
+                                                        <Button variant="outlined" onClick={handleClose} sx={{mr: 2}}>
+                                                            CANCEL
+                                                        </Button>
+                                                        <Button variant="contained" onClick={()=>{removeSongToPlaylist(song._id)}} color="error">
+                                                            OK
+                                                        </Button>
+                                                    </Box>
+                                                </Box>
+                                            </Modal>
+                                        </div>
                                     </CardActions>
                                 </Stack>
                             </Card>
@@ -213,7 +274,7 @@ export default function SongInPlaylist() {
                             <td>{song.songName}</td>
                             <td>{song.singers}</td>
                             <td>
-                                <button>Add to Playlist</button>
+                                <button onClick={() => addSongToPlaylist(song._id)}>Add to Playlist</button>
                             </td>
                         </tr>
                     ))
@@ -267,4 +328,17 @@ const grey = {
     200: '#d0d7de',
     800: '#32383f',
     900: '#24292f',
+};
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'white',
+    boxShadow: 24,
+    borderRadius: 4,
+    p: 4,
+    color: 'black',
 };
