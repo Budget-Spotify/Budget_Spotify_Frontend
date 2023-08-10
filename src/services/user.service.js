@@ -59,7 +59,7 @@ class UserService {
     }
 
     static async getPlaylist(accessToken) {
-        return await axios.get("http://localhost:8000/user/play-list", {
+        return await axios.get("http://localhost:8000/user/playlist", {
             headers: {
                 token: `Bearer ${accessToken}`,
             },
