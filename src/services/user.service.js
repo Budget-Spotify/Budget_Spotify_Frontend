@@ -65,6 +65,14 @@ class UserService {
             },
         });
     }
+
+    static async getSongInPlaylist(playlistId, accessToken) {
+        return await axios.get("http://localhost:8000/user/playlist/" + playlistId, {
+            headers: {
+                token: `Bearer ${accessToken}`,
+            },
+        });
+    }
 }
 
 export default UserService;
