@@ -10,6 +10,7 @@ import UserList from './component/UserManager';
 import SongCardDetail from "./component/SongCardDetail";
 import EditPassword from './component/EditPassword';
 import DetailUser from './component/DetailUser';
+import PlayList from './component/PlayList';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/song/detail/:id" element={<SongCardDetail/>}/>
                     <Route path="/info/editpassword" element={<EditPassword/>}/>
                     <Route path="/info/detail" element={<DetailUser/>}/>
+                    <Route path="/playlists" element={<PlayList/>}/>
                 </Route>
                 <Route path="/login" element={<LoginComponent/>}/>
                 <Route path="/signup" element={<SignupComponent/>}/>

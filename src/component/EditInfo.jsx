@@ -171,9 +171,10 @@ export default function EditInfo({ reload }) {
         <>
             <Button
                 sx={{
-                    backgroundColor: "green",
+                    backgroundColor: "black",
                     color: "white",
                     margin: "10px",
+                    border: "2px solid white",
                     "&:hover": {
                         backgroundColor: "grey",
                         color: "white",
