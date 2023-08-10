@@ -28,7 +28,7 @@ function App() {
                     <Route path="/song/detail/:id" element={<SongCardDetail/>}/>
                     <Route path="/info/editpassword" element={<EditPassword/>}/>
                     <Route path="/info/detail" element={<DetailUser/>}/>
-                    <Route path="/playlists" element={<PlayList/>}/>
+                    <Route path="/playlists" element={<Playlist/>}/>
                 </Route>
                 <Route path="/login" element={<LoginComponent/>}/>
                 <Route path="/signup" element={<SignupComponent/>}/>

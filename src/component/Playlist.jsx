@@ -9,24 +9,10 @@ import MusicPlayBar from "./MusicPlayBar";
 import UserService from "../services/user.service";
 import {setSong} from "../redux/features/songs/songSlice";
 import SongCard from "./SongCard";
-
-function PlayListCard({songUrl, image, title, artist, id}) {
-    const [flag, setFlag] = useState(false)
-    return (
-        <div className='songCardDiv'>
-            <img src={image} alt="image"/>
-            <button onClick={() => {
-                setFlag(true)
-            }}><FontAwesomeIcon icon={faPlay}/></button>
-            <h3>{title}</h3>
-            <p>{artist}</p>
-            {flag && <MusicPlayBar id={id} songUrl={songUrl} image={image} title={title} artist={artist}/>}
-        </div>
-    )
-}
-
+import AddPlaylist from "./AddPlaylist";
 export default function Playlist() {
     const [data, setData] = useState([]);
+    const [playListChange, setPlayListChange] = useState(null);
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
         UserService.getPlaylist(accessToken)
@@ -36,7 +22,7 @@ export default function Playlist() {
             .catch(e => {
                 console.log(e)
             })
-    }, []);
+    }, [playListChange]);
 
     return (
         <Root
@@ -58,7 +44,7 @@ export default function Playlist() {
                     marginTop: "40px",
                     gap: "30px 20px",
                 }}
-            >
+            >   <AddPlaylist reload={setPlayListChange}/>
                 {data.map((e, index) => {
 
                     return (
