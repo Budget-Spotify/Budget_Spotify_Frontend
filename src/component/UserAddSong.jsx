@@ -97,6 +97,10 @@ function UserAddSong({ reload }) {
   const [open, setOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState("");
 
+  const userLoginJSON = localStorage.getItem("userLogin");
+  const userLogin = JSON.parse(userLoginJSON);
+  const userID = userLogin._id;
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -180,7 +184,7 @@ function UserAddSong({ reload }) {
       singers: [],
       composers: [],
       tags: [],
-      uploader: "64ca21378646dc995d7f7683",
+      uploader: userID,
       isPublic: false,
     },
     onSubmit: (values) => {

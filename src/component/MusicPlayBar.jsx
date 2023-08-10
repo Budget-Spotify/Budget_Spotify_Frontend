@@ -91,22 +91,22 @@ export default function MusicPlayBar() {
                         <img
                             src={song.avatar}
                             alt="img"
-                            style={{width: "70px", height: "100%", borderRadius: "5px"}}
+                            style={{width: "50%", height: "100%", borderRadius: "5px"}}
                         />
                     ) : (
                         <img
                             src="https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/art.jpg"
                             alt="img"
-                            style={{width: "70px", height: "100%", borderRadius: "5px"}}
+                            style={{width: "50%", height: "100%", borderRadius: "5px"}}
                         />
                     )}
 
                     <div style={{color: "#fff", background: "black", width: "78%"}}>
-                        {song ? <h3 style={{background: "black", marginTop: "4px"}}>{song.songName}</h3> :
-                            <h3 style={{marginTop: "4px", background: "black"}}>Voyage I - Waterfall</h3>}
+                        {song ? <h3 style={{background: "black", marginTop: "10px", marginLeft: "10px"}}>{song.songName}</h3> :
+                            <h3 style={{marginTop: "10px", marginLeft: "10px", background: "black"}}>Voyage I - Waterfall</h3>}
                         {song ?
-                            <p style={{fontSize: "13px", background: "black", marginTop: "20px"}}>{song.songName}</p> :
-                            <p style={{background: "black", fontSize: "13px", marginTop: "20px"}}>The Kyoto
+                            <p style={{fontSize: "12px", background: "black", marginTop: "10px", marginLeft: "10px"}}>{song.songName}</p> :
+                            <p style={{background: "black", fontSize: "12px", marginTop: "10px", marginLeft: "10px"}}>The Kyoto
                                 Connection</p>}
                     </div>
                 </div>
