@@ -54,18 +54,28 @@ export default function MusicPlayBar() {
 
     useEffect(()=>{
         if(song.songName) {
-            dispatch(addSongIntoPlayList(song))
-            if(tracks.length===0) setCurrentTrackIndex(0)
-            else {setCurrentTrackIndex(tracks.length)}
+            const songExist = tracks.some(e => e.songName === song.songName)
+            if(songExist){
+                const songIndex = tracks.findIndex(e => e.songName === song.songName);
+                setCurrentTrackIndex(songIndex)
+            } else {
+                dispatch(addSongIntoPlayList(song))
+                if(tracks.length===0) setCurrentTrackIndex(0)
+                else {setCurrentTrackIndex(tracks.length)}
+            }
         }
     },[song])
+
+    
+    useEffect(()=>{
+        console.log(tracks); // you can use this to monitor the tracklist using in playbar
+    },[tracks])
+    
     useEffect(()=>{
         if(playingMusic) handlePlay()
         else handlePause()
     },[playingMusic]);
-    useEffect(()=>{
-        console.log(tracks);
-    },[tracks])
+
     return (
         <>
             {!isPlaying ? (
