@@ -1,47 +1,25 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 import SongCard from "./SongCard";
 import Footer from "./Footer";
 import MenuAppBar from "./NavBar";
-import {useOutletContext} from "react-router-dom";
+import SongService from "../services/song.service";
 
 export default function Songspage() {
-    const [search] = useOutletContext();
-    const [data, setData] = useState([]);
-    const [isLoading, setisLoading] = useState(false);
-
-    function getData() {
-        setisLoading(true);
-
-        !search
-            ? axios
-                .get("https://frightened-baseball-cap-fish.cyclic.app/musixmix/songs")
-                .then((res) => {
-                    setData(res.data.data);
-                    setisLoading(false);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    setisLoading(false);
-                })
-            : axios
-                .get(
-                    `https://frightened-baseball-cap-fish.cyclic.app/musixmix?search=${search}`
-                )
-                .then((res) => {
-                    setData(res.data.songs);
-                    console.log(res.data.songs)
-                    setisLoading(false);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    setisLoading(false);
-                });
-    }
+    const [isLoading, setIsLoading] = useState(false);
+    const [listPublicSongs, setListPublicSongs] = useState([]);
 
     useEffect(() => {
-        getData();
-    }, [search]);
+        setIsLoading(true);
+        SongService.getPublicSongs()
+            .then((res) => {
+                setListPublicSongs(res.data.songs);
+                setIsLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setIsLoading(false);
+            })
+    }, []);
 
     return (
         <div
@@ -72,15 +50,16 @@ export default function Songspage() {
                         gap: "30px 20px",
                     }}
                 >
-                    {data && data.map((e, index) => {
+                    {listPublicSongs && listPublicSongs.map((song, index) => {
 
                         return (
                             <SongCard
-                                songUrl={e.source}
-                                image={e.image}
-                                title={e.title}
-                                artist={e.artist}
+                                songUrl={song.fileURL}
+                                image={song.avatar}
+                                title={song.songName}
+                                artist={new Date(song.uploadTime).toLocaleDateString()}
                                 key={index}
+                                song={song}
                             />
                         );
                     })}

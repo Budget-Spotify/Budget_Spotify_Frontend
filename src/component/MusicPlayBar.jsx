@@ -1,4 +1,4 @@
-import React from "react";
+import {useEffect, useRef, useState} from "react";
 import ReactH5AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import "./component.css";
@@ -6,13 +6,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {Fab} from "@mui/material";
 import UpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DownIcon from '@mui/icons-material/KeyboardArrowDown';
-import {setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
+import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 
 
 export default function MusicPlayBar() {
     const song = useSelector(state => state.song.song);
     const dispatch = useDispatch();
     const isPlaying = useSelector(state => state.playBar.isPlaying);
+    const playingMusic = useSelector(state => state.playBar.playingMusic);
 
     const fixedUpIconStyle = {
         position: 'fixed',
@@ -28,6 +29,22 @@ export default function MusicPlayBar() {
     const handleCollapse = () => {
         dispatch(setPlayBar(!isPlaying));
     }
+
+    const audioRef = useRef();
+
+    const handlePlay = () => {
+      audioRef.current.audio.current.play();
+    };
+
+    const handlePause = () => {
+      audioRef.current.audio.current.pause();
+    };
+
+    useEffect(()=>{
+        if(playingMusic) handlePlay()
+        else handlePause()
+    },[playingMusic]);
+
     return (
         <>
             {!isPlaying ? (
@@ -112,11 +129,15 @@ export default function MusicPlayBar() {
                 </div>
                 {
                     song ? <ReactH5AudioPlayer
+                            ref={audioRef}
                             src={song.fileURL}
                             layout="stacked-reverse"
                             volume={0.6}
+                            autoPlay
                             showSkipControls={true}
                             progressJumpStep={5000}
+                            onPlay={()=>{dispatch(setPlay(true))}}
+                            onPause={()=>{dispatch(setPlay(false))}}
                             style={{
                                 color: "white",
                                 width: "60%",
