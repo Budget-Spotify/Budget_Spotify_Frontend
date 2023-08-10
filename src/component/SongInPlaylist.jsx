@@ -21,20 +21,30 @@ import {useDispatch} from "react-redux";
 
 export default function SongInPlaylist() {
     const dispatch = useDispatch();
-    let params = useParams();
+    const params = useParams();
     const [songsListChange, setSongsListChange] = useState(null);
     const [data, setData] = useState([]);
+    const [searchInput, setSearchInput] = useState("");
+    const [searchData, setSearchData] = useState([]);
 
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
         UserService.getSongInPlaylist(params.playlistId, accessToken)
-            .then(res => {
-                setData(res.data.playlist);
-            })
+            .then(res => setData(res.data.playlist))
             .catch(e => {
                 console.log(e)
             })
     }, [songsListChange]);
+    console.log(searchData.data)
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem("token");
+        UserService.searchSong(searchInput, accessToken)
+            .then(res => setSearchData(res))
+            .catch(e => {
+                console.log(e)
+            })
+    }, [searchInput]);
 
     return (
         <Root>
@@ -47,7 +57,7 @@ export default function SongInPlaylist() {
                 marginBottom: "20px"
             }}>
                 <img
-                    src={data.avatar}
+                    src={data?.avatar}
                     alt="This is a Picture"
                     style={{maxWidth: "25%", maxHeight: "100%"}}
                 />
@@ -63,10 +73,10 @@ export default function SongInPlaylist() {
                         Playlist
                     </div>
                     <div style={{fontSize: "4rem"}}>
-                        {data.playlistName}
+                        {data?.playlistName}
                     </div>
                     <div style={{fontSize: "0.9rem", marginLeft: "100%", width: "100%"}}>
-                        {data.songs?.length} songs
+                        {data?.songs?.length} songs
                     </div>
                 </div>
             </section>
@@ -84,7 +94,7 @@ export default function SongInPlaylist() {
                 </tr>
                 </thead>
                 <tbody>
-                {data.songs?.map(song => (
+                {data?.songs?.map(song => (
                     <tr key={song._id}>
                         <td colSpan={6} style={{backgroundColor: 'grey'}}>
                             <Card
@@ -96,7 +106,7 @@ export default function SongInPlaylist() {
                                     <CardMedia
                                         component="img"
                                         height="194"
-                                        image={song.avatar}
+                                        image={song?.avatar}
                                         alt="Paella dish"
                                         onClick={() => {
                                             dispatch(setSong(song));
@@ -177,6 +187,44 @@ export default function SongInPlaylist() {
                 ))}
                 </tbody>
             </table>
+
+            <input
+                className="w-70 h-10 rounded-md border border-gray-400 px-4 bg-black text-white "
+                type="text"
+                placeholder="Search Songs"
+                onChange={(e) => {
+                    setSearchInput(e.target.value);
+                }}
+                style={{width: "100%"}}
+            />
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Song Name</th>
+                    <th>Artist</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {searchData.data && searchData.data.length > 0 ? (
+                    searchData.data.map((song) => (
+                        <tr key={song._id}>
+                            <td>{song.songName}</td>
+                            <td>{song.singers}</td>
+                            <td>
+                                <button>Add to Playlist</button>
+                            </td>
+                        </tr>
+                    ))
+                ) : (
+                    <tr>
+                        <td colSpan="3">No results found</td>
+                    </tr>
+                )}
+                </tbody>
+            </table>
+
             <Footer/>
         </Root>
     );
