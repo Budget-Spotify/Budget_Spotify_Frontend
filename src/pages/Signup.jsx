@@ -114,7 +114,7 @@ export function SignupComponent() {
             <div className="w-full h-full flex flex-col items-center">
                 <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
                     <h1 className="text-4xl font-bold">
-                        DieC<span className="text-green-500">Team</span>
+                        DieC<span className="text-green-500">Music</span>
                     </h1>
                 </div>
                 <div
