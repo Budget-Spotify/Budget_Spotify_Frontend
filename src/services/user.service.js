@@ -65,8 +65,17 @@ class UserService {
             },
         });
     }
+
     static async addPlayList(data, accessToken) {
         return await axios.post("http://localhost:8000/user/playlist/create", data, {
+            headers: {
+                token: `Bearer ${accessToken}`,
+            },
+        });
+    }
+
+    static async updateSongState(data, accessToken) {
+        return await axios.put("http://localhost:8000/user/song/update-state", data, {
             headers: {
                 token: `Bearer ${accessToken}`,
             },
