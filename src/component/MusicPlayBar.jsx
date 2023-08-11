@@ -49,9 +49,15 @@ export default function MusicPlayBar() {
         if(currentTrackIndex===tracks.length-1){
             SongService.getRandomSong()
             .then(res=>{
-                dispatch(setSong(res.data.data))
-                dispatch(addSongIntoPlayList(res.data.data))
-                nextTrackIndex = currentTrackIndex + 1
+                const randomSong = res.data.data
+                const songExist = tracks.some(e => e.songName === randomSong.songName)
+                if(songExist){
+                    handleNextTrack()
+                } else {
+                    dispatch(setSong(res.data.data))
+                    dispatch(addSongIntoPlayList(res.data.data))
+                    nextTrackIndex = currentTrackIndex + 1
+                }   
             })
             .catch(err=>{
                 console.log(err);
@@ -191,7 +197,7 @@ export default function MusicPlayBar() {
                             ref={audioRef}
                             src={tracks[currentTrackIndex].fileURL}
                             layout="stacked-reverse"
-                            volume={0.5}
+                            volume={1.0}
                             autoPlay
                             showSkipControls={true}
                             progressJumpStep={5000}
@@ -214,7 +220,7 @@ export default function MusicPlayBar() {
                             ref={audioRef}
                             src={"https://firebasestorage.googleapis.com/v0/b/budget-spotify.appspot.com/o/placeholders%2FMp3%20placeholder.mp3?alt=media&token=61efdf22-c1fa-4a93-ada0-ae5629ff565f"}
                             layout="stacked-reverse"
-                            volume={0.5}
+                            volume={1.0}
                             showSkipControls={true}
                             progressJumpStep={5000}
                             onPlay={handleEmptyTracks}
