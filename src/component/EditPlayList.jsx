@@ -155,7 +155,7 @@ export default function EditPlaylist({ reload, playlist }) {
     }, [haveImage]);
     return (
         <>
-            <button onClick={handleOpen}>Edit</button>
+            <button onClick={handleOpen} >Edit</button>
             <Modal
                 open={open}
                 onClose={handleClose}
