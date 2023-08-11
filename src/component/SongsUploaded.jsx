@@ -22,6 +22,7 @@ import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Card from "@mui/material/Card";
+import PublicState from "./PublicState";
 
 export default function SongUploaded() {
     const [search] = useOutletContext();
@@ -139,6 +140,14 @@ export default function SongUploaded() {
                                                 {new Date(song.uploadTime).toLocaleDateString()}
                                             </Typography>
                                         </Stack>
+                                    </CardContent>
+                                    <CardContent
+                                        style={{
+                                            paddingRight: '142.5px',
+                                            paddingTop: '25px',
+                                        }}
+                                    >
+                                        <PublicState song={song}/>
                                     </CardContent>
                                     <CardContent>
                                         <Typography

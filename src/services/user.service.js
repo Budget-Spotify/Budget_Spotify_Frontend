@@ -120,6 +120,13 @@ class UserService {
             },
         });
     }
+    static async updateSongState(data, accessToken) {
+        return await axios.put("http://localhost:8000/user/song/update-state", data, {
+            headers: {
+                token: `Bearer ${accessToken}`,
+            },
+        });
+    }
 }
 
 export default UserService;
