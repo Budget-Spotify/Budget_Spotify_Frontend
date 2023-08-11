@@ -24,7 +24,6 @@ export default function SongCard({songUrl, image, title, artist, id, song}) {
             {
                 flag ? (
                     <button onClick={() => {
-                        dispatch(setSong(song));
                         dispatch(setPlay(false))
                         setFlag(false);
                     }}>

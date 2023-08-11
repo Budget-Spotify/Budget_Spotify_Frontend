@@ -1,10 +1,10 @@
-import {useFormik} from "formik";
+import { useFormik } from "formik";
 import axios from "axios";
-import {Link, useNavigate} from "react-router-dom";
-import {ToastContainer} from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import TextField from '@mui/material/TextField';
-import {createTheme, ThemeProvider} from "@mui/material/styles";
-import {useState} from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useState } from "react";
 
 const theme = createTheme({
     palette: {
@@ -43,29 +43,29 @@ export function LoginComponent() {
     const [loginFail, setLoginFail] = useState(false);
     const navigate = useNavigate();
     const formik = useFormik({
-            initialValues: {
-                username: "",
-                password: "",
-            },
-            onSubmit: async (values) => {
-                try {
-                    const response = await axios.post("http://localhost:8000/auth/login", values);
-                    localStorage.setItem("token", response.data.accessToken);
-                    const userObject = response.data.user;
-                    const userString = JSON.stringify(userObject);
-                    localStorage.setItem("userLogin", userString);
-                    navigate('/');
+        initialValues: {
+            username: "",
+            password: "",
+        },
+        onSubmit: async (values) => {
+            try {
+                const response = await axios.post("http://localhost:8000/auth/login", values);
+                localStorage.setItem("token", response.data.accessToken);
+                const userObject = response.data.user;
+                const userString = JSON.stringify(userObject);
+                localStorage.setItem("userLogin", userString);
+                navigate('/');
 
-                    // if you need to get userLogin
-                    // const storedUserString = localStorage.getItem("userLogin");
-                    // const storedUserObject = JSON.parse(storedUserString);
-                    // console.log(storedUserObject);
-                } catch (error) {
-                    setLoginFail(true);
-                }
+                // if you need to get userLogin
+                // const storedUserString = localStorage.getItem("userLogin");
+                // const storedUserObject = JSON.parse(storedUserString);
+                // console.log(storedUserObject);
+            } catch (error) {
+                setLoginFail(true);
             }
-
         }
+
+    }
     )
 
     return (
@@ -73,7 +73,7 @@ export function LoginComponent() {
             <div className="w-full h-full flex flex-col items-center">
                 <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
                     <h1 className="text-4xl font-bold">
-                        Music<span className="text-green-500">Mix</span>
+                        DieC<span className="text-green-500">Music</span>
                     </h1>
 
                 </div>
@@ -81,33 +81,33 @@ export function LoginComponent() {
                     <div className="font-bold mb-4 text-center text-xl">
                         To continue, log in to Spotify.
                     </div>
-                    <form onSubmit={formik.handleSubmit} style={{width: '100%'}}>
+                    <form onSubmit={formik.handleSubmit} style={{ width: '100%' }}>
 
-                        <div style={{marginBottom: '10px'}}>
-                        <TextField
-                            label="Username"
-                            placeholder="Enter your username"
-                            className="textFieldLogin-width"
-                            value={formik.values.username}
-                            onChange={formik.handleChange}
-                            name="username"
-                        />
+                        <div style={{ marginBottom: '10px' }}>
+                            <TextField
+                                label="Username"
+                                placeholder="Enter your username"
+                                className="textFieldLogin-width"
+                                value={formik.values.username}
+                                onChange={formik.handleChange}
+                                name="username"
+                            />
                         </div>
 
-                        <div style={{marginBottom: '10px'}}>
-                        <TextField
-                            label="Password"
-                            placeholder="Password"
-                            className="textFieldLogin-width"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            name="password"
-                            type="password"
-                        />
+                        <div style={{ marginBottom: '10px' }}>
+                            <TextField
+                                label="Password"
+                                placeholder="Password"
+                                className="textFieldLogin-width"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                name="password"
+                                type="password"
+                            />
                         </div>
 
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            {loginFail && <div style={{color: 'red'}}><p>Wrong password or user name</p></div>}
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            {loginFail && <div style={{ color: 'red' }}><p>Wrong password or user name</p></div>}
                         </div>
 
                         <div className="w-full flex items-center justify-center my-8">
@@ -125,7 +125,7 @@ export function LoginComponent() {
                         <Link to="/signup">SIGN UP FOR MusicMix</Link>
                     </div>
                 </div>
-                <ToastContainer/>
+                <ToastContainer />
             </div>
         </ThemeProvider>
     );

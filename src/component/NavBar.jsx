@@ -157,7 +157,7 @@ export default function MenuAppBar() {
                                         </div>) :
                                     (
                                         <div>
-                                            <MenuItem><Link to={'/login'}>Login</Link></MenuItem>
+                                            <MenuItem><Link style={{width: '100%', display: 'block'}} to={'/login'}>Login</Link></MenuItem>
                                         </div>
                                     )
                                 }

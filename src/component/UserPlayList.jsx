@@ -1,24 +1,76 @@
 import * as React from "react";
 import MenuAppBar from "./NavBar";
 import Footer from "./Footer";
-import {styled} from "@mui/system";
-import {useEffect, useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlay} from "@fortawesome/free-solid-svg-icons";
+import { styled } from "@mui/system";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import MusicPlayBar from "./MusicPlayBar";
 import UserService from "../services/user.service";
 import AddPlaylist from "./AddPlaylist";
-function PlayListCard({image, title, artist}) {
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeletePlayListModal from "./DeletePlaylist";
+import EditPlaylist from "./EditPlayList";
+const ITEM_HEIGHT = 48;
+function PlayListCard({ playlist, image, title, time,reload }) {
     const [flag, setFlag] = useState(false)
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     return (
         <div className='songCardDiv'>
-            <img src={image} alt="image"/>
+            <div >
+                <IconButton
+                    aria-label="more"
+                    id="long-button"
+                    aria-controls={open ? 'long-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                    style={{ float: 'right' }} // Dropdown
+                >
+                    <MoreVertIcon  style={{ transform: 'rotate(90deg)',color: 'white' }} /> 
+                </IconButton>
+                <Menu
+                    id="long-menu"
+                    MenuListProps={{
+                        'aria-labelledby': 'long-button',
+                    }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{
+                        style: {
+                            maxHeight: ITEM_HEIGHT * 4.5,
+                            width: '20ch',
+                        },
+                    }}
+                >
+
+                    <MenuItem >
+                        <DeletePlayListModal reload={reload} playlist={playlist}/>
+                    </MenuItem>
+                    <MenuItem >
+                        <EditPlaylist reload={reload} playlist={playlist} />
+                    </MenuItem>
+                </Menu>
+            </div>
+            <img src={image} alt="image" />
+
             <button onClick={() => {
                 setFlag(true)
-            }}><FontAwesomeIcon icon={faPlay}/></button>
+            }}><FontAwesomeIcon icon={faPlay} /></button>
             <h3>{title}</h3>
-            <p>{artist}</p>
-            {flag && <MusicPlayBar image={image} title={title} artist={artist}/>}
+            <p>updated on: {time}</p>
+            {flag && <MusicPlayBar image={image} title={title} time={time} />}
         </div>
     )
 }
@@ -48,7 +100,7 @@ export default function UserPlaylist() {
                 borderRadius: "10px",
             }}
         >
-            <MenuAppBar/>
+            <MenuAppBar />
             <div
                 style={{
                     display: "grid",
@@ -56,20 +108,22 @@ export default function UserPlaylist() {
                     marginTop: "40px",
                     gap: "30px 20px",
                 }}
-            >   <AddPlaylist reload={setPlayListChange}/>
+            >   <AddPlaylist reload={setPlayListChange} />
                 {data.map((e, index) => {
 
                     return (
                         <PlayListCard
+                            playlist={e}
                             image={e.avatar}
                             title={e.playlistName}
-                            artist={e.description}
+                            time={e.uploadTime}
                             key={index}
+                            reload={setPlayListChange}
                         />
                     );
                 })}
             </div>
-            <Footer/>
+            <Footer />
         </Root>
     );
 }
@@ -81,7 +135,7 @@ const grey = {
 };
 
 const Root = styled('div')(
-    ({theme}) => `
+    ({ theme }) => `
   table {
     font-family: IBM Plex Sans, sans-serif;
     font-size: 0.875rem;
