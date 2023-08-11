@@ -12,8 +12,10 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeletePlayListModal from "./DeletePlaylist";
+import EditPlaylist from "./EditPlayList";
 const ITEM_HEIGHT = 48;
-function PlayListCard({ playlist, image, title, artist,reload }) {
+function PlayListCard({ playlist, image, title, time,reload }) {
     const [flag, setFlag] = useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -23,16 +25,6 @@ function PlayListCard({ playlist, image, title, artist,reload }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const handleDelete = () => {
-        const accessToken = localStorage.getItem("token");
-        UserService.deletePlaylist({_id: playlist._id}, accessToken)
-            .then(res => {
-                reload(res);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
     return (
         <div className='songCardDiv'>
             <div >
@@ -64,10 +56,10 @@ function PlayListCard({ playlist, image, title, artist,reload }) {
                 >
 
                     <MenuItem >
-                        <button onClick={handleDelete}>Delete</button>
+                        <DeletePlayListModal reload={reload} playlist={playlist}/>
                     </MenuItem>
                     <MenuItem >
-                        <button >Edit</button>
+                        <EditPlaylist reload={reload} playlist={playlist} />
                     </MenuItem>
                 </Menu>
             </div>
@@ -77,8 +69,8 @@ function PlayListCard({ playlist, image, title, artist,reload }) {
                 setFlag(true)
             }}><FontAwesomeIcon icon={faPlay} /></button>
             <h3>{title}</h3>
-            <p>{artist}</p>
-            {flag && <MusicPlayBar image={image} title={title} artist={artist} />}
+            <p>updated on: {time}</p>
+            {flag && <MusicPlayBar image={image} title={title} time={time} />}
         </div>
     )
 }
@@ -124,7 +116,7 @@ export default function UserPlaylist() {
                             playlist={e}
                             image={e.avatar}
                             title={e.playlistName}
-                            artist={e.description}
+                            time={e.uploadTime}
                             key={index}
                             reload={setPlayListChange}
                         />

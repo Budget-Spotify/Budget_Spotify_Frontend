@@ -80,6 +80,13 @@ class UserService {
             data: data,
         });
     }
+    static async editPlaylist(data, accessToken) {
+        return await axios.put("http://localhost:8000/user/playlist/update", data, {
+            headers: {
+                token: `Bearer ${accessToken}`,
+            },
+        });
+    }
 }
 
 export default UserService;
