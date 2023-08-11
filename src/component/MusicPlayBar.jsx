@@ -7,10 +7,13 @@ import {Fab} from "@mui/material";
 import UpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
+import { addSongIntoPlayList } from "../redux/features/songs/songSlice";
 
 
 export default function MusicPlayBar() {
+    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const song = useSelector(state => state.song.song);
+    const tracks = useSelector(state => state.song.currentPlaylist)
     const dispatch = useDispatch();
     const isPlaying = useSelector(state => state.playBar.isPlaying);
     const playingMusic = useSelector(state => state.playBar.playingMusic);
@@ -40,6 +43,34 @@ export default function MusicPlayBar() {
       audioRef.current.audio.current.pause();
     };
 
+    const handleNextTrack = () => {
+        const nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
+        setCurrentTrackIndex(nextTrackIndex);
+    };
+    const handlePreTrack = () => {
+        const nextTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+        setCurrentTrackIndex(nextTrackIndex);
+    };
+
+    useEffect(()=>{
+        if(song.songName) {
+            const songExist = tracks.some(e => e.songName === song.songName)
+            if(songExist){
+                const songIndex = tracks.findIndex(e => e.songName === song.songName);
+                setCurrentTrackIndex(songIndex)
+            } else {
+                dispatch(addSongIntoPlayList(song))
+                if(tracks.length===0) setCurrentTrackIndex(0)
+                else {setCurrentTrackIndex(tracks.length)}
+            }
+        }
+    },[song])
+
+    
+    useEffect(()=>{
+        console.log(tracks); // you can use this to monitor the tracklist using in playbar
+    },[tracks])
+    
     useEffect(()=>{
         if(playingMusic) handlePlay()
         else handlePause()
@@ -103,10 +134,10 @@ export default function MusicPlayBar() {
                         justifyContent: "space-between",
                     }}
                 >
-                    {song ? (
+                    {song && tracks[currentTrackIndex] ? (
 
                         <img
-                            src={song.avatar}
+                            src={tracks[currentTrackIndex].avatar}
                             alt="img"
                             style={{width: "50%", height: "100%", borderRadius: "5px"}}
                         />
@@ -119,18 +150,18 @@ export default function MusicPlayBar() {
                     )}
 
                     <div style={{color: "#fff", background: "black", width: "78%"}}>
-                        {song ? <h3 style={{background: "black", marginTop: "10px", marginLeft: "10px"}}>{song.songName}</h3> :
+                        {song && tracks[currentTrackIndex] ? <h3 style={{background: "black", marginTop: "10px", marginLeft: "10px"}}>{song.songName}</h3> :
                             <h3 style={{marginTop: "10px", marginLeft: "10px", background: "black"}}>Voyage I - Waterfall</h3>}
-                        {song ?
+                        {song && tracks[currentTrackIndex] ?
                             <p style={{fontSize: "12px", background: "black", marginTop: "10px", marginLeft: "10px"}}>{song.songName}</p> :
                             <p style={{background: "black", fontSize: "12px", marginTop: "10px", marginLeft: "10px"}}>The Kyoto
                                 Connection</p>}
                     </div>
                 </div>
                 {
-                    song ? <ReactH5AudioPlayer
+                    song && tracks[currentTrackIndex]? <ReactH5AudioPlayer
                             ref={audioRef}
-                            src={song.fileURL}
+                            src={tracks[currentTrackIndex].fileURL}
                             layout="stacked-reverse"
                             volume={0.6}
                             autoPlay
@@ -138,6 +169,9 @@ export default function MusicPlayBar() {
                             progressJumpStep={5000}
                             onPlay={()=>{dispatch(setPlay(true))}}
                             onPause={()=>{dispatch(setPlay(false))}}
+                            onClickPrevious={handlePreTrack}
+                            onClickNext={handleNextTrack}
+                            onEnded={handleNextTrack}
                             style={{
                                 color: "white",
                                 width: "60%",
@@ -149,6 +183,7 @@ export default function MusicPlayBar() {
                             }}
                         /> :
                         <ReactH5AudioPlayer
+                            ref={audioRef}
                             src={"https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/03_-_Voyage_I_-_Waterfall.mp3"}
                             layout="stacked-reverse"
                             volume={0.6}
