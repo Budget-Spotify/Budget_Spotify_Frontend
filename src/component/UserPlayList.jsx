@@ -1,10 +1,10 @@
 import * as React from "react";
 import MenuAppBar from "./NavBar";
 import Footer from "./Footer";
-import { styled } from "@mui/system";
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import {styled} from "@mui/system";
+import {useEffect, useState} from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlay} from "@fortawesome/free-solid-svg-icons";
 import MusicPlayBar from "./MusicPlayBar";
 import UserService from "../services/user.service";
 import AddPlaylist from "./AddPlaylist";
@@ -14,20 +14,35 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeletePlayListModal from "./DeletePlaylist";
 import EditPlaylist from "./EditPlayList";
+import {useNavigate} from "react-router-dom";
+
 const ITEM_HEIGHT = 48;
-function PlayListCard({ playlist, image, title, time,reload }) {
+
+function PlayListCard({playlist, image, title, time, reload, playlistId}) {
     const [flag, setFlag] = useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
     const open = Boolean(anchorEl);
+    const navigate = useNavigate();
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleViewPlaylist = (playlistId) => {
+        const accessToken = localStorage.getItem("token");
+        navigate(`/playlists/song-in-play-list/${playlistId}`)
+        UserService.getSongInPlaylist(playlistId, accessToken)
+            .then()
+            .catch(e => {
+                console.log(e)
+            })
+    }
     return (
         <div className='songCardDiv'>
-            <div >
+            <div>
                 <IconButton
                     aria-label="more"
                     id="long-button"
@@ -35,9 +50,9 @@ function PlayListCard({ playlist, image, title, time,reload }) {
                     aria-expanded={open ? 'true' : undefined}
                     aria-haspopup="true"
                     onClick={handleClick}
-                    style={{ float: 'right' }} // Dropdown
+                    style={{float: 'right'}} // Dropdown
                 >
-                    <MoreVertIcon  style={{ transform: 'rotate(90deg)',color: 'white' }} /> 
+                    <MoreVertIcon style={{transform: 'rotate(90deg)', color: 'white'}}/>
                 </IconButton>
                 <Menu
                     id="long-menu"
@@ -55,25 +70,31 @@ function PlayListCard({ playlist, image, title, time,reload }) {
                     }}
                 >
 
-                    <MenuItem >
+                    <MenuItem>
                         <DeletePlayListModal reload={reload} playlist={playlist}/>
                     </MenuItem>
-                    <MenuItem >
-                        <EditPlaylist reload={reload} playlist={playlist} />
+                    <MenuItem>
+                        <EditPlaylist reload={reload} playlist={playlist}/>
+                    </MenuItem>
+                    <MenuItem>
+                        <p onClick={() => {
+                            handleViewPlaylist(playlistId)
+                        }}>View playlist</p>
                     </MenuItem>
                 </Menu>
             </div>
-            <img src={image} alt="image" />
+            <img src={image} alt="image"/>
 
             <button onClick={() => {
                 setFlag(true)
-            }}><FontAwesomeIcon icon={faPlay} /></button>
+            }}><FontAwesomeIcon icon={faPlay}/></button>
             <h3>{title}</h3>
             <p>updated on: {time}</p>
-            {flag && <MusicPlayBar image={image} title={title} time={time} />}
+            {flag && <MusicPlayBar image={image} title={title} time={time}/>}
         </div>
     )
 }
+
 export default function UserPlaylist() {
     const [data, setData] = useState([]);
     const [playListChange, setPlayListChange] = useState(null);
@@ -100,7 +121,7 @@ export default function UserPlaylist() {
                 borderRadius: "10px",
             }}
         >
-            <MenuAppBar />
+            <MenuAppBar/>
             <div
                 style={{
                     display: "grid",
@@ -108,22 +129,22 @@ export default function UserPlaylist() {
                     marginTop: "40px",
                     gap: "30px 20px",
                 }}
-            >   <AddPlaylist reload={setPlayListChange} />
+            ><AddPlaylist reload={setPlayListChange}/>
                 {data.map((e, index) => {
-
                     return (
                         <PlayListCard
                             playlist={e}
                             image={e.avatar}
                             title={e.playlistName}
                             time={e.uploadTime}
+                            playlistId={e._id}
                             key={index}
                             reload={setPlayListChange}
                         />
                     );
                 })}
             </div>
-            <Footer />
+            <Footer/>
         </Root>
     );
 }
@@ -135,7 +156,7 @@ const grey = {
 };
 
 const Root = styled('div')(
-    ({ theme }) => `
+    ({theme}) => `
   table {
     font-family: IBM Plex Sans, sans-serif;
     font-size: 0.875rem;
