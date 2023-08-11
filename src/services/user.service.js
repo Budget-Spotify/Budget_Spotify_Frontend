@@ -105,6 +105,21 @@ class UserService {
             }, data: songId
         });
     }
+    static async deletePlaylist(data, accessToken) {
+        return await axios.delete("http://localhost:8000/user/playlist/delete", {
+            headers: {
+                token: `Bearer ${accessToken}`,
+            },
+            data: data,
+        });
+    }
+    static async editPlaylist(data, accessToken) {
+        return await axios.put("http://localhost:8000/user/playlist/update", data, {
+            headers: {
+                token: `Bearer ${accessToken}`,
+            },
+        });
+    }
 }
 
 export default UserService;
