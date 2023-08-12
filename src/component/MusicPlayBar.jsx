@@ -100,11 +100,6 @@ export default function MusicPlayBar() {
             }
         }
     },[song])
-
-    
-    useEffect(()=>{
-        console.log(tracks); // you can use this to monitor the tracklist using in playbar
-    },[tracks])
     
     useEffect(()=>{
         if(playingMusic) handlePlay()

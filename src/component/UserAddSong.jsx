@@ -9,6 +9,7 @@ import UserService from "../services/user.service";
 import storage from "../config/firebase.config";
 import {ref, getDownloadURL, uploadBytesResumable} from "firebase/storage";
 import CircularProgress from '@mui/material/CircularProgress';
+import AutocompleteTextField from './shared/AutocompleteTextField'
 
 const fileTypes = ["MP3"];
 const BoxStyle = {
@@ -132,6 +133,10 @@ function UserAddSong({reload}) {
     const userLoginJSON = localStorage.getItem("userLogin");
     const userLogin = JSON.parse(userLoginJSON);
     const userID = userLogin._id;
+
+    const [singers,setSingers]=useState(null)
+    const [composers,setComposers]=useState(null)
+    const [tags,setTags]=useState(null)
 
     const handleOpen = () => {
         setOpen(true);
@@ -327,6 +332,9 @@ function UserAddSong({reload}) {
                             autoComplete="description"
                             autoFocus
                         />
+                        <AutocompleteTextField setValue={setSingers} inputText={"Singer:"}/>
+                        <AutocompleteTextField setValue={setComposers} inputText={"Composers:"}/>
+                        <AutocompleteTextField setValue={setTags} inputText={"Tags:"}/>
                         {
                             isSubmit ? (
                                 <div
