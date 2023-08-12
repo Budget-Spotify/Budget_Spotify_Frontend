@@ -172,16 +172,7 @@ export default function AutocompleteTextField({setValue,inputText,datalist,formF
     id: 'customized-hook-demo',
     multiple: true,
     options: datalist,
-    getOptionLabel: (option) => {
-      switch (formField){
-        case "singers":
-          return option.singerName
-        case "composers":
-          return option.composerName
-        case "tags":
-          return option.tagName
-      }
-    },
+    getOptionLabel: (option) => option.name,
   });
 
   useEffect(()=>{
@@ -194,52 +185,18 @@ export default function AutocompleteTextField({setValue,inputText,datalist,formF
       <div {...getRootProps()}>
         <Label {...getInputLabelProps()}>{inputText}</Label>
         <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
-          {value.map((option, index) => {
-            switch (formField){
-              case "singers":
-                return (
-                  <StyledTag label={option.singerName} {...getTagProps({ index })} />
-                )
-              case "composers":
-                return (
-                  <StyledTag label={option.composerName} {...getTagProps({ index })} />
-                )
-              case "tags":
-                return (
-                  <StyledTag label={option.tagName} {...getTagProps({ index })} />
-                )
-            }
-          })}
+          {value.map((option, index) =>(<StyledTag label={option.name} {...getTagProps({ index })} />))}
           <input {...getInputProps()} />
         </InputWrapper>
       </div>
       {groupedOptions.length > 0 ? (
         <Listbox {...getListboxProps()}>
-          {groupedOptions.map((option, index) => {
-            switch (formField){
-              case "singers":
-                return (
+          {groupedOptions.map((option, index) => (
                   <li {...getOptionProps({ option, index })}>
-                    <span>{option.singerName}</span>
+                    <span>{option.name}</span>
                     <CheckIcon fontSize="small" />
                   </li>
-                )
-              case "composers":
-                return (
-                  <li {...getOptionProps({ option, index })}>
-                    <span>{option.composerName}</span>
-                    <CheckIcon fontSize="small" />
-                  </li>
-                )
-              case "tags":
-                return (
-                  <li {...getOptionProps({ option, index })}>
-                    <span>{option.tagName}</span>
-                    <CheckIcon fontSize="small" />
-                  </li>
-                )
-            }
-          })}
+                ))}
         </Listbox>
       ) : null}
     </Root>
