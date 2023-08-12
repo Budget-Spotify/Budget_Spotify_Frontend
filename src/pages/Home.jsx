@@ -12,7 +12,7 @@ export default function Home() {
     return (
         <div style={{height: "100%", background: "#1a1a1a"}}>
             <SideBar handleChange={handleChange}/>
-            <Outlet context={[search]}/>
+            <Outlet context={search}/>
             <MusicPlayBar/>
         </div>
     )

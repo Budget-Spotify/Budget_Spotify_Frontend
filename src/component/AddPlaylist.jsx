@@ -169,13 +169,14 @@ export default function AddPlaylist({ reload }) {
             >
                 Add PlayList
             </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+
                     <Box
                         component="form"
                         onSubmit={formAdd.handleSubmit}
@@ -253,8 +254,8 @@ export default function AddPlaylist({ reload }) {
                             )}
                         </div>
                     </Box>
-                </ThemeProvider>
-            </Modal>
+                </Modal>
+            </ThemeProvider>
         </>
     );
 }

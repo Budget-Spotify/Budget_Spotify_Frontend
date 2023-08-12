@@ -151,7 +151,7 @@ export default function EditInfo({ reload }) {
             resetFormFileAndImage();
             formAdd.resetForm();
             handleClose()
-            UserService.editInfo(data,accessToken)
+            UserService.editInfo(data, accessToken)
                 .then((res) => {
                     reload(userLogin)
                 })
@@ -184,13 +184,13 @@ export default function EditInfo({ reload }) {
             >
                 Edit
             </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
                     <Box
                         component="form"
                         onSubmit={formAdd.handleSubmit}
@@ -302,9 +302,8 @@ export default function EditInfo({ reload }) {
                             )}
                         </div>
                     </Box>
-                </ThemeProvider>
-
-            </Modal>
+                </Modal>
+            </ThemeProvider>
         </>
     );
 }

@@ -29,7 +29,7 @@ export default function SongInPlaylist() {
     const [data, setData] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const [searchData, setSearchData] = useState([]);
-    const [flagUpdate, setFlagUpdate] = useState(0);
+    
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -41,12 +41,15 @@ export default function SongInPlaylist() {
             .catch(e => {
                 console.log(e)
             });
-    }, [songsListChange, data]);
+    }, [songsListChange]);
 
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
         UserService.searchSong(searchInput, accessToken)
-            .then(res => setSearchData(res))
+            .then(res => {
+                setSearchData(res)
+                setSongsListChange(res)
+            })
             .catch(e => {
                 console.log(e)
             });
@@ -55,20 +58,22 @@ export default function SongInPlaylist() {
     const addSongToPlaylist = (songId) => {
         const accessToken = localStorage.getItem("token");
         UserService.addSongToPlaylist(params.playlistId, songId, accessToken)
-            .then()
+            .then(res => {
+                setSongsListChange(res)
+            })
             .catch(e => {
                 console.log(e)
             });
-        setFlagUpdate(flagUpdate + 1);
-    }
+        }
     const removeSongToPlaylist = (songId) => {
         const accessToken = localStorage.getItem("token");
         UserService.removeSongFromPlaylist(params.playlistId, songId, accessToken)
-            .then()
+            .then(res => {
+                setSongsListChange(res)
+            })
             .catch(e => {
                 console.log(e)
             });
-        setFlagUpdate(flagUpdate + 1);
         handleClose();
     }
 
