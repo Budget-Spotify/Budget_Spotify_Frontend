@@ -1,6 +1,5 @@
 import { useState } from "react";
 import MenuAppBar from "./NavBar";
-import { useOutletContext } from "react-router-dom";
 import Footer from "./Footer";
 import EditInfo from "./EditInfo";
 import * as React from 'react';
@@ -12,7 +11,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 const DetailUser = () => {
-    const [search] = useOutletContext();
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
     const [userChange, setUserChange] = useState(null);

@@ -3,7 +3,7 @@ import {styled} from '@mui/system';
 import TablePagination, {
     tablePaginationClasses as classes,
 } from '@mui/base/TablePagination';
-import {Link, useOutletContext} from "react-router-dom";
+import {Link} from "react-router-dom";
 import MenuAppBar from "./NavBar";
 import UserAddSong from "./UserAddSong";
 import {useEffect, useState} from "react";
@@ -25,7 +25,6 @@ import Card from "@mui/material/Card";
 import PublicState from "./PublicState";
 
 export default function SongUploaded() {
-    const [search] = useOutletContext();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [songs, setSongs] = useState([]);

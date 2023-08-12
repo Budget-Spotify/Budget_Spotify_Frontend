@@ -10,7 +10,6 @@ import AdminService from '../services/admin.service'
 import Footer from "./Footer";
 
 export default function UserList() {
-    const [search] = useOutletContext();
     const [data, setData] = useState({list: []});
     const [isLoading, setisLoading] = useState(false);
     const [page, setPage] = React.useState(0);
