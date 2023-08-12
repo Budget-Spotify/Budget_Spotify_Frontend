@@ -185,10 +185,10 @@ export default function MusicPlayBar() {
                     )}
 
                     <div style={{color: "#fff", background: "black", width: "78%"}}>
-                        {song.songName && tracks[currentTrackIndex] ? <h3 style={{background: "black", marginTop: "10px", marginLeft: "10px"}}>{song.songName}</h3> :
+                        {song.songName && tracks[currentTrackIndex] ? <h3 style={{background: "black", marginTop: "10px", marginLeft: "10px"}}>{tracks[currentTrackIndex].songName}</h3> :
                             <h3 style={{marginTop: "10px", marginLeft: "10px", background: "black"}}>...</h3>}
                         {song.songName && tracks[currentTrackIndex] ?
-                            <p style={{fontSize: "12px", background: "black", marginTop: "10px", marginLeft: "10px"}}>{song.songName}</p> :
+                            <p style={{fontSize: "12px", background: "black", marginTop: "10px", marginLeft: "10px"}}>{tracks[currentTrackIndex].songName}</p> :
                             <p style={{background: "black", fontSize: "12px", marginTop: "10px", marginLeft: "10px"}}>...</p>}
                     </div>
                 </div>
