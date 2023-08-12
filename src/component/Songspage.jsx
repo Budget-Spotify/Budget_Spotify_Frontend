@@ -3,14 +3,15 @@ import SongCard from "./SongCard";
 import Footer from "./Footer";
 import MenuAppBar from "./NavBar";
 import SongService from "../services/song.service";
-
+import { useOutletContext } from "react-router-dom";
 export default function Songspage() {
+    const search = useOutletContext();
     const [isLoading, setIsLoading] = useState(false);
     const [listPublicSongs, setListPublicSongs] = useState([]);
 
     useEffect(() => {
         setIsLoading(true);
-        SongService.getPublicSongs()
+        SongService.searchSongPublic(search)
             .then((res) => {
                 setListPublicSongs(res.data.songs);
                 setIsLoading(false);
@@ -19,7 +20,7 @@ export default function Songspage() {
                 console.log(err);
                 setIsLoading(false);
             })
-    }, []);
+    }, [search]);
 
     return (
         <div
