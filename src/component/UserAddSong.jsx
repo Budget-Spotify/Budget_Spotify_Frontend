@@ -10,6 +10,7 @@ import storage from "../config/firebase.config";
 import {ref, getDownloadURL, uploadBytesResumable} from "firebase/storage";
 import CircularProgress from '@mui/material/CircularProgress';
 import AutocompleteTextField from './shared/AutocompleteTextField'
+import SongService from "../services/song.service";
 
 const fileTypes = ["MP3"];
 const BoxStyle = {
@@ -242,6 +243,21 @@ function UserAddSong({reload}) {
             }
         },
     });
+    useEffect(()=>{
+        Promise.all([
+            SongService.getSingers(),
+            SongService.getComposers(),
+            SongService.getTags()
+        ])
+        .then(values=>{
+            setSingers(values[0].data.data)
+            setComposers(values[1].data.data)
+            setTags(values[2].data.data)
+        })
+        .catch(err=>{
+            console.log(err.message);
+        })
+    },[])
     useEffect(() => {
         if (haveFile && haveAvatar) {
             let data = {
@@ -249,6 +265,7 @@ function UserAddSong({reload}) {
                 fileURL: file,
                 avatar: avatar,
             };
+            console.log(data);
             const accessToken = localStorage.getItem("token");
             UserService.addSong(data, accessToken)
                 .then((res) => {
@@ -332,9 +349,24 @@ function UserAddSong({reload}) {
                             autoComplete="description"
                             autoFocus
                         />
-                        <AutocompleteTextField setValue={setSingers} inputText={"Singer:"}/>
-                        <AutocompleteTextField setValue={setComposers} inputText={"Composers:"}/>
-                        <AutocompleteTextField setValue={setTags} inputText={"Tags:"}/>
+                        <AutocompleteTextField 
+                        datalist={singers} 
+                        setValue={formAdd.setFieldValue} 
+                        inputText={"Singer:"} 
+                        formField={"singers"}
+                        />
+                        <AutocompleteTextField 
+                        datalist={composers} 
+                        setValue={formAdd.setFieldValue} 
+                        inputText={"Composers:"} 
+                        formField={"composers"}
+                        />
+                        <AutocompleteTextField 
+                        datalist={tags} 
+                        setValue={formAdd.setFieldValue} 
+                        inputText={"Tags:"} 
+                        formField={"tags"}
+                        />
                         {
                             isSubmit ? (
                                 <div
