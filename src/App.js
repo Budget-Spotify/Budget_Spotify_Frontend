@@ -16,8 +16,6 @@ import UserPlaylist from './component/UserPlayList';
 
 
 function App() {
-    const userLoginJSON = localStorage.getItem('userLogin');
-    const userLogin = JSON.parse(userLoginJSON);
     return (
         <div className="App">
 

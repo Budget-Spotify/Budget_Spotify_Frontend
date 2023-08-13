@@ -10,6 +10,15 @@ class SongService {
     static async searchSongPublic(songname) {
         return await axios.get(`http://localhost:8000/song/search-public?songName=${songname}`);
     }
+    static async getSingers(){
+        return await axios.get('http://localhost:8000/song/singers')
+    }
+    static async getComposers(){
+        return await axios.get('http://localhost:8000/song/composers')
+    }
+    static async getTags(){
+        return await axios.get('http://localhost:8000/song/tags')
+    }
 }
 
 export default SongService;
