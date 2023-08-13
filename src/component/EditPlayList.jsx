@@ -68,12 +68,9 @@ const imageInputStyle = {
     marginBottom: "5px"
 };
 const validationSchema = Yup.object({
-    firstName: Yup.string().required('First name is required'),
-    lastName: Yup.string().required('Last name is required'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    gender: Yup.string().required('Gender is required'),
+    playlistName: Yup.string().required('PlayListName is reqired'),
 });
-export default function EditInfo({ reload }) {
+export default function EditPlaylist({ reload, playlist }) {
     const [open, setOpen] = useState(false);
     const [image, setImage] = useState("");
     const [imageSrc, setImageSrc] = useState("");
@@ -124,10 +121,8 @@ export default function EditInfo({ reload }) {
 
     const formAdd = useFormik({
         initialValues: {
-            firstName: userLogin.firstName,
-            lastName: userLogin.lastName,
-            phoneNumber: userLogin.phoneNumber,
-            gender: userLogin.gender,
+            playlistName: playlist.playlistName,
+            description: playlist.description
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
@@ -143,7 +138,7 @@ export default function EditInfo({ reload }) {
         const accessToken = localStorage.getItem("token");
         if (haveImage) {
             let data = {
-                id: userLogin._id,
+                _id: playlist._id,
                 ...formAdd.values,
                 avatar: image,
             };
@@ -151,39 +146,16 @@ export default function EditInfo({ reload }) {
             resetFormFileAndImage();
             formAdd.resetForm();
             handleClose()
-            UserService.editInfo(data, accessToken)
+            UserService.editPlaylist(data, accessToken)
                 .then((res) => {
-                    reload(userLogin)
+                    reload(res)
                 })
                 .catch((err) => console.log(err));
-            const dataLogin = {
-                _id: userLogin._id,
-                username: userLogin.username,
-                role: userLogin.role,
-                ...formAdd.values,
-                avatar: image,
-            }
-            const userString = JSON.stringify(dataLogin);
-            localStorage.setItem("userLogin", userString);
         }
     }, [haveImage]);
     return (
         <>
-            <Button
-                sx={{
-                    backgroundColor: "black",
-                    color: "white",
-                    margin: "10px",
-                    border: "2px solid white",
-                    "&:hover": {
-                        backgroundColor: "grey",
-                        color: "white",
-                    },
-                }}
-                onClick={handleOpen}
-            >
-                Edit
-            </Button>
+            <button onClick={handleOpen} >Edit</button>
             <ThemeProvider theme={theme}>
                 <Modal
                     open={open}
@@ -205,71 +177,37 @@ export default function EditInfo({ reload }) {
                                         : { color: "red" }
                                 }
                             >
-                                {showError === "" ? "Edit Profile" : showError}
+                                {showError === "" ? "Add PlayList" : showError}
                             </h1>
                             <TextField
                                 margin="normal"
                                 required
                                 fullWidth
-                                value={formAdd.values.firstName}
+                                value={formAdd.values.playlistName}
                                 onChange={formAdd.handleChange}
-                                id="firstName"
-                                label="First Name"
-                                name="firstName"
-                                autoComplete="firstName"
+                                id="laylistName"
+                                label="playlistName"
+                                name="playlistName"
+                                autoComplete="playlistName"
                                 autoFocus
                             />
-                            {formAdd.errors.firstName && (
-                                <div style={{ color: 'red' }}>{formAdd.errors.firstName}</div>
+                            {formAdd.errors.playlistName && (
+                                <div style={{ color: 'red' }}>{formAdd.errors.playlistName}</div>
                             )}
                             <TextField
                                 margin="normal"
                                 required
                                 fullWidth
-                                value={formAdd.values.lastName}
+                                value={formAdd.values.description}
                                 onChange={formAdd.handleChange}
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="lastName"
+                                id="description"
+                                label="description"
+                                name="description"
+                                autoComplete="description"
                                 autoFocus
                             />
-                            {formAdd.errors.lastName && (
-                                <div style={{ color: 'red' }}>{formAdd.errors.lastName}</div>
-                            )}
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                value={formAdd.values.phoneNumber}
-                                onChange={formAdd.handleChange}
-                                id="phoneNumber"
-                                label="Phone Number"
-                                name="phoneNumber"
-                                autoComplete="phoneNumber"
-                                autoFocus
-                            />
-
-                            {formAdd.errors.phoneNumber && (
-                                <div style={{ color: 'red' }}>{formAdd.errors.phoneNumber}</div>
-                            )}
-                            <div className="textInputDiv flex flex-col space-y-2 w-full">
-                                <label className="font-semibold pt-5">Gender</label>
-                                <select
-                                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 bg-black text-white"
-                                    name="gender"
-                                    value={formAdd.values.gender}
-                                    onChange={formAdd.handleChange}
-                                    required
-                                >
-                                    <option value="">Select your gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
                             <label htmlFor="avatar" style={imageInputLabelStyle}>Avatar:</label>
-                            <input id="avatar" name="avatar" type="file" onChange={handleImageInput} style={imageInputStyle} />
+                            <input id="avatar" type="file" onChange={handleImageInput} style={imageInputStyle} />
                             <Button
                                 type="submit"
                                 fullWidth

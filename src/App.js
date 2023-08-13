@@ -10,13 +10,12 @@ import UserList from './component/UserManager';
 import SongCardDetail from "./component/SongCardDetail";
 import EditPassword from './component/EditPassword';
 import DetailUser from './component/DetailUser';
+import SongInPlaylist from "./component/SongInPlaylist";
 import UserPlaylist from './component/UserPlayList';
 
 
 
 function App() {
-    const userLoginJSON = localStorage.getItem('userLogin');
-    const userLogin = JSON.parse(userLoginJSON);
     return (
         <div className="App">
 
@@ -24,12 +23,12 @@ function App() {
                 <Route path='/' element={<Home/>}>
                     <Route path="/" element={<Songspage/>}/>
                     <Route path="/playlists" element={<UserPlaylist/>}/>
+                    <Route path="/playlists/song-in-play-list/:playlistId" element={<SongInPlaylist/>}/>
                     <Route path="/songs-uploaded" element={<SongUploaded/>}/>
                     <Route path="/users-manager" element={<UserList/>}/>
                     <Route path="/song/detail/:id" element={<SongCardDetail/>}/>
                     <Route path="/info/editpassword" element={<EditPassword/>}/>
                     <Route path="/info/detail" element={<DetailUser/>}/>
-                    <Route path="/playlists" element={<UserPlaylist/>}/>
                 </Route>
                 <Route path="/login" element={<LoginComponent/>}/>
                 <Route path="/signup" element={<SignupComponent/>}/>

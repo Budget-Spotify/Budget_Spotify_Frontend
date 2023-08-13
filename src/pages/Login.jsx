@@ -1,10 +1,11 @@
 import {useFormik} from "formik";
-import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 import TextField from '@mui/material/TextField';
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {useState} from "react";
+import {GGLogin} from "./GGLogin";
+import {AuthService} from "../services/auth.service";
 
 const theme = createTheme({
     palette: {
@@ -49,17 +50,12 @@ export function LoginComponent() {
             },
             onSubmit: async (values) => {
                 try {
-                    const response = await axios.post("http://localhost:8000/auth/login", values);
+                    const response = await AuthService.jwtLogin(values);
                     localStorage.setItem("token", response.data.accessToken);
                     const userObject = response.data.user;
                     const userString = JSON.stringify(userObject);
                     localStorage.setItem("userLogin", userString);
                     navigate('/');
-
-                    // if you need to get userLogin
-                    // const storedUserString = localStorage.getItem("userLogin");
-                    // const storedUserObject = JSON.parse(storedUserString);
-                    // console.log(storedUserObject);
                 } catch (error) {
                     setLoginFail(true);
                 }
@@ -84,26 +80,26 @@ export function LoginComponent() {
                     <form onSubmit={formik.handleSubmit} style={{width: '100%'}}>
 
                         <div style={{marginBottom: '10px'}}>
-                        <TextField
-                            label="Username"
-                            placeholder="Enter your username"
-                            className="textFieldLogin-width"
-                            value={formik.values.username}
-                            onChange={formik.handleChange}
-                            name="username"
-                        />
+                            <TextField
+                                label="Username"
+                                placeholder="Enter your username"
+                                className="textFieldLogin-width"
+                                value={formik.values.username}
+                                onChange={formik.handleChange}
+                                name="username"
+                            />
                         </div>
 
                         <div style={{marginBottom: '10px'}}>
-                        <TextField
-                            label="Password"
-                            placeholder="Password"
-                            className="textFieldLogin-width"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            name="password"
-                            type="password"
-                        />
+                            <TextField
+                                label="Password"
+                                placeholder="Password"
+                                className="textFieldLogin-width"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                name="password"
+                                type="password"
+                            />
                         </div>
 
                         <div style={{display: 'flex', justifyContent: 'center'}}>
@@ -117,6 +113,12 @@ export function LoginComponent() {
                         </div>
                     </form>
                     <div className="w-full border border-solid border-gray-300"></div>
+                    <div className="my-6 font-semibold text-center text-lg" style={{marginTop: "20px"}}>
+                        Or login with social net world
+                        <div style={{marginTop: "20px"}}>
+                            <GGLogin/>
+                        </div>
+                    </div>
                     <div className="my-6 font-semibold text-center text-lg">
                         Don't have an account?
                     </div>
