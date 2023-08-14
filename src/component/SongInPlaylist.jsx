@@ -8,8 +8,8 @@ import {Link, useParams} from "react-router-dom";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import CardMedia from "@mui/material/CardMedia";
-import {setSong} from "../redux/features/songs/songSlice";
-import {setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
+import {setSong as setCurrentSong, setSong} from "../redux/features/songs/songSlice";
+import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
@@ -21,6 +21,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Collapse from "@mui/material/Collapse";
 
 export default function SongInPlaylist() {
     const dispatch = useDispatch();
@@ -80,37 +85,93 @@ export default function SongInPlaylist() {
     return (
         <Root>
             <MenuAppBar/>
-            <section style={{
-                position: "relative",
-                overflow: "hidden",
-                backgroundColor: '#685A89',
-                maxHeight: "250px",
-                marginBottom: "20px"
-            }}>
-                <img
-                    src={data?.avatar}
-                    alt="This is a Picture"
-                    style={{maxWidth: "25%", maxHeight: "100%"}}
-                />
-                <div
-                    style={{
-                        position: "absolute",
-                        top: "45%",
-                        left: "27%",
-                        transform: "translateY(-50%)",
-                    }}
-                >
-                    <div style={{fontSize: "0.9rem"}}>
-                        Playlist
-                    </div>
-                    <div style={{fontSize: "4rem"}}>
-                        {data?.playlistName}
-                    </div>
-                    <div style={{fontSize: "0.9rem", marginLeft: "100%", width: "100%"}}>
-                        {data?.songs?.length} songs
-                    </div>
-                </div>
-            </section>
+            {/*<section style={{*/}
+            {/*    position: "relative",*/}
+            {/*    overflow: "hidden",*/}
+            {/*    backgroundColor: '#685A89',*/}
+            {/*    maxHeight: "250px",*/}
+            {/*    marginBottom: "20px"*/}
+            {/*}}>*/}
+            {/*    <img*/}
+            {/*        src={data?.avatar}*/}
+            {/*        alt="This is a Picture"*/}
+            {/*        style={{maxWidth: "25%", maxHeight: "100%"}}*/}
+            {/*    />*/}
+            {/*    <div*/}
+            {/*        style={{*/}
+            {/*            position: "absolute",*/}
+            {/*            top: "45%",*/}
+            {/*            left: "27%",*/}
+            {/*            transform: "translateY(-50%)",*/}
+            {/*        }}*/}
+            {/*    >*/}
+            {/*        <div style={{fontSize: "0.9rem"}}>*/}
+            {/*            Playlist*/}
+            {/*        </div>*/}
+            {/*        <div style={{fontSize: "4rem"}}>*/}
+            {/*            {data?.playlistName}*/}
+            {/*        </div>*/}
+            {/*        <div style={{fontSize: "0.9rem", marginLeft: "100%", width: "100%"}}>*/}
+            {/*            {data?.songs?.length} songs*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</section>*/}
+            <Card
+                sx={{
+                    backgroundColor: 'black'
+                }}
+            >
+                <Stack direction={'row'}>
+                    <CardMedia
+                        component="img"
+                        height="194"
+                        image={data?.avatar}
+                        alt="Paella dish"
+                        sx={{
+                            width: '192px',
+                            height: '192px'
+                        }}
+                    />
+                    <CardContent style={{flexGrow: '1'}}>
+                        <Typography
+                            variant="body2"
+                            style={{
+                                color: 'white',
+                                fontSize: '0.875rem',
+                                fontWeight: '700',
+                            }}>
+                            Playlist
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            style={
+                                data?.playlistName?.length > 21 ?
+                                    {
+                                        color: 'white',
+                                        fontSize: '4rem',
+                                        fontWeight: '900',
+                                    } :
+                                    {
+                                        color: 'white',
+                                        fontSize: '5rem',
+                                        fontWeight: '900',
+                                    }
+                            }
+                        >
+                            {data?.playlistName}
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            style={{
+                                color: 'white',
+                                fontSize: '0.875rem',
+                                fontWeight: '700',
+                            }}>
+                            {data?.songs?.length} songs
+                        </Typography>
+                    </CardContent>
+                </Stack>
+            </Card>
 
 
             <table aria-label="custom pagination table">
@@ -280,13 +341,6 @@ export default function SongInPlaylist() {
                 <tbody>
                 {searchData.data && searchData.data.length > 0 ? (
                     searchData.data.map((song) => (
-                        // <tr key={song._id}>
-                        //     <td>{song.songName}</td>
-                        //     <td>{song.singers[0] ? song.singers[0].name : 'Unknown Singer'}</td>
-                        //     <td>
-                        //         <button onClick={() => addSongToPlaylist(song._id)}>Add to Playlist</button>
-                        //     </td>
-                        // </tr>
                         <tr key={song._id}>
                             <td colSpan={6} style={{backgroundColor: 'grey'}}>
                                 <Card
