@@ -11,6 +11,7 @@ export function GGLogin() {
     const handleLogin = async (credential) => {
         try {
             const response = await AuthService.googleLogin(credential);
+            console.log(response);
             localStorage.setItem("token", response.data.accessToken);
             const userObject = response.data.user;
             const userString = JSON.stringify(userObject);

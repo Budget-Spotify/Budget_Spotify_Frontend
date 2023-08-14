@@ -4,11 +4,12 @@ import Footer from "./Footer";
 import MenuAppBar from "./NavBar";
 import SongService from "../services/song.service";
 import { useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 export default function Songspage() {
     const search = useOutletContext();
     const [isLoading, setIsLoading] = useState(false);
     const [listPublicSongs, setListPublicSongs] = useState([]);
-
+    
     useEffect(() => {
         setIsLoading(true);
         SongService.searchSongPublic(search)
