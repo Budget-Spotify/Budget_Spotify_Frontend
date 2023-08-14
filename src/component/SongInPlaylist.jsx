@@ -277,7 +277,7 @@ export default function SongInPlaylist() {
                     searchData.data.map((song) => (
                         <tr key={song._id}>
                             <td>{song.songName}</td>
-                            <td>{song.singers}</td>
+                            <td>{song.singers[0] ? song.singers[0].name : 'Unknown Singer'}</td>
                             <td>
                                 <button onClick={() => addSongToPlaylist(song._id)}>Add to Playlist</button>
                             </td>
