@@ -13,7 +13,7 @@ import FormatItalic from '@mui/icons-material/FormatItalic';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Check from '@mui/icons-material/Check';
 import Typography from "@mui/material/Typography";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import UserService from "../services/user.service";
 
@@ -21,7 +21,7 @@ export function TextareaComment() {
     const [italic, setItalic] = React.useState(false);
     const [fontWeight, setFontWeight] = React.useState('normal');
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [allComments, setAllComments] = useState(false);
+    const [allComments, setAllComments] = useState('');
     const [comment, setComment] = useState('');
     const songId = useParams().id;
 
@@ -32,6 +32,26 @@ export function TextareaComment() {
                 console.log(e)
             });
     }
+
+    useEffect(() => {
+        const eventSource = new EventSource(`http://localhost:8000/sse/events`);
+
+        eventSource.onmessage = (event) => {
+            const newComments = JSON.parse(event.data);
+            setAllComments(newComments);
+        };
+
+        eventSource.onerror = (error) => {
+            console.error('SSE Error:', error);
+            eventSource.close();
+        };
+
+        return () => {
+            eventSource.close();
+        };
+    }, [songId]);
+
+    console.log(allComments)
 
     return (
         <FormControl>
