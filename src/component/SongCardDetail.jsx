@@ -53,8 +53,7 @@ export default function SongCardDetail() {
     let songId = useParams();
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("token");
-        UserService.getOneSong(songId.id, accessToken)
+        UserService.getOneSong(songId.id)
             .then(res => {
                 setSong(res.data.song);
             })
@@ -128,7 +127,8 @@ export default function SongCardDetail() {
                                 fontSize: '0.875rem',
                                 fontWeight: '700',
                             }}>
-                            {song.uploadTime}
+                            {/*{song.uploadTime}*/}
+                            {song.singers && song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
                         </Typography>
                     </CardContent>
                 </Stack>
