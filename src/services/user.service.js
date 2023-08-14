@@ -74,7 +74,7 @@ class UserService {
     }
 
     static async submitComment(comment, songId){
-        return await axiosInstance.post("http://localhost:8000/user/song/" + songId, comment);
+        return await axiosInstance.post("http://localhost:8000/user/song/" + songId, {comment: comment});
     }
 }
 

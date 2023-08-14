@@ -34,7 +34,7 @@ export function TextareaComment() {
     }
 
     useEffect(() => {
-        const eventSource = new EventSource(`http://localhost:8000/sse/events`);
+        const eventSource = new EventSource('http://localhost:8000/sse/events');
 
         eventSource.onmessage = (event) => {
             const newComments = JSON.parse(event.data);
@@ -49,8 +49,9 @@ export function TextareaComment() {
         return () => {
             eventSource.close();
         };
-    }, [songId]);
+    }, []);
 
+    console.log(allComments)
     console.log(allComments)
 
     return (
