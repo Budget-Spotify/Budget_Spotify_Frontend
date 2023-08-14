@@ -139,8 +139,8 @@ function UserAddSong({reload}) {
     const [composers,setComposers]=useState(null)
     const [tags,setTags]=useState(null)
 
-    const handleOpen = () => {
-        formAdd.setFieldValue('songName',file.name.substring(0,file.name.length-4))
+    const handleOpen = (input) => {
+        formAdd.setFieldValue('songName',input.name.substring(0,input.name.length-4))
         setOpen(true);
     };
     const handleClose = () => {
@@ -157,7 +157,7 @@ function UserAddSong({reload}) {
     const handleChangeFile = (input) => {
         console.log(input);
         setFile(input);
-        handleOpen();
+        handleOpen(input);
     };
     const handleChangeAvatar = (input) => {
         console.log(input);
@@ -355,18 +355,21 @@ function UserAddSong({reload}) {
                         setValue={formAdd.setFieldValue} 
                         inputText={"Singer:"} 
                         formField={"singers"}
+                        defaultValues={[]}
                         />
                         <AutocompleteTextField 
                         datalist={composers} 
                         setValue={formAdd.setFieldValue} 
                         inputText={"Composers:"} 
                         formField={"composers"}
+                        defaultValues={[]}
                         />
                         <AutocompleteTextField 
                         datalist={tags} 
                         setValue={formAdd.setFieldValue} 
                         inputText={"Tags:"} 
                         formField={"tags"}
+                        defaultValues={[]}
                         />
                         {
                             isSubmit ? (
