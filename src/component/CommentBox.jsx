@@ -21,9 +21,10 @@ export function TextareaComment() {
     const [italic, setItalic] = React.useState(false);
     const [fontWeight, setFontWeight] = React.useState('normal');
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [allComments, setAllComments] = useState('');
+    const [eventData, setEventData] = useState('');
     const [comment, setComment] = useState('');
     const songId = useParams().id;
+    const commentsArray = eventData.relatedComments;
 
     const handleComment = () => {
         UserService.submitComment(comment, songId)
@@ -38,7 +39,7 @@ export function TextareaComment() {
 
         eventSource.onmessage = (event) => {
             const newComments = JSON.parse(event.data);
-            setAllComments(newComments);
+            setEventData(newComments);
         };
 
         eventSource.onerror = (error) => {
@@ -51,8 +52,7 @@ export function TextareaComment() {
         };
     }, []);
 
-    console.log(allComments)
-    console.log(allComments)
+    console.log(commentsArray)
 
     return (
         <FormControl>
@@ -133,8 +133,8 @@ export function TextareaComment() {
             />
 
             <h1 style={{color: "white", marginLeft: "10px", fontSize: "16px"}}>All Comments</h1>
-            {allComments.result && allComments.result.length > 0 && (
-                allComments.result.map((comment) => (
+            {commentsArray && commentsArray.length > 0 && (
+                commentsArray.map((comment) => (
                     <Box
                         key={comment._id}
                         sx={{
@@ -145,8 +145,9 @@ export function TextareaComment() {
                             marginBottom: '10px',
                         }}
                     >
-                        <Typography sx={{color: 'blue'}}>{comment.user._id}</Typography>
-                        <Typography>{comment.content}</Typography>
+                        <Typography sx={{color: 'white'}}>{comment.user.username}</Typography>
+                        <Typography sx={{color: 'white'}}>{comment.content}</Typography>
+                        <Typography sx={{color: 'white'}}>{comment.uploadTime}</Typography>
                     </Box>
                 ))
             )}
