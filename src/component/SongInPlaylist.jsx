@@ -176,7 +176,7 @@ export default function SongInPlaylist() {
                                                     fontSize: '12px',
                                                     fontWeight: '400',
                                                 }}>
-                                                {new Date(song.uploadTime).toLocaleDateString()}
+                                                {song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
                                             </Typography>
                                         </Stack>
                                     </CardContent>

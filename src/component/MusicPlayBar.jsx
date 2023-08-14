@@ -63,7 +63,6 @@ export default function MusicPlayBar() {
                 console.log(err);
             })
         } else nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
-        console.log(nextTrackIndex);
         setCurrentTrackIndex(nextTrackIndex);
     };
     const handlePreTrack = () => {

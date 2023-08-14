@@ -12,7 +12,6 @@ import Footer from "./Footer";
 import {useDispatch} from "react-redux";
 import {setSong} from "../redux/features/songs/songSlice";
 import IconButton from "@mui/material/IconButton";
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteModal from "./DeleteSong";
 import {setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import Stack from "@mui/material/Stack";
@@ -23,6 +22,7 @@ import CardActions from "@mui/material/CardActions";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Card from "@mui/material/Card";
 import PublicState from "./PublicState";
+import UserEditSong from './UserEditSong';
 
 export default function SongUploaded() {
     const [page, setPage] = React.useState(0);
@@ -44,8 +44,8 @@ export default function SongUploaded() {
     };
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("token");
-        UserService.getSongs(accessToken)
+
+        UserService.getSongs()
             .then(res => {
                 setSongs(res.data.songs);
             })
@@ -126,7 +126,7 @@ export default function SongUploaded() {
                                                     fontWeight: '500',
                                                 }}>
                                                 <Link to={`/song/detail/${song._id}`}>
-                                                    {song.songName}
+                                                    {song.songName.length > 20 ? `${song.songName.substring(0, 20)}...` : song.songName}
                                                 </Link>
                                             </Typography>
                                             <Typography
@@ -136,7 +136,7 @@ export default function SongUploaded() {
                                                     fontSize: '12px',
                                                     fontWeight: '400',
                                                 }}>
-                                                {new Date(song.uploadTime).toLocaleDateString()}
+                                                {song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
                                             </Typography>
                                         </Stack>
                                     </CardContent>
@@ -170,13 +170,7 @@ export default function SongUploaded() {
                                                 }}
                                             />
                                         </IconButton>
-                                        <IconButton aria-label="delete">
-                                            <EditIcon
-                                                sx={{
-                                                    color: '#4f48cb',
-                                                }}
-                                            />
-                                        </IconButton>
+                                        <UserEditSong songID={song._id} reload={setSongsListChange}/>
                                         <DeleteModal song={song} reload={setSongsListChange}/>
                                     </CardActions>
                                 </Stack>

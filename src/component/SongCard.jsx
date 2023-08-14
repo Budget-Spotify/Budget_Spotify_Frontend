@@ -67,7 +67,7 @@ export default function SongCard({songUrl, image, title, artist, id, song}) {
             >
                 {title}
             </h3>
-            <p style={{fontSize: '14px'}}>{artist}</p>
+            <p style={{fontSize: '12px'}}>{artist}</p>
         </div>
     )
 }

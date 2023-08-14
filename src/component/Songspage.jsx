@@ -96,9 +96,8 @@ export default function Songspage() {
                     </div>
                 </>
             )}
-            <Footer />
+
+            <Footer/>
         </div>
     );
 }
-
-
