@@ -57,7 +57,7 @@ export default function Songspage() {
                                 songUrl={song.fileURL}
                                 image={song.avatar}
                                 title={song.songName}
-                                artist={new Date(song.uploadTime).toLocaleDateString()}
+                                artist={song.singers[0]}
                                 key={index}
                                 song={song}
                             />
