@@ -127,7 +127,7 @@ export default function SongUploaded() {
                                                     fontWeight: '500',
                                                 }}>
                                                 <Link to={`/song/detail/${song._id}`}>
-                                                    {song.songName}
+                                                    {song.songName.length > 20 ? `${song.songName.substring(0, 20)}...` : song.songName}
                                                 </Link>
                                             </Typography>
                                             <Typography
@@ -137,7 +137,7 @@ export default function SongUploaded() {
                                                     fontSize: '12px',
                                                     fontWeight: '400',
                                                 }}>
-                                                {new Date(song.uploadTime).toLocaleDateString()}
+                                                {song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
                                             </Typography>
                                         </Stack>
                                     </CardContent>
