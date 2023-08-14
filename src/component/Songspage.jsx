@@ -58,7 +58,7 @@ export default function Songspage() {
                                 songUrl={song.fileURL}
                                 image={song.avatar}
                                 title={song.songName}
-                                artist={song.singers[0]}
+                                artist={song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
                                 key={index}
                                 song={song}
                             />

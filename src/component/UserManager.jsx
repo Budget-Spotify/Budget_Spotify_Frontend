@@ -20,7 +20,6 @@ export default function UserList() {
         const accessToken = localStorage.getItem("token");
         setisLoading(true);
         AdminService.getUserList(accessToken).then(res => {
-            console.log(res.data);
             setData(res.data)
             setisLoading(false)
         })
