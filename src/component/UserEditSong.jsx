@@ -81,13 +81,14 @@ function UploadImageDragAndDrop({ imageSrc }) {
   );
 }
 
-const UserEditSong = ({ song,reload }) => {
+const UserEditSong = ({ songID,reload }) => {
   const [avatar, setAvatar] = useState(null);
   const [haveAvatar, setHaveAvatar] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [song,setSong] = useState('')
 
   const [open, setOpen] = useState(false);
-  const [imageSrc, setImageSrc] = useState(song.avatar);
+  const [imageSrc, setImageSrc] = useState('');
 
   const userLoginJSON = localStorage.getItem("userLogin");
   const userLogin = JSON.parse(userLoginJSON);
@@ -100,7 +101,7 @@ const UserEditSong = ({ song,reload }) => {
   const handleChangeAvatar = (input) => {
     setAvatar(input);
     const imgURL = URL.createObjectURL(input)
-    if(imageSrc!==imgURL) setImageSrc(imgURL);
+    if(input) setImageSrc(imgURL);
   };
 
   const handleUploadFile = () => {
@@ -133,10 +134,25 @@ const UserEditSong = ({ song,reload }) => {
     });
   };
   const handleOpen = () => {
+    UserService.getOneSong(songID)
+      .then(res=>{
+        setSong(res.data.song)
+      })
+      .catch(err=>console.log(err))
     setOpen(true);
   };
+  useEffect(()=>{
+    if(song){
+      setImageSrc(song.avatar)
+      formEdit.setFieldValue('songName',song.songName)
+      formEdit.setFieldValue('description',song.description)
+      formEdit.setFieldValue('singers',song.singers)
+      formEdit.setFieldValue('composers',song.composers)
+      formEdit.setFieldValue('tags',song.tags)
+    }
+  },[song])
   const handleClose = () => {
-    setImageSrc(song.avatar);
+    setSong('')
     formEdit.resetForm();
     setOpen(false);
   };
@@ -147,11 +163,11 @@ const UserEditSong = ({ song,reload }) => {
 
   const formEdit = useFormik({
     initialValues: {
-      songName: song.songName,
-      description: song.description,
-      singers: song.singers,
-      composers: song.composers,
-      tags: song.tags,
+      songName: '',
+      description: '',
+      singers: [],
+      composers: [],
+      tags: [],
       uploader: userID,
       isPublic: false,
     },
@@ -162,7 +178,6 @@ const UserEditSong = ({ song,reload }) => {
         }
         console.log("submitting");
         setIsSubmit(true);
-        console.log(avatar);
         if (avatar) handleUploadFile();
         else setHaveAvatar(true);
       } catch (e) {
@@ -195,6 +210,7 @@ const UserEditSong = ({ song,reload }) => {
       };
       UserService.editSong(data)
         .then((res) => {
+          setImageSrc(res.data.song.avatar);
           setIsSubmit(false);
           resetFormFileAndImage();
           reload(data);
@@ -273,7 +289,8 @@ const UserEditSong = ({ song,reload }) => {
               autoComplete="description"
               autoFocus
             />
-            <AutocompleteTextField
+            {song && (<>
+              <AutocompleteTextField
               datalist={singers}
               setValue={formEdit.setFieldValue}
               inputText={"Singer:"}
@@ -296,7 +313,7 @@ const UserEditSong = ({ song,reload }) => {
               formField={"tags"}
               defaultValues={song.tags}
               isOptionEqualToValue={(option, value) => option.name === value.name}
-            />
+            /></>)}
             {isSubmit ? (
               <div
                 style={{

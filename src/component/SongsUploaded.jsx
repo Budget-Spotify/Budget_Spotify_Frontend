@@ -171,7 +171,7 @@ export default function SongUploaded() {
                                                 }}
                                             />
                                         </IconButton>
-                                        <UserEditSong song={song} reload={setSongsListChange}/>
+                                        <UserEditSong songID={song._id} reload={setSongsListChange}/>
                                         <DeleteModal song={song} reload={setSongsListChange}/>
                                     </CardActions>
                                 </Stack>
