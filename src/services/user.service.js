@@ -69,8 +69,12 @@ class UserService {
         return await axiosInstance.put("http://localhost:8000/user/playlist/update", data);
     }
 
-    static async updateSongState(data, accessToken) {
+    static async updateSongState(data) {
         return await axiosInstance.put("http://localhost:8000/user/song/update-state", data);
+    }
+
+    static async submitComment(comment, songId){
+        return await axiosInstance.post("http://localhost:8000/user/song/" + songId, comment);
     }
 }
 

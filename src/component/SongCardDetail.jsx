@@ -21,6 +21,7 @@ import Footer from "./Footer";
 import {useDispatch, useSelector} from "react-redux";
 import {setSong as setCurrentSong} from "../redux/features/songs/songSlice";
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
+import {TextareaComment} from "./CommentBox";
 
 const ExpandMore = styled((props) => {
     const {expand, ...other} = props;
@@ -216,6 +217,9 @@ export default function SongCardDetail() {
                         </Typography>
                     </CardContent>
                 </Collapse>
+
+                <TextareaComment/>
+
             </Card>
             <Footer/>
         </div>
