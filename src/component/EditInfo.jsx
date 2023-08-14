@@ -298,11 +298,7 @@ export default function EditInfo({ reload }) {
                                     style={{ width: "80%", height: "80%" }}
                                 />
                             ) : (
-                                <img
-                                    src={userLogin.avatar}
-                                    alt="Image Preview"
-                                    style={{ width: "80%", height: "80%" }}
-                                />
+                                <p>Image Preview</p>
                             )}
                         </div>
                     </Box>

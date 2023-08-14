@@ -12,6 +12,7 @@ import EditPassword from './component/EditPassword';
 import DetailUser from './component/DetailUser';
 import SongInPlaylist from "./component/SongInPlaylist";
 import UserPlaylist from './component/UserPlayList';
+import AlbumDetail from './component/AlbumDetail';
 
 
 
@@ -23,6 +24,7 @@ function App() {
                 <Route path='/' element={<Home/>}>
                     <Route path="/" element={<Songspage/>}/>
                     <Route path="/playlists" element={<UserPlaylist/>}/>
+                    <Route path="/album/detail/:playlistId" element={<AlbumDetail/>}/>
                     <Route path="/playlists/song-in-play-list/:playlistId" element={<SongInPlaylist/>}/>
                     <Route path="/songs-uploaded" element={<SongUploaded/>}/>
                     <Route path="/users-manager" element={<UserList/>}/>

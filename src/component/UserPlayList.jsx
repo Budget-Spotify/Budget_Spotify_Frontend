@@ -34,11 +34,6 @@ function PlayListCard({playlist, image, title, time, reload, playlistId}) {
     const handleViewPlaylist = (playlistId) => {
         const accessToken = localStorage.getItem("token");
         navigate(`/playlists/song-in-play-list/${playlistId}`)
-        UserService.getSongInPlaylist(playlistId, accessToken)
-            .then()
-            .catch(e => {
-                console.log(e)
-            })
     }
     return (
         <div className='songCardDiv'>
@@ -100,7 +95,7 @@ export default function UserPlaylist() {
     const [playListChange, setPlayListChange] = useState(null);
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
-        UserService.getPlaylist(accessToken)
+        UserService.getPlaylist()
             .then(res => {
                 setData(res.data.data);
             })

@@ -1,21 +1,27 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import SongCard from "./SongCard";
 import Footer from "./Footer";
 import MenuAppBar from "./NavBar";
 import SongService from "../services/song.service";
 import { useOutletContext } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import AlbumCard from "./AlbumCard";
+
 export default function Songspage() {
     const search = useOutletContext();
     const [isLoading, setIsLoading] = useState(false);
     const [listPublicSongs, setListPublicSongs] = useState([]);
-    
+    const [playlists, setPlaylists] = useState([])
+    const [singers, setSinger] = useState([])
+
     useEffect(() => {
         setIsLoading(true);
         SongService.searchSongPublic(search)
             .then((res) => {
                 setListPublicSongs(res.data.songs);
+                setPlaylists(res.data.playlists)
+                setSinger(res.data.singers)
                 setIsLoading(false);
+
             })
             .catch((err) => {
                 console.log(err);
@@ -35,40 +41,64 @@ export default function Songspage() {
                 borderRadius: "10px",
             }}
         >
-            <MenuAppBar/>
-            <br/>
-            <br/>
-            <h2 className="text-2xl font-semibold">Best of what India listens to!</h2>
+            <MenuAppBar />
+            <br />
+            <br />
             {isLoading ? (
-                <h2 style={{textAlign: "center", margin: "150px", color: "#1DB954"}}>
+                <h2 style={{ textAlign: "center", margin: "150px", color: "#1DB954" }}>
                     Loading...
                 </h2>
             ) : (
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(5,1fr)",
-                        marginTop: "40px",
-                        gap: "30px 20px",
-                    }}
-                >
-                    {listPublicSongs && listPublicSongs.map((song, index) => {
-
-                        return (
-                            <SongCard
-                                songUrl={song.fileURL}
-                                image={song.avatar}
-                                title={song.songName}
-                                artist={song.singers[0]}
-                                key={index}
-                                song={song}
-                            />
-                        );
-                    })}
-                </div>
+                <>
+                    <div>
+                        <h1>Best of music</h1>
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(5,1fr)",
+                                marginTop: "40px",
+                                gap: "30px 20px",
+                            }}
+                        >
+                            {listPublicSongs && listPublicSongs.map((song, index) => (
+                                <>
+                                    <SongCard
+                                        songUrl={song.fileURL}
+                                        image={song.avatar}
+                                        title={song.songName}
+                                        artist={song.singers[0]}
+                                        key={index}
+                                        song={song}
+                                    />
+                                </>
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <h1>Album</h1>
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(5,1fr)",
+                                marginTop: "40px",
+                                gap: "30px 20px",
+                            }}
+                        >
+                            {playlists && playlists.map((playlist, index) => (
+                                <>
+                                    <AlbumCard
+                                       playlist={playlist}
+                                       playlistId={playlist._id}
+                                    />
+                                </>
+                            ))}
+                        </div>
+                    </div>
+                </>
             )}
-
-            <Footer/>
+            <Footer />
         </div>
     );
 }
+
+
