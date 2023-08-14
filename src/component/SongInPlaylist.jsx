@@ -29,7 +29,7 @@ export default function SongInPlaylist() {
     const [data, setData] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const [searchData, setSearchData] = useState([]);
-    
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -64,7 +64,7 @@ export default function SongInPlaylist() {
             .catch(e => {
                 console.log(e)
             });
-        }
+    }
     const removeSongToPlaylist = (songId) => {
         const accessToken = localStorage.getItem("token");
         UserService.removeSongFromPlaylist(params.playlistId, songId, accessToken)
@@ -187,7 +187,7 @@ export default function SongInPlaylist() {
                                                 color: 'white',
                                                 fontSize: '14px',
                                                 fontWeight: '500',
-                                                paddingRight: '142.5px',
+                                                paddingRight: '180px',
                                                 paddingTop: '25px',
                                             }}>
                                             Time
@@ -199,13 +199,6 @@ export default function SongInPlaylist() {
                                                 fontSize='large'
                                                 sx={{
                                                     color: '#1ed760',
-                                                }}
-                                            />
-                                        </IconButton>
-                                        <IconButton aria-label="delete">
-                                            <EditIcon
-                                                sx={{
-                                                    color: '#4f48cb',
                                                 }}
                                             />
                                         </IconButton>
@@ -228,17 +221,26 @@ export default function SongInPlaylist() {
                                             >
                                                 <Box sx={style}>
                                                     <Typography variant="h6" component="h2" gutterBottom>
-                                                        <span style={{color: 'white', backgroundColor: 'black'}}>FBI </span>
-                                                        <span style={{color: 'black', backgroundColor: 'orange'}}>WARNING!</span>
+                                                        <span style={{
+                                                            color: 'white',
+                                                            backgroundColor: 'black'
+                                                        }}>FBI </span>
+                                                        <span style={{
+                                                            color: 'black',
+                                                            backgroundColor: 'orange'
+                                                        }}>WARNING!</span>
                                                     </Typography>
                                                     <Typography variant="body1" gutterBottom>
-                                                        Are you sure you want to delete this item? This action cannot be undone.
+                                                        Are you sure you want to delete this item? This action cannot be
+                                                        undone.
                                                     </Typography>
                                                     <Box sx={{display: 'flex', justifyContent: 'flex-end', mt: 2}}>
                                                         <Button variant="outlined" onClick={handleClose} sx={{mr: 2}}>
                                                             CANCEL
                                                         </Button>
-                                                        <Button variant="contained" onClick={()=>{removeSongToPlaylist(song._id)}} color="error">
+                                                        <Button variant="contained" onClick={() => {
+                                                            removeSongToPlaylist(song._id)
+                                                        }} color="error">
                                                             OK
                                                         </Button>
                                                     </Box>
@@ -253,7 +255,7 @@ export default function SongInPlaylist() {
                 ))}
                 </tbody>
             </table>
-
+            <br/>
             <input
                 className="w-70 h-10 rounded-md border border-gray-400 px-4 bg-black text-white "
                 type="text"
@@ -267,19 +269,112 @@ export default function SongInPlaylist() {
             <table>
                 <thead>
                 <tr>
-                    <th>Song Name</th>
-                    <th>Artist</th>
-                    <th>Action</th>
+                    <th>Song</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Time</th>
                 </tr>
                 </thead>
                 <tbody>
                 {searchData.data && searchData.data.length > 0 ? (
                     searchData.data.map((song) => (
+                        // <tr key={song._id}>
+                        //     <td>{song.songName}</td>
+                        //     <td>{song.singers[0] ? song.singers[0].name : 'Unknown Singer'}</td>
+                        //     <td>
+                        //         <button onClick={() => addSongToPlaylist(song._id)}>Add to Playlist</button>
+                        //     </td>
+                        // </tr>
                         <tr key={song._id}>
-                            <td>{song.songName}</td>
-                            <td>{song.singers[0] ? song.singers[0].name : 'Unknown Singer'}</td>
-                            <td>
-                                <button onClick={() => addSongToPlaylist(song._id)}>Add to Playlist</button>
+                            <td colSpan={6} style={{backgroundColor: 'grey'}}>
+                                <Card
+                                    sx={{
+                                        backgroundColor: 'black'
+                                    }}
+                                >
+                                    <Stack direction={'row'}>
+                                        <CardMedia
+                                            component="img"
+                                            height="194"
+                                            image={song?.avatar}
+                                            alt="Paella dish"
+                                            onClick={() => {
+                                                dispatch(setSong(song));
+                                                dispatch(setPlayBar(true));
+                                            }}
+                                            sx={{
+                                                width: '100px',
+                                                height: '100px',
+                                                cursor: "pointer",
+                                            }}
+                                        />
+                                        <CardContent
+                                            sx={{
+                                                flexGrow: '1',
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                justifyContent: 'flex-start',
+                                            }}
+                                        >
+                                            <Stack direction={'column'}>
+                                                <Typography
+                                                    variant="body2"
+                                                    style={{
+                                                        color: 'white',
+                                                        fontSize: '14px',
+                                                        fontWeight: '500',
+                                                    }}>
+                                                    <Link to={`/song/detail/${song._id}`}>
+                                                        {song.songName}
+                                                    </Link>
+                                                </Typography>
+                                                <Typography
+                                                    variant="body2"
+                                                    style={{
+                                                        color: 'white',
+                                                        fontSize: '12px',
+                                                        fontWeight: '400',
+                                                    }}>
+                                                    {song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
+                                                </Typography>
+                                            </Stack>
+                                        </CardContent>
+                                        <CardContent>
+                                            <Typography
+                                                variant="body2"
+                                                style={{
+                                                    color: 'white',
+                                                    fontSize: '14px',
+                                                    fontWeight: '500',
+                                                    paddingRight: '210px',
+                                                    paddingTop: '25px',
+                                                }}>
+                                                Time
+                                            </Typography>
+                                        </CardContent>
+                                        <CardActions disableSpacing>
+                                            <Button
+                                                variant="outlined"
+                                                onClick={() => addSongToPlaylist(song._id)}
+                                                sx={{
+                                                    borderColor: 'white',
+                                                    color: 'white',
+                                                    borderRadius: '500px',
+                                                    '&:hover': {
+                                                        transform: 'scale(1.1)',
+                                                        backgroundColor: 'black',
+                                                        fontWeight: 600,
+                                                        borderColor: 'white',
+                                                    }
+                                                }}
+                                            >
+                                                Add
+                                            </Button>
+                                        </CardActions>
+                                    </Stack>
+                                </Card>
                             </td>
                         </tr>
                     ))
@@ -317,7 +412,6 @@ const Root = styled('div')(
 
         td,
         th {
-            border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
             text-align: left;
             padding: 8px;
         }
