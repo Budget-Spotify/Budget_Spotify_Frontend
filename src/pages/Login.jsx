@@ -1,10 +1,11 @@
-import { useFormik } from "formik";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import {useFormik} from "formik";
+import {Link, useNavigate} from "react-router-dom";
+import {ToastContainer} from "react-toastify";
 import TextField from '@mui/material/TextField';
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
+import {useState} from "react";
+import {GGLogin} from "./GGLogin";
+import {AuthService} from "../services/auth.service";
 
 const theme = createTheme({
     palette: {
@@ -43,29 +44,25 @@ export function LoginComponent() {
     const [loginFail, setLoginFail] = useState(false);
     const navigate = useNavigate();
     const formik = useFormik({
-        initialValues: {
-            username: "",
-            password: "",
-        },
-        onSubmit: async (values) => {
-            try {
-                const response = await axios.post("http://localhost:8000/auth/login", values);
-                localStorage.setItem("token", response.data.accessToken);
-                const userObject = response.data.user;
-                const userString = JSON.stringify(userObject);
-                localStorage.setItem("userLogin", userString);
-                navigate('/');
-
-                // if you need to get userLogin
-                // const storedUserString = localStorage.getItem("userLogin");
-                // const storedUserObject = JSON.parse(storedUserString);
-                // console.log(storedUserObject);
-            } catch (error) {
-                setLoginFail(true);
+            initialValues: {
+                username: "",
+                password: "",
+            },
+            onSubmit: async (values) => {
+                try {
+                    const response = await AuthService.jwtLogin(values);
+                    localStorage.setItem("token", response.data.accessToken);
+                    localStorage.setItem("refreshToken", response.data.refreshToken);
+                    const userObject = response.data.user;
+                    const userString = JSON.stringify(userObject);
+                    localStorage.setItem("userLogin", userString);
+                    navigate('/');
+                } catch (error) {
+                    setLoginFail(true);
+                }
             }
-        }
 
-    }
+        }
     )
 
     return (
@@ -73,7 +70,7 @@ export function LoginComponent() {
             <div className="w-full h-full flex flex-col items-center">
                 <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
                     <h1 className="text-4xl font-bold">
-                        DieC<span className="text-green-500">Music</span>
+                        Music<span className="text-green-500">Mix</span>
                     </h1>
 
                 </div>
@@ -81,9 +78,9 @@ export function LoginComponent() {
                     <div className="font-bold mb-4 text-center text-xl">
                         To continue, log in to Spotify.
                     </div>
-                    <form onSubmit={formik.handleSubmit} style={{ width: '100%' }}>
+                    <form onSubmit={formik.handleSubmit} style={{width: '100%'}}>
 
-                        <div style={{ marginBottom: '10px' }}>
+                        <div style={{marginBottom: '10px'}}>
                             <TextField
                                 label="Username"
                                 placeholder="Enter your username"
@@ -94,7 +91,7 @@ export function LoginComponent() {
                             />
                         </div>
 
-                        <div style={{ marginBottom: '10px' }}>
+                        <div style={{marginBottom: '10px'}}>
                             <TextField
                                 label="Password"
                                 placeholder="Password"
@@ -106,8 +103,8 @@ export function LoginComponent() {
                             />
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            {loginFail && <div style={{ color: 'red' }}><p>Wrong password or user name</p></div>}
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            {loginFail && <div style={{color: 'red'}}><p>Wrong password or user name</p></div>}
                         </div>
 
                         <div className="w-full flex items-center justify-center my-8">
@@ -117,6 +114,12 @@ export function LoginComponent() {
                         </div>
                     </form>
                     <div className="w-full border border-solid border-gray-300"></div>
+                    <div className="my-6 font-semibold text-center text-lg" style={{marginTop: "20px"}}>
+                        Or login with social net world
+                        <div style={{marginTop: "20px"}}>
+                            <GGLogin/>
+                        </div>
+                    </div>
                     <div className="my-6 font-semibold text-center text-lg">
                         Don't have an account?
                     </div>
@@ -125,7 +128,7 @@ export function LoginComponent() {
                         <Link to="/signup">SIGN UP FOR MusicMix</Link>
                     </div>
                 </div>
-                <ToastContainer />
+                <ToastContainer/>
             </div>
         </ThemeProvider>
     );

@@ -7,7 +7,8 @@ import {Fab} from "@mui/material";
 import UpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
-import { addSongIntoPlayList } from "../redux/features/songs/songSlice";
+import { addSongIntoPlayList, setSong } from "../redux/features/songs/songSlice";
+import SongService from "../services/song.service";
 
 
 export default function MusicPlayBar() {
@@ -44,13 +45,47 @@ export default function MusicPlayBar() {
     };
 
     const handleNextTrack = () => {
-        const nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
+        let nextTrackIndex = currentTrackIndex
+        if(currentTrackIndex===tracks.length-1){
+            SongService.getRandomSong()
+            .then(res=>{
+                const randomSong = res.data.data
+                const songExist = tracks.some(e => e.songName === randomSong.songName)
+                if(songExist){
+                    handleNextTrack()
+                } else {
+                    dispatch(setSong(res.data.data))
+                    dispatch(addSongIntoPlayList(res.data.data))
+                    nextTrackIndex = currentTrackIndex + 1
+                }   
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        } else nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
+        console.log(nextTrackIndex);
         setCurrentTrackIndex(nextTrackIndex);
     };
     const handlePreTrack = () => {
         const nextTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
         setCurrentTrackIndex(nextTrackIndex);
     };
+    const handlePlayButton = () =>{
+        dispatch(setPlay(true))
+    }
+    const handlePauseButton = () => {
+        dispatch(setPlay(false))
+    }
+    const handleEmptyTracks = () =>{
+        SongService.getRandomSong()
+            .then(res=>{
+                dispatch(setSong(res.data.data))
+                dispatch(addSongIntoPlayList(res.data.data))
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+    }
 
     useEffect(()=>{
         if(song.songName) {
@@ -65,11 +100,6 @@ export default function MusicPlayBar() {
             }
         }
     },[song])
-
-    
-    useEffect(()=>{
-        console.log(tracks); // you can use this to monitor the tracklist using in playbar
-    },[tracks])
     
     useEffect(()=>{
         if(playingMusic) handlePlay()
@@ -134,7 +164,7 @@ export default function MusicPlayBar() {
                         justifyContent: "space-between",
                     }}
                 >
-                    {song && tracks[currentTrackIndex] ? (
+                    {song.songName && tracks[currentTrackIndex] ? (
 
                         <img
                             src={tracks[currentTrackIndex].avatar}
@@ -143,32 +173,31 @@ export default function MusicPlayBar() {
                         />
                     ) : (
                         <img
-                            src="https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/art.jpg"
+                            src="https://steamcommunity-a.akamaihd.net/public/images/profile/2020/bg_dots.png"
                             alt="img"
                             style={{width: "50%", height: "100%", borderRadius: "5px"}}
                         />
                     )}
 
                     <div style={{color: "#fff", background: "black", width: "78%"}}>
-                        {song && tracks[currentTrackIndex] ? <h3 style={{background: "black", marginTop: "10px", marginLeft: "10px"}}>{song.songName}</h3> :
-                            <h3 style={{marginTop: "10px", marginLeft: "10px", background: "black"}}>Voyage I - Waterfall</h3>}
-                        {song && tracks[currentTrackIndex] ?
-                            <p style={{fontSize: "12px", background: "black", marginTop: "10px", marginLeft: "10px"}}>{song.songName}</p> :
-                            <p style={{background: "black", fontSize: "12px", marginTop: "10px", marginLeft: "10px"}}>The Kyoto
-                                Connection</p>}
+                        {song.songName && tracks[currentTrackIndex] ? <h3 style={{background: "black", marginTop: "10px", marginLeft: "10px"}}>{tracks[currentTrackIndex].songName}</h3> :
+                            <h3 style={{marginTop: "10px", marginLeft: "10px", background: "black"}}>...</h3>}
+                        {song.songName && tracks[currentTrackIndex] ?
+                            <p style={{fontSize: "12px", background: "black", marginTop: "10px", marginLeft: "10px"}}>{tracks[currentTrackIndex].songName}</p> :
+                            <p style={{background: "black", fontSize: "12px", marginTop: "10px", marginLeft: "10px"}}>...</p>}
                     </div>
                 </div>
                 {
-                    song && tracks[currentTrackIndex]? <ReactH5AudioPlayer
+                    song.songName && tracks[currentTrackIndex]? <ReactH5AudioPlayer
                             ref={audioRef}
                             src={tracks[currentTrackIndex].fileURL}
                             layout="stacked-reverse"
-                            volume={0.6}
+                            volume={1.0}
                             autoPlay
                             showSkipControls={true}
                             progressJumpStep={5000}
-                            onPlay={()=>{dispatch(setPlay(true))}}
-                            onPause={()=>{dispatch(setPlay(false))}}
+                            onPlay={handlePlayButton}
+                            onPause={handlePauseButton}
                             onClickPrevious={handlePreTrack}
                             onClickNext={handleNextTrack}
                             onEnded={handleNextTrack}
@@ -184,11 +213,12 @@ export default function MusicPlayBar() {
                         /> :
                         <ReactH5AudioPlayer
                             ref={audioRef}
-                            src={"https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/03_-_Voyage_I_-_Waterfall.mp3"}
+                            src={"https://firebasestorage.googleapis.com/v0/b/budget-spotify.appspot.com/o/placeholders%2FMp3%20placeholder.mp3?alt=media&token=61efdf22-c1fa-4a93-ada0-ae5629ff565f"}
                             layout="stacked-reverse"
-                            volume={0.6}
+                            volume={1.0}
                             showSkipControls={true}
                             progressJumpStep={5000}
+                            onPlay={handleEmptyTracks}
                             style={{
                                 color: "white",
                                 width: "62%",

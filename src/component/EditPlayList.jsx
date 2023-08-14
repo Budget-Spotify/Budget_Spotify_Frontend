@@ -156,13 +156,13 @@ export default function EditPlaylist({ reload, playlist }) {
     return (
         <>
             <button onClick={handleOpen} >Edit</button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
                     <Box
                         component="form"
                         onSubmit={formAdd.handleSubmit}
@@ -240,8 +240,8 @@ export default function EditPlaylist({ reload, playlist }) {
                             )}
                         </div>
                     </Box>
-                </ThemeProvider>
-            </Modal>
+                </Modal>
+            </ThemeProvider>
         </>
     );
 }
