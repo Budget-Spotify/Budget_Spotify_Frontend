@@ -140,6 +140,7 @@ function UserAddSong({reload}) {
     const [tags,setTags]=useState(null)
 
     const handleOpen = () => {
+        formAdd.setFieldValue('songName',file.name.substring(0,file.name.length-4))
         setOpen(true);
     };
     const handleClose = () => {
