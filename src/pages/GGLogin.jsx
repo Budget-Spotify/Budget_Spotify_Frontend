@@ -13,6 +13,7 @@ export function GGLogin() {
             const response = await AuthService.googleLogin(credential);
             console.log(response);
             localStorage.setItem("token", response.data.accessToken);
+            localStorage.setItem("refreshToken", response.data.refreshToken);
             const userObject = response.data.user;
             const userString = JSON.stringify(userObject);
             localStorage.setItem("userLogin", userString);
