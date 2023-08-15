@@ -12,23 +12,22 @@ import EditPassword from './component/EditPassword';
 import DetailUser from './component/DetailUser';
 import SongInPlaylist from "./component/SongInPlaylist";
 import UserPlaylist from './component/UserPlayList';
-import AlbumDetail from './component/AlbumDetail';
 import SongOnly from './component/SearchSongOnly';
 import PlaylistOnly from './component/SearchPlaylistOnly';
+import PlaylistDetail from './component/PlaylistDetail';
 
 
 
 function App() {
     return (
         <div className="App">
-
             <Routes>
                 <Route path='/' element={<Home/>}>
                     <Route path="/" element={<Songspage/>}/>
-                    <Route path="/search/song/only" element={<SongOnly/>}/>
-                    <Route path="/search/playlist/only" element={<PlaylistOnly/>}/>
+                    <Route path="/search/songs" element={<SongOnly/>}/>
+                    <Route path="/search/playlists" element={<PlaylistOnly/>}/>
                     <Route path="/playlists" element={<UserPlaylist/>}/>
-                    <Route path="/album/detail/:playlistId" element={<AlbumDetail/>}/>
+                    <Route path="/playlist/detail/:playlistId" element={<PlaylistDetail/>}/>
                     <Route path="/playlists/song-in-play-list/:playlistId" element={<SongInPlaylist/>}/>
                     <Route path="/songs-uploaded" element={<SongUploaded/>}/>
                     <Route path="/users-manager" element={<UserList/>}/>

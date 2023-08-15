@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import MenuAppBar from "./NavBar";
 import SongService from "../services/song.service";
 import { useOutletContext } from "react-router-dom";
-import AlbumCard from "./AlbumCard";
+import PlaylistCard from "./PlaylistCard";
 
 export default function Songspage() {
     const search = useOutletContext();
@@ -42,6 +42,7 @@ export default function Songspage() {
             }}
         >
             <MenuAppBar search={search}/>
+            <>câccacacacaca</>
             <br />
             <br />
             {isLoading ? (
@@ -86,7 +87,7 @@ export default function Songspage() {
                         >
                             {playlists && playlists.slice(0, 10).map((playlist, index) => (
                                 <>
-                                    <AlbumCard
+                                    <PlaylistCard
                                         playlist={playlist}
                                         playlistId={playlist._id}
                                     />

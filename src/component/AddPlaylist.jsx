@@ -169,6 +169,7 @@ export default function AddPlaylist({ reload }) {
             >
                 Add PlayList
             </Button>
+            
             <ThemeProvider theme={theme}>
                 <Modal
                     open={open}

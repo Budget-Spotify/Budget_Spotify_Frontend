@@ -5,11 +5,9 @@ import {useNavigate} from "react-router-dom";
 
 export function GGLogin() {
     const navigate = useNavigate();
-
     const handleLogin = async (credential) => {
         try {
             const response = await AuthService.googleLogin(credential);
-            console.log(response);
             localStorage.setItem("token", response.data.accessToken);
             localStorage.setItem("refreshToken", response.data.refreshToken);
             const userObject = response.data.user;

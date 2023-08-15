@@ -15,15 +15,11 @@ import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import SongService from "../services/song.service";
-
-export default function AlbumDetail() {
+import { useOutletContext } from "react-router-dom";
+export default function PlaylistDetail() {
+    const search = useOutletContext();
     const dispatch = useDispatch();
     const params = useParams();
     const [songsListChange, setSongsListChange] = useState(null);
@@ -52,7 +48,7 @@ export default function AlbumDetail() {
     }, [searchInput]);
     return (
         <Root>
-            <MenuAppBar />
+            <MenuAppBar search={search}/>
             <section style={{
                 position: "relative",
                 overflow: "hidden",

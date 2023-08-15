@@ -8,18 +8,30 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { useState } from "react";
 import { Avatar } from "@mui/material";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Button from "@mui/material/Button";
+import { useEffect } from 'react';
 
 
 
-export default function MenuAppBar({search}) {
+export default function MenuAppBar({ search }) {
     const navigate = useNavigate()
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
     const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const [activeLink, setActiveLink] = useState("");
+    const location = useLocation();
+    useEffect(() => {
+        if (location.pathname === "/") {
+            setActiveLink("all");
+        } else if (location.pathname === "/search/songs") {
+            setActiveLink("songs");
+        } else if (location.pathname === "/search/playlists") {
+            setActiveLink("playlists");
+        }
+    }, [location]);
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -46,12 +58,6 @@ export default function MenuAppBar({search}) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        {search!==""?(
-                            <>
-                            <Link to={'/'} style={{ marginRight: "20px" }}>All</Link>
-                            <Link to={'/search/song/only'} style={{ marginRight: "20px" }}>Song</Link>
-                            <Link to={'/search/playlist/only'} style={{ marginRight: "20px" }}>PlayList</Link></>
-                        ):(<></>)}
                     </Typography>
                     {auth && (
                         <div>
@@ -171,6 +177,39 @@ export default function MenuAppBar({search}) {
                         </div>
                     )}
                 </Toolbar>
+                {search !== "" ? (
+                    <Toolbar>
+                        <Link
+                            to={"/"}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "all" ? "green" : "white",
+                            }}
+                        >
+                            All
+                        </Link>
+                        <Link
+                            to={"/search/songs"}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "songs" ? "green" : "white",
+                            }}
+                        >
+                            Song
+                        </Link>
+                        <Link
+                            to={"/search/playlists"}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "playlists" ? "green" : "white",
+                            }}
+                        >
+                            PlayList
+                        </Link>
+                    </Toolbar>
+                ) : (
+                    <></>
+                )}
             </AppBar>
         </Box>
     );

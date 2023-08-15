@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import MenuAppBar from "./NavBar";
 import SongService from "../services/song.service";
 import { useOutletContext } from "react-router-dom";
-import AlbumCard from "./AlbumCard";
+import AlbumCard from "./PlaylistCard";
 
 export default function PlaylistOnly() {
     const search = useOutletContext();
