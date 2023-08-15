@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {styled} from '@mui/material/styles';
+import {createTheme, styled, ThemeProvider} from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
@@ -70,154 +70,170 @@ export default function SongCardDetail() {
         if (song.songName === currentSong.songName) setIsPlay(playingMusic);
     }, [playingMusic])
 
+    const customTheme = createTheme({
+        typography: {
+            fontFamily: 'Times New Roman, serif',
+        },
+    });
+
     return (
-        <div
-            style={{
-                marginLeft: "20.5%",
-                marginBottom: "155px",
-                marginRight: "1%",
-                color: "#fff",
-                padding: "30px 20px 20px 20px",
-                background: "black",
-                borderRadius: "10px",
-            }}
-        >
-            <MenuAppBar/>
-            <br/>
-            <br/>
-            <Card
-                sx={{
-                    backgroundColor: 'black'
+        <ThemeProvider theme={customTheme}>
+            <div
+                style={{
+                    marginLeft: "20.5%",
+                    marginBottom: "155px",
+                    marginRight: "1%",
+                    color: "#fff",
+                    padding: "30px 20px 20px 20px",
+                    background: "black",
+                    borderRadius: "10px",
                 }}
             >
-                <Stack direction={'row'}>
-                    <CardMedia
-                        component="img"
-                        height="194"
-                        image={song.avatar}
-                        alt="Paella dish"
-                        sx={{
-                            width: '192px',
-                            height: '192px'
-                        }}
-                    />
-                    <CardContent style={{flexGrow: '1'}}>
-                        <Typography
-                            variant="body2"
-                            style={{
-                                color: 'white',
-                                fontSize: '0.875rem',
-                                fontWeight: '700',
-                            }}>
-                            Song
-                        </Typography>
-                        <Typography
-                            variant="body2"
-                            style={{
-                                color: 'white',
-                                fontSize: '6rem',
-                                fontWeight: '900',
-                            }}>
-                            {song.songName}
-                        </Typography>
-                        <Typography
-                            variant="body2"
-                            style={{
-                                color: 'white',
-                                fontSize: '0.875rem',
-                                fontWeight: '700',
-                            }}>
-                            {/*{song.uploadTime}*/}
-                            {song.singers && song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
-                        </Typography>
-                    </CardContent>
-                </Stack>
-                <CardActions disableSpacing>
-                    {
-                        isPlay ?
-                            (
-                                <IconButton
-                                    aria-label="pause"
-                                    onClick={() => {
-                                        dispatch(setPlay(false));
-                                        setIsPlay(false);
-                                    }}
-                                >
-                                    <PauseCircleIcon
-                                        fontSize='large'
-                                        sx={{
-                                            color: '#1ed760',
-                                            fontSize: 60,
-                                        }}
-                                    />
-                                </IconButton>
-                            ) :
-                            (
-                                <IconButton
-                                    aria-label="play"
-                                    onClick={() => {
-                                        if (song.songName !== currentSong.songName) {
-                                            dispatch(setCurrentSong(song));
-                                        }
-                                        dispatch(setPlay(true));
-                                        dispatch(setPlayBar(true));
-                                        setIsPlay(true);
-                                    }}
-                                >
-                                    <PlayCircleIcon
-                                        fontSize='large'
-                                        sx={{
-                                            color: '#1ed760',
-                                            fontSize: 60,
-                                        }}
-                                    />
-                                </IconButton>
-                            )
-                    }
-                    <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
-                        {
-                            favorite ?
-                                (
-                                    <FavoriteIcon
-                                        fontSize='large'
-                                        sx={{
-                                            color: '#1ed760'
-                                        }}
-                                    />
-                                ) :
-                                (
-                                    <FavoriteBorderIcon
-                                        fontSize='large'
-                                        sx={{
-                                            color: '#1ed760',
-                                        }}
-                                    />
-                                )
-                        }
-                    </IconButton>
-                    <ExpandMore
-                        expand={expanded}
-                        onClick={handleExpandClick}
-                        aria-expanded={expanded}
-                        aria-label="show more"
-                    >
-                        <ExpandMoreIcon
+                <MenuAppBar/>
+                <br/>
+                <br/>
+                <Card
+                    sx={{
+                        backgroundColor: 'black'
+                    }}
+                >
+                    <Stack direction={'row'}>
+                        <CardMedia
+                            component="img"
+                            height="194"
+                            image={song.avatar}
+                            alt="Paella dish"
                             sx={{
-                                color: '#1ed760'
+                                width: '192px',
+                                height: '192px'
                             }}
                         />
-                    </ExpandMore>
-                </CardActions>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent style={{color: 'white'}}>
-                        <Typography paragraph>Lyrics:</Typography>
-                        <Typography paragraph>
-                            {song.description}
-                        </Typography>
-                    </CardContent>
-                </Collapse>
-            </Card>
-            <Footer/>
-        </div>
+                        <CardContent style={{flexGrow: '1'}}>
+                            <Typography
+                                variant="body2"
+                                style={{
+                                    color: 'white',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '700',
+                                }}>
+                                Song
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                style={
+                                    song.songName && song.songName.length > 21 ?
+                                        {
+                                            color: 'white',
+                                            fontSize: '4rem',
+                                            fontWeight: '900',
+                                        } :
+                                        {
+                                            color: 'white',
+                                            fontSize: '5rem',
+                                            fontWeight: '900',
+                                        }
+                                }
+                            >
+                                {song.songName}
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                style={{
+                                    color: 'white',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '700',
+                                }}>
+                                {song.singers && song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
+                            </Typography>
+                        </CardContent>
+                    </Stack>
+                    <CardActions disableSpacing>
+                        {
+                            isPlay ?
+                                (
+                                    <IconButton
+                                        aria-label="pause"
+                                        onClick={() => {
+                                            dispatch(setPlay(false));
+                                            setIsPlay(false);
+                                        }}
+                                    >
+                                        <PauseCircleIcon
+                                            fontSize='large'
+                                            sx={{
+                                                color: '#1ed760',
+                                                fontSize: 60,
+                                            }}
+                                        />
+                                    </IconButton>
+                                ) :
+                                (
+                                    <IconButton
+                                        aria-label="play"
+                                        onClick={() => {
+                                            if (song.songName !== currentSong.songName) {
+                                                dispatch(setCurrentSong(song));
+                                            }
+                                            dispatch(setPlay(true));
+                                            dispatch(setPlayBar(true));
+                                            setIsPlay(true);
+                                        }}
+                                    >
+                                        <PlayCircleIcon
+                                            fontSize='large'
+                                            sx={{
+                                                color: '#1ed760',
+                                                fontSize: 60,
+                                            }}
+                                        />
+                                    </IconButton>
+                                )
+                        }
+                        <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
+                            {
+                                favorite ?
+                                    (
+                                        <FavoriteIcon
+                                            fontSize='large'
+                                            sx={{
+                                                color: '#1ed760'
+                                            }}
+                                        />
+                                    ) :
+                                    (
+                                        <FavoriteBorderIcon
+                                            fontSize='large'
+                                            sx={{
+                                                color: '#1ed760',
+                                            }}
+                                        />
+                                    )
+                            }
+                        </IconButton>
+                        <ExpandMore
+                            expand={expanded}
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                            aria-label="show more"
+                        >
+                            <ExpandMoreIcon
+                                sx={{
+                                    color: '#1ed760'
+                                }}
+                            />
+                        </ExpandMore>
+                    </CardActions>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                        <CardContent style={{color: 'white'}}>
+                            <Typography paragraph>Lyrics:</Typography>
+                            <Typography paragraph>
+                                {song.description}
+                            </Typography>
+                        </CardContent>
+                    </Collapse>
+                </Card>
+                <Footer/>
+            </div>
+        </ThemeProvider>
     );
 }
