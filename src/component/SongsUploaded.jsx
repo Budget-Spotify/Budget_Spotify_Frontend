@@ -12,6 +12,7 @@ import Footer from "./Footer";
 import {useDispatch} from "react-redux";
 import {setSong} from "../redux/features/songs/songSlice";
 import IconButton from "@mui/material/IconButton";
+import EditIcon from '@mui/icons-material/Edit';
 import DeleteModal from "./DeleteSong";
 import {setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import Stack from "@mui/material/Stack";
@@ -22,9 +23,9 @@ import CardActions from "@mui/material/CardActions";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Card from "@mui/material/Card";
 import PublicState from "./PublicState";
-import UserEditSong from './UserEditSong';
-
+import { useOutletContext } from 'react-router-dom';
 export default function SongUploaded() {
+    const search = useOutletContext();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [songs, setSongs] = useState([]);
@@ -44,8 +45,8 @@ export default function SongUploaded() {
     };
 
     useEffect(() => {
-
-        UserService.getSongs()
+        const accessToken = localStorage.getItem("token");
+        UserService.getSongs(accessToken)
             .then(res => {
                 setSongs(res.data.songs);
             })
@@ -66,7 +67,7 @@ export default function SongUploaded() {
                 borderRadius: "10px",
             }}
         >
-            <MenuAppBar/>
+            <MenuAppBar search={search}/>
             <h2 className="text-2xl font-semibold">Songs Uploaded</h2>
             <br/>
             <UserAddSong reload={setSongsListChange}/>
@@ -170,7 +171,13 @@ export default function SongUploaded() {
                                                 }}
                                             />
                                         </IconButton>
-                                        <UserEditSong songID={song._id} reload={setSongsListChange}/>
+                                        <IconButton aria-label="delete">
+                                            <EditIcon
+                                                sx={{
+                                                    color: '#4f48cb',
+                                                }}
+                                            />
+                                        </IconButton>
                                         <DeleteModal song={song} reload={setSongsListChange}/>
                                     </CardActions>
                                 </Stack>

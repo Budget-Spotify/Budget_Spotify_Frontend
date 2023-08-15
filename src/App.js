@@ -13,6 +13,8 @@ import DetailUser from './component/DetailUser';
 import SongInPlaylist from "./component/SongInPlaylist";
 import UserPlaylist from './component/UserPlayList';
 import AlbumDetail from './component/AlbumDetail';
+import SongOnly from './component/SearchSongOnly';
+import PlaylistOnly from './component/SearchPlaylistOnly';
 
 
 
@@ -23,6 +25,8 @@ function App() {
             <Routes>
                 <Route path='/' element={<Home/>}>
                     <Route path="/" element={<Songspage/>}/>
+                    <Route path="/search/song/only" element={<SongOnly/>}/>
+                    <Route path="/search/playlist/only" element={<PlaylistOnly/>}/>
                     <Route path="/playlists" element={<UserPlaylist/>}/>
                     <Route path="/album/detail/:playlistId" element={<AlbumDetail/>}/>
                     <Route path="/playlists/song-in-play-list/:playlistId" element={<SongInPlaylist/>}/>
