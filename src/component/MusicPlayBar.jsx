@@ -46,8 +46,9 @@ export default function MusicPlayBar() {
 
     const handleNextTrack = () => {
         let nextTrackIndex = currentTrackIndex
+        let songIds = tracks.map(song=> song._id)
         if(currentTrackIndex===tracks.length-1){
-            SongService.getRandomSong()
+            SongService.getRandomSong(songIds)
             .then(res=>{
                 const randomSong = res.data.data
                 const songExist = tracks.some(e => e.songName === randomSong.songName)
@@ -76,7 +77,8 @@ export default function MusicPlayBar() {
         dispatch(setPlay(false))
     }
     const handleEmptyTracks = () =>{
-        SongService.getRandomSong()
+        let songIds = tracks.map(song=> song._id)
+        SongService.getRandomSong(songIds)
             .then(res=>{
                 dispatch(setSong(res.data.data))
                 dispatch(addSongIntoPlayList(res.data.data))
