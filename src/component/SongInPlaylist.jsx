@@ -25,8 +25,9 @@ import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
+import { useOutletContext } from "react-router-dom";
 export default function SongInPlaylist() {
+    const search = useOutletContext()
     const dispatch = useDispatch();
     const params = useParams();
     const [songsListChange, setSongsListChange] = useState(null);
@@ -91,7 +92,7 @@ export default function SongInPlaylist() {
 
     return (
         <Root>
-            <MenuAppBar/>
+            <MenuAppBar search={search}/>
             <Card
                 sx={{
                     backgroundColor: 'black'

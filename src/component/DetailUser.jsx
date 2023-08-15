@@ -9,8 +9,10 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import Paper from '@mui/material/Paper'
+import { useOutletContext } from "react-router-dom";
 const DetailUser = () => {
+    const search = useOutletContext()
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
     const [userChange, setUserChange] = useState(null);
@@ -25,7 +27,7 @@ const DetailUser = () => {
             background: "black",
             borderRadius: "10px",
         }} >
-            <MenuAppBar />
+            <MenuAppBar search={search}/>
             <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
                 <style>
                     {`

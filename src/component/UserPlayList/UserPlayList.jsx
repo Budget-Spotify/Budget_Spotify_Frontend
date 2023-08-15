@@ -16,7 +16,7 @@ import DeletePlayListModal from "../DeletePlaylist";
 import EditPlaylist from "../EditPlayList";
 import {useNavigate} from "react-router-dom";
 import "./UserPlayList.css"
-
+import { useOutletContext } from "react-router-dom";
 const ITEM_HEIGHT = 48;
 
 function PlayListCard({playlist, image, title, time, reload, playlistId}) {
@@ -99,6 +99,7 @@ function PlayListCard({playlist, image, title, time, reload, playlistId}) {
 }
 
 export default function UserPlaylist() {
+    const search = useOutletContext()
     const [data, setData] = useState([]);
     const [playListChange, setPlayListChange] = useState(null);
     useEffect(() => {
@@ -124,7 +125,7 @@ export default function UserPlaylist() {
                 borderRadius: "10px",
             }}
         >
-            <MenuAppBar/>
+            <MenuAppBar search={search}/>
             <div
                 style={{
                     display: "grid",
