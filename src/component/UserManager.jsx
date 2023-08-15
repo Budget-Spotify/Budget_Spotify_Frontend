@@ -10,7 +10,7 @@ import AdminService from '../services/admin.service'
 import Footer from "./Footer";
 
 export default function UserList() {
-    const [search] = useOutletContext();
+    const search = useOutletContext()
     const [data, setData] = useState({list: []});
     const [isLoading, setisLoading] = useState(false);
     const [page, setPage] = React.useState(0);
@@ -53,7 +53,7 @@ export default function UserList() {
                 borderRadius: "10px",
             }}
         >
-            <MenuAppBar/>
+            <MenuAppBar search={search}/>
             {isLoading ? (
                 <h2 style={{textAlign: "center", margin: "150px", color: "#1DB954"}}>
                     Loading...

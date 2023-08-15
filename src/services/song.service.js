@@ -19,6 +19,9 @@ class SongService {
     static async getTags(){
         return await axios.get('http://localhost:8000/song/tags')
     }
+    static async getPublicPlaylist(playlistId){
+        return await axios.get(`http://localhost:8000/song/playlist-public/${playlistId}`)
+    }
 }
 
 export default SongService;
