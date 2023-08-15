@@ -36,9 +36,13 @@ export default function SongInPlaylist() {
     const userLogin = JSON.parse(localStorage.getItem('userLogin'));
     const fullNameUser = userLogin.lastName + ` ${userLogin.firstName}`;
     const [isPlay, setIsPlay] = useState(false);
+    const [songIdToDelete, setSongIdToDelete] = useState('');
 
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
+    const handleOpen = (songId) => {
+        setOpen(true);
+        setSongIdToDelete(songId);
+    }
     const handleClose = () => setOpen(false);
     const handleClickPlayPause = () => setIsPlay(!isPlay);
 
@@ -282,7 +286,7 @@ export default function SongInPlaylist() {
                                         <div>
                                             <IconButton
                                                 aria-label="delete"
-                                                onClick={handleOpen}
+                                                onClick={() => handleOpen(song._id)}
                                             >
                                                 <DeleteIcon
                                                     sx={{
@@ -317,7 +321,7 @@ export default function SongInPlaylist() {
                                                         </Button>
                                                         <Button
                                                             variant="contained"
-                                                            onClick={() => removeSongToPlaylist(song._id)}
+                                                            onClick={() => removeSongToPlaylist(songIdToDelete)}
                                                             color="error"
                                                         >
                                                             OK
