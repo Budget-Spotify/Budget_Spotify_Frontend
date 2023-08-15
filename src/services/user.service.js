@@ -73,8 +73,16 @@ class UserService {
         return await axiosInstance.put("http://localhost:8000/user/song/update-state", data);
     }
 
-    static async submitComment(comment, songId){
-        return await axiosInstance.post("http://localhost:8000/user/song/" + songId, {comment: comment});
+    static async showCommentInSong(songId){
+        return await axiosInstance.get("http://localhost:8000/user/song/show-comment/" + songId);
+    }
+
+    static async submitComment(comment, songId) {
+        return await axiosInstance.post("http://localhost:8000/user/song/add-comment/" + songId, {comment: comment});
+    }
+
+    static async deleteComment(commentId) {
+        return await axiosInstance.get("http://localhost:8000/user/song/delete-comment/" + commentId);
     }
 }
 

@@ -16,6 +16,7 @@ import Check from '@mui/icons-material/Check';
 import Typography from "@mui/material/Typography";
 import {useParams} from 'react-router-dom';
 import UserService from "../services/user.service";
+import axios from "axios";
 
 export function TextareaComment() {
     const [italic, setItalic] = React.useState(false);
@@ -23,11 +24,34 @@ export function TextareaComment() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [eventData, setEventData] = useState('');
     const [comment, setComment] = useState('');
+    const [commentId, setCommentId] = useState('');
     const songId = useParams().id;
     const commentsArray = eventData;
 
+    useEffect(() => {
+        UserService.showCommentInSong(songId)
+            .then(result => {
+                setEventData(result.data.allComment)
+            })
+            .catch(e => {
+                console.log(e)
+            });
+    }, [])
+
     const handleComment = () => {
-        UserService.submitComment(comment, songId)
+        if (comment) {
+            UserService.submitComment(comment, songId)
+                .then(()=>{
+                    setComment('')
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+        }
+    }
+
+    const handleDeleteComment = () => {
+        UserService.deleteComment(commentId)
             .then()
             .catch(e => {
                 console.log(e)
@@ -39,12 +63,7 @@ export function TextareaComment() {
 
         eventSource.onmessage = (event) => {
             const eventData = JSON.parse(event.data);
-
-            if (eventData.eventData) {
-                setEventData(eventData.relatedComments);
-            } else {
-                setEventData(eventData.initialComments);
-            }
+            setEventData(eventData.relatedComments);
         };
 
         eventSource.onerror = (error) => {
