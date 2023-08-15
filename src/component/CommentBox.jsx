@@ -24,7 +24,7 @@ export function TextareaComment() {
     const [eventData, setEventData] = useState('');
     const [comment, setComment] = useState('');
     const songId = useParams().id;
-    const commentsArray = eventData.relatedComments;
+    const commentsArray = eventData;
 
     const handleComment = () => {
         UserService.submitComment(comment, songId)
@@ -35,11 +35,19 @@ export function TextareaComment() {
     }
 
     useEffect(() => {
-        const eventSource = new EventSource('http://localhost:8000/sse/events');
+        const eventSource = new EventSource('http://localhost:8000/sse/comment-on-song');
 
         eventSource.onmessage = (event) => {
-            const newComments = JSON.parse(event.data);
-            setEventData(newComments);
+            const eventData = JSON.parse(event.data);
+
+            if (eventData.eventData) {
+                setEventData(eventData.relatedComments);
+                console.log('if')
+            } else {
+                const newComments = eventData;
+                setEventData(newComments.initialComments);
+                console.log('else')
+            }
         };
 
         eventSource.onerror = (error) => {
@@ -52,7 +60,8 @@ export function TextareaComment() {
         };
     }, []);
 
-    console.log(commentsArray)
+    // console.log(commentsArray)
+    console.log(eventData)
 
     return (
         <FormControl>
