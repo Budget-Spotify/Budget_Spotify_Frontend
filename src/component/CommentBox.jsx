@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import FormControl from '@mui/joy/FormControl';
@@ -13,7 +14,6 @@ import FormatItalic from '@mui/icons-material/FormatItalic';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Check from '@mui/icons-material/Check';
 import Typography from "@mui/material/Typography";
-import {useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import UserService from "../services/user.service";
 
@@ -42,11 +42,8 @@ export function TextareaComment() {
 
             if (eventData.eventData) {
                 setEventData(eventData.relatedComments);
-                console.log('if')
             } else {
-                const newComments = eventData;
-                setEventData(newComments.initialComments);
-                console.log('else')
+                setEventData(eventData.initialComments);
             }
         };
 
@@ -59,9 +56,6 @@ export function TextareaComment() {
             eventSource.close();
         };
     }, []);
-
-    // console.log(commentsArray)
-    console.log(eventData)
 
     return (
         <FormControl>
