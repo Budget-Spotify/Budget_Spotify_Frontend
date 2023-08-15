@@ -92,7 +92,7 @@ function PlayListCard({playlist, image, title, time, reload, playlistId}) {
                 setFlag(true)
             }}><FontAwesomeIcon icon={faPlay}/></button>
             <h3>{title}</h3>
-            <p>updated on: {time}</p>
+            <p>Updated on: {time}</p>
             {flag && <MusicPlayBar image={image} title={title} time={time}/>}
         </div>
     )
@@ -132,7 +132,8 @@ export default function UserPlaylist() {
                     marginTop: "40px",
                     gap: "30px 20px",
                 }}
-            ><AddPlaylist reload={setPlayListChange}/>
+            >
+                <AddPlaylist reload={setPlayListChange}/>
                 {data.map((e, index) => {
                     return (
                         <PlayListCard

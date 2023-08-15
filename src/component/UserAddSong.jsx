@@ -135,12 +135,12 @@ function UserAddSong({reload}) {
     const userLogin = JSON.parse(userLoginJSON);
     const userID = userLogin._id;
 
-    const [singers,setSingers]=useState(null)
-    const [composers,setComposers]=useState(null)
-    const [tags,setTags]=useState(null)
+    const [singers, setSingers] = useState(null)
+    const [composers, setComposers] = useState(null)
+    const [tags, setTags] = useState(null)
 
     const handleOpen = () => {
-        formAdd.setFieldValue('songName',file.name.substring(0,file.name.length-4))
+        formAdd.setFieldValue('songName', file.name.substring(0, file.name.length - 4))
         setOpen(true);
     };
     const handleClose = () => {
@@ -244,21 +244,21 @@ function UserAddSong({reload}) {
             }
         },
     });
-    useEffect(()=>{
+    useEffect(() => {
         Promise.all([
             SongService.getSingers(),
             SongService.getComposers(),
             SongService.getTags()
         ])
-        .then(values=>{
-            setSingers(values[0].data.data)
-            setComposers(values[1].data.data)
-            setTags(values[2].data.data)
-        })
-        .catch(err=>{
-            console.log(err.message);
-        })
-    },[])
+            .then(values => {
+                setSingers(values[0].data.data)
+                setComposers(values[1].data.data)
+                setTags(values[2].data.data)
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
+    }, [])
     useEffect(() => {
         if (haveFile && haveAvatar) {
             let data = {
@@ -350,44 +350,36 @@ function UserAddSong({reload}) {
                             autoComplete="description"
                             autoFocus
                         />
-                        <AutocompleteTextField 
-                        datalist={singers} 
-                        setValue={formAdd.setFieldValue} 
-                        inputText={"Singer:"} 
-                        formField={"singers"}
+                        <AutocompleteTextField
+                            datalist={singers}
+                            setValue={formAdd.setFieldValue}
+                            inputText={"Singer:"}
+                            formField={"singers"}
                         />
-                        <AutocompleteTextField 
-                        datalist={composers} 
-                        setValue={formAdd.setFieldValue} 
-                        inputText={"Composers:"} 
-                        formField={"composers"}
+                        <AutocompleteTextField
+                            datalist={composers}
+                            setValue={formAdd.setFieldValue}
+                            inputText={"Composers:"}
+                            formField={"composers"}
                         />
-                        <AutocompleteTextField 
-                        datalist={tags} 
-                        setValue={formAdd.setFieldValue} 
-                        inputText={"Tags:"} 
-                        formField={"tags"}
+                        <AutocompleteTextField
+                            datalist={tags}
+                            setValue={formAdd.setFieldValue}
+                            inputText={"Tags:"}
+                            formField={"tags"}
                         />
-                        {
-                            isSubmit ? (
-                                <div
-                                    style={{
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    <CircularProgress/>
-                                </div>
-                            ) : (
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{mt: 3, mb: 2, backgroundColor: "green"}}
-                                >
-                                    Save
-                                </Button>
-                            )
-                        }
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{mt: 3, mb: 2, backgroundColor: "green"}}
+                        >
+                            {
+                                isSubmit
+                                    ? <CircularProgress size={25} color='inherit'/>
+                                    : 'Save'
+                            }
+                        </Button>
                     </div>
                 </Box>
             </Modal>
