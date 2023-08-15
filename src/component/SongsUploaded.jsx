@@ -12,7 +12,6 @@ import Footer from "./Footer";
 import {useDispatch} from "react-redux";
 import {setSong} from "../redux/features/songs/songSlice";
 import IconButton from "@mui/material/IconButton";
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteModal from "./DeleteSong";
 import {setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import Stack from "@mui/material/Stack";
@@ -23,6 +22,7 @@ import CardActions from "@mui/material/CardActions";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Card from "@mui/material/Card";
 import PublicState from "./PublicState";
+import UserEditSong from './UserEditSong';
 
 export default function SongUploaded() {
     const [search] = useOutletContext();
@@ -45,8 +45,8 @@ export default function SongUploaded() {
     };
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("token");
-        UserService.getSongs(accessToken)
+
+        UserService.getSongs()
             .then(res => {
                 setSongs(res.data.songs);
             })
@@ -171,13 +171,7 @@ export default function SongUploaded() {
                                                 }}
                                             />
                                         </IconButton>
-                                        <IconButton aria-label="delete">
-                                            <EditIcon
-                                                sx={{
-                                                    color: '#4f48cb',
-                                                }}
-                                            />
-                                        </IconButton>
+                                        <UserEditSong songID={song._id} reload={setSongsListChange}/>
                                         <DeleteModal song={song} reload={setSongsListChange}/>
                                     </CardActions>
                                 </Stack>

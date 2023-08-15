@@ -72,6 +72,10 @@ class UserService {
     static async updateSongState(data, accessToken) {
         return await axiosInstance.put("http://localhost:8000/user/song/update-state", data);
     }
+
+    static async editSong(data){
+        return await axiosInstance.put("http://localhost:8000/user/song/update", data)
+    }
 }
 
 export default UserService;
