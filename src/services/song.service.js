@@ -4,8 +4,8 @@ class SongService {
     static async getPublicSongs() {
         return await axios.get('http://localhost:8000/song/list/songs');
     }
-    static async getRandomSong(){
-        return await axios.get('http://localhost:8000/song/random')
+    static async getRandomSong(songIDs){
+        return await axios.post('http://localhost:8000/song/random',songIDs)
     }
     static async searchSongPublic(songname) {
         return await axios.get(`http://localhost:8000/song/search-public?songName=${songname}`);

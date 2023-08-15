@@ -82,11 +82,12 @@ export default function AddPlaylist({reload}) {
     const [image, setImage] = useState("");
     const [imageSrc, setImageSrc] = useState("");
     const [haveImage, setHaveImage] = useState(false);
-    const userLoginJSON = localStorage.getItem('userLogin');
-    const userLogin = JSON.parse(userLoginJSON);
     const [showError, setShowError] = useState("");
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setShowError('')
+        setOpen(false)
+    };
     const handleImageInput = (e) => {
         setImage(e.target.files[0]);
         setImageSrc(URL.createObjectURL(e.target.files[0]));
@@ -94,6 +95,7 @@ export default function AddPlaylist({reload}) {
     const resetFormFileAndImage = () => {
         setImage("");
         setHaveImage(false);
+        setImageSrc('')
     };
     const handleUploadFile = () => {
         return new Promise((resolve, reject) => {
