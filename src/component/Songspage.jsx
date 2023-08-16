@@ -42,7 +42,6 @@ export default function Songspage() {
             }}
         >
             <MenuAppBar search={search}/>
-            <>câccacacacaca</>
             <br />
             <br />
             {isLoading ? (
@@ -62,16 +61,14 @@ export default function Songspage() {
                             }}
                         >
                             {listPublicSongs && listPublicSongs.slice(0, 10).map((song, index) => (
-                                <>
-                                    <SongCard
+                                <SongCard
                                         songUrl={song.fileURL}
                                         image={song.avatar}
                                         title={song.songName}
                                         artist={song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
                                         key={index}
                                         song={song}
-                                    />
-                                </>
+                                />
                             ))}
                         </div>
                     </div>
@@ -86,12 +83,11 @@ export default function Songspage() {
                             }}
                         >
                             {playlists && playlists.slice(0, 10).map((playlist, index) => (
-                                <>
-                                    <PlaylistCard
+                                <PlaylistCard
+                                        key={index}
                                         playlist={playlist}
                                         playlistId={playlist._id}
-                                    />
-                                </>
+                                />
                             ))}
                         </div>
                     </div>
