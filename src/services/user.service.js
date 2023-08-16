@@ -65,12 +65,24 @@ class UserService {
         return await axiosInstance.put("http://localhost:8000/user/playlist/update", data);
     }
 
-    static async updateSongState(data, accessToken) {
+    static async updateSongState(data) {
         return await axiosInstance.put("http://localhost:8000/user/song/update-state", data);
     }
 
     static async editSong(data){
         return await axiosInstance.put("http://localhost:8000/user/song/update", data)
+    }
+
+    static async showCommentInSong(songId){
+        return await axiosInstance.get("http://localhost:8000/user/song/show-comment/" + songId);
+    }
+
+    static async submitComment(comment, songId) {
+        return await axiosInstance.post("http://localhost:8000/user/song/add-comment/" + songId, {comment: comment});
+    }
+
+    static async deleteComment(commentId) {
+        return await axiosInstance.get("http://localhost:8000/user/song/delete-comment/" + commentId);
     }
 }
 
