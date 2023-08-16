@@ -53,7 +53,7 @@ export default function SongInPlaylist() {
         dispatch(setCurrentSong(data.songs[0]));
         dispatch(setPlay(true));
         dispatch(setPlayBar(true));
-        setIsPlay(!isPlay);
+        setIsPlay(true);
     }
     const handleClickPause = () => {
         dispatch(setPlay(false))
