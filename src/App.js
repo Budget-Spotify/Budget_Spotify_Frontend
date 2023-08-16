@@ -15,20 +15,9 @@ import UserPlaylist from './component/UserPlayList/UserPlayList';
 import SongOnly from './component/SearchSongOnly';
 import PlaylistOnly from './component/SearchPlaylistOnly';
 import PlaylistDetail from './component/PlaylistDetail';
-import {
-    experimental_extendTheme as materialExtendTheme,
-    Experimental_CssVarsProvider as MaterialCssVarsProvider,
-    THEME_ID as MATERIAL_THEME_ID,
-} from '@mui/material/styles';
-import {CssVarsProvider as JoyCssVarsProvider} from '@mui/joy/styles';
-
-const materialTheme = materialExtendTheme();
-
 
 function App() {
     return (
-        <MaterialCssVarsProvider theme={{[MATERIAL_THEME_ID]: materialTheme}}>
-            <JoyCssVarsProvider>
                 <div className="App">
                     <Routes>
                         <Route path='/' element={<Home/>}>
@@ -50,8 +39,6 @@ function App() {
 
                     </Routes>
                 </div>
-            </JoyCssVarsProvider>
-        </MaterialCssVarsProvider>
     );
 }
 
