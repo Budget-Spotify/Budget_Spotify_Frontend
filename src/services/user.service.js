@@ -48,15 +48,11 @@ class UserService {
     }
 
     static async addSongToPlaylist(playlistId, songId) {
-        return await axiosInstance.post(`http://localhost:8000/user/playlist/add-song/` + playlistId, {songId: songId}, {
-            data: songId
-        });
+        return await axiosInstance.post(`http://localhost:8000/user/playlist/add-song/` + playlistId, {songId: songId});
     }
 
     static async removeSongFromPlaylist(playlistId, songId) {
-        return await axiosInstance.post(`http://localhost:8000/user/playlist/remove-song/` + playlistId, {songId: songId}, {
-            data: songId
-        });
+        return await axiosInstance.post(`http://localhost:8000/user/playlist/remove-song/` + playlistId, {songId: songId});
     }
 
     static async deletePlaylist(data) {
@@ -71,6 +67,10 @@ class UserService {
 
     static async updateSongState(data) {
         return await axiosInstance.put("http://localhost:8000/user/song/update-state", data);
+    }
+
+    static async editSong(data){
+        return await axiosInstance.put("http://localhost:8000/user/song/update", data)
     }
 
     static async showCommentInSong(songId){

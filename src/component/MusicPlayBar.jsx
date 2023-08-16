@@ -46,8 +46,9 @@ export default function MusicPlayBar() {
 
     const handleNextTrack = () => {
         let nextTrackIndex = currentTrackIndex
+        let songIds = tracks.map(song=> song._id)
         if(currentTrackIndex===tracks.length-1){
-            SongService.getRandomSong()
+            SongService.getRandomSong(songIds)
             .then(res=>{
                 const randomSong = res.data.data
                 const songExist = tracks.some(e => e.songName === randomSong.songName)
@@ -63,7 +64,6 @@ export default function MusicPlayBar() {
                 console.log(err);
             })
         } else nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
-        console.log(nextTrackIndex);
         setCurrentTrackIndex(nextTrackIndex);
     };
     const handlePreTrack = () => {
@@ -77,7 +77,8 @@ export default function MusicPlayBar() {
         dispatch(setPlay(false))
     }
     const handleEmptyTracks = () =>{
-        SongService.getRandomSong()
+        let songIds = tracks.map(song=> song._id)
+        SongService.getRandomSong(songIds)
             .then(res=>{
                 dispatch(setSong(res.data.data))
                 dispatch(addSongIntoPlayList(res.data.data))
@@ -183,7 +184,7 @@ export default function MusicPlayBar() {
                         {song.songName && tracks[currentTrackIndex] ? <h3 style={{background: "black", marginTop: "10px", marginLeft: "10px"}}>{tracks[currentTrackIndex].songName}</h3> :
                             <h3 style={{marginTop: "10px", marginLeft: "10px", background: "black"}}>...</h3>}
                         {song.songName && tracks[currentTrackIndex] ?
-                            <p style={{fontSize: "12px", background: "black", marginTop: "10px", marginLeft: "10px"}}>{tracks[currentTrackIndex].songName}</p> :
+                            <p style={{fontSize: "12px", background: "black", marginTop: "10px", marginLeft: "10px"}}>{tracks[currentTrackIndex].singers[0] ? tracks[currentTrackIndex].singers[0].name : 'Unknown Singer'}</p> :
                             <p style={{background: "black", fontSize: "12px", marginTop: "10px", marginLeft: "10px"}}>...</p>}
                     </div>
                 </div>
@@ -213,7 +214,7 @@ export default function MusicPlayBar() {
                         /> :
                         <ReactH5AudioPlayer
                             ref={audioRef}
-                            src={"https://firebasestorage.googleapis.com/v0/b/budget-spotify.appspot.com/o/placeholders%2FMp3%20placeholder.mp3?alt=media&token=61efdf22-c1fa-4a93-ada0-ae5629ff565f"}
+                            src={"https://firebasestorage.googleapis.com/v0/b/budget-spotify-f7142.appspot.com/o/songs%2FMp3%20placeholder.mp3?alt=media&token=908222d7-598f-4bb6-ad0a-2affc413a574"}
                             layout="stacked-reverse"
                             volume={1.0}
                             showSkipControls={true}

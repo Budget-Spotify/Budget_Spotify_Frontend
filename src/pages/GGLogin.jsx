@@ -3,11 +3,8 @@ import {GoogleOAuthProvider, GoogleLogin} from '@react-oauth/google';
 import {AuthService} from "../services/auth.service";
 import {useNavigate} from "react-router-dom";
 
-// import jwt_decode from 'jwt-decode'
-
 export function GGLogin() {
     const navigate = useNavigate();
-
     const handleLogin = async (credential) => {
         try {
             const response = await AuthService.googleLogin(credential);

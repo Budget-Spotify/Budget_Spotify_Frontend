@@ -8,8 +8,8 @@ import {Link, useParams} from "react-router-dom";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import CardMedia from "@mui/material/CardMedia";
-import {setSong} from "../redux/features/songs/songSlice";
-import {setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
+import {setSong as setCurrentSong, setSong} from "../redux/features/songs/songSlice";
+import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
@@ -21,18 +21,31 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useOutletContext } from "react-router-dom";
 export default function SongInPlaylist() {
+    const search = useOutletContext()
     const dispatch = useDispatch();
     const params = useParams();
     const [songsListChange, setSongsListChange] = useState(null);
     const [data, setData] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const [searchData, setSearchData] = useState([]);
-    
+    const userLogin = JSON.parse(localStorage.getItem('userLogin'));
+    const fullNameUser = userLogin.lastName + ` ${userLogin.firstName}`;
+    const [isPlay, setIsPlay] = useState(false);
+    const [songIdToDelete, setSongIdToDelete] = useState('');
+
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
+    const handleOpen = (songId) => {
+        setOpen(true);
+        setSongIdToDelete(songId);
+    }
     const handleClose = () => setOpen(false);
+    const handleClickPlayPause = () => setIsPlay(!isPlay);
 
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
@@ -64,7 +77,7 @@ export default function SongInPlaylist() {
             .catch(e => {
                 console.log(e)
             });
-        }
+    }
     const removeSongToPlaylist = (songId) => {
         const accessToken = localStorage.getItem("token");
         UserService.removeSongFromPlaylist(params.playlistId, songId, accessToken)
@@ -79,38 +92,107 @@ export default function SongInPlaylist() {
 
     return (
         <Root>
-            <MenuAppBar/>
-            <section style={{
-                position: "relative",
-                overflow: "hidden",
-                backgroundColor: '#685A89',
-                maxHeight: "250px",
-                marginBottom: "20px"
-            }}>
-                <img
-                    src={data?.avatar}
-                    alt="This is a Picture"
-                    style={{maxWidth: "25%", maxHeight: "100%"}}
-                />
-                <div
-                    style={{
-                        position: "absolute",
-                        top: "45%",
-                        left: "27%",
-                        transform: "translateY(-50%)",
-                    }}
-                >
-                    <div style={{fontSize: "0.9rem"}}>
-                        Playlist
-                    </div>
-                    <div style={{fontSize: "4rem"}}>
-                        {data?.playlistName}
-                    </div>
-                    <div style={{fontSize: "0.9rem", marginLeft: "100%", width: "100%"}}>
-                        {data?.songs?.length} songs
-                    </div>
-                </div>
-            </section>
+            <MenuAppBar search={search}/>
+            <Card
+                sx={{
+                    backgroundColor: 'black'
+                }}
+            >
+                <Stack direction={'row'}>
+                    <CardMedia
+                        component="img"
+                        height="194"
+                        image={data?.avatar}
+                        alt="Paella dish"
+                        sx={{
+                            width: '192px',
+                            height: '192px'
+                        }}
+                    />
+                    <CardContent style={{flexGrow: '1'}}>
+                        <Typography
+                            variant="body2"
+                            style={{
+                                color: 'white',
+                                fontSize: '0.875rem',
+                                fontWeight: '700',
+                            }}>
+                            Playlist
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            style={
+                                data?.playlistName?.length > 21 ?
+                                    {
+                                        color: 'white',
+                                        fontSize: '4rem',
+                                        fontWeight: '900',
+                                    } :
+                                    {
+                                        color: 'white',
+                                        fontSize: '5rem',
+                                        fontWeight: '900',
+                                    }
+                            }
+                        >
+                            {data?.playlistName}
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            style={{
+                                color: 'white',
+                                fontSize: '0.875rem',
+                                fontWeight: '700',
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}>
+                            <img
+                                src={userLogin.avatar}
+                                alt="error"
+                                style={{
+                                    width: '24px',
+                                    height: '24px',
+                                    borderRadius: '100%'
+                                }}
+                            />
+                            &nbsp;{fullNameUser} &bull; {data?.songs?.length} songs
+                        </Typography>
+                    </CardContent>
+                </Stack>
+                <CardActions disableSpacing>
+                    {
+                        isPlay ?
+                            (
+                                <IconButton
+                                    aria-label="pause"
+                                    onClick={() => handleClickPlayPause()}
+                                >
+                                    <PauseCircleIcon
+                                        fontSize='large'
+                                        sx={{
+                                            color: '#1ed760',
+                                            fontSize: 60,
+                                        }}
+                                    />
+                                </IconButton>
+                            ) :
+                            (
+                                <IconButton
+                                    aria-label="play"
+                                    onClick={() => handleClickPlayPause()}
+                                >
+                                    <PlayCircleIcon
+                                        fontSize='large'
+                                        sx={{
+                                            color: '#1ed760',
+                                            fontSize: 60,
+                                        }}
+                                    />
+                                </IconButton>
+                            )
+                    }
+                </CardActions>
+            </Card>
 
 
             <table aria-label="custom pagination table">
@@ -176,7 +258,7 @@ export default function SongInPlaylist() {
                                                     fontSize: '12px',
                                                     fontWeight: '400',
                                                 }}>
-                                                {new Date(song.uploadTime).toLocaleDateString()}
+                                                {song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
                                             </Typography>
                                         </Stack>
                                     </CardContent>
@@ -187,7 +269,7 @@ export default function SongInPlaylist() {
                                                 color: 'white',
                                                 fontSize: '14px',
                                                 fontWeight: '500',
-                                                paddingRight: '142.5px',
+                                                paddingRight: '182px',
                                                 paddingTop: '25px',
                                             }}>
                                             Time
@@ -202,17 +284,10 @@ export default function SongInPlaylist() {
                                                 }}
                                             />
                                         </IconButton>
-                                        <IconButton aria-label="delete">
-                                            <EditIcon
-                                                sx={{
-                                                    color: '#4f48cb',
-                                                }}
-                                            />
-                                        </IconButton>
                                         <div>
                                             <IconButton
                                                 aria-label="delete"
-                                                onClick={handleOpen}
+                                                onClick={() => handleOpen(song._id)}
                                             >
                                                 <DeleteIcon
                                                     sx={{
@@ -228,17 +303,28 @@ export default function SongInPlaylist() {
                                             >
                                                 <Box sx={style}>
                                                     <Typography variant="h6" component="h2" gutterBottom>
-                                                        <span style={{color: 'white', backgroundColor: 'black'}}>FBI </span>
-                                                        <span style={{color: 'black', backgroundColor: 'orange'}}>WARNING!</span>
+                                                        <span style={{
+                                                            color: 'white',
+                                                            backgroundColor: 'black'
+                                                        }}>FBI </span>
+                                                        <span style={{
+                                                            color: 'black',
+                                                            backgroundColor: 'orange'
+                                                        }}>WARNING!</span>
                                                     </Typography>
                                                     <Typography variant="body1" gutterBottom>
-                                                        Are you sure you want to delete this item? This action cannot be undone.
+                                                        Are you sure you want to delete this item? This action cannot be
+                                                        undone.
                                                     </Typography>
                                                     <Box sx={{display: 'flex', justifyContent: 'flex-end', mt: 2}}>
                                                         <Button variant="outlined" onClick={handleClose} sx={{mr: 2}}>
                                                             CANCEL
                                                         </Button>
-                                                        <Button variant="contained" onClick={()=>{removeSongToPlaylist(song._id)}} color="error">
+                                                        <Button
+                                                            variant="contained"
+                                                            onClick={() => removeSongToPlaylist(songIdToDelete)}
+                                                            color="error"
+                                                        >
                                                             OK
                                                         </Button>
                                                     </Box>
@@ -253,43 +339,134 @@ export default function SongInPlaylist() {
                 ))}
                 </tbody>
             </table>
+            <br/>
+            <Stack gap={3}>
+                <h1
+                    style={{
+                        fontSize: '1.5rem',
+                        fontFamily: 'CircularSpTitle,' +
+                            'CircularSpTitle-Tall,' +
+                            'CircularSp-Arab,' +
+                            'CircularSp-Hebr,' +
+                            'CircularSp-Cyrl,' +
+                            'CircularSp-Grek,' +
+                            'CircularSp-Deva,' +
+                            'var(--fallback-fonts,sans-serif)',
+                        fontWeight: '700',
+                    }}
+                >
+                    Let's find content for your playlist
+                </h1>
+                <input
+                    className="w-70 h-10 rounded-md border border-gray-400 px-4 bg-black text-white "
+                    type="text"
+                    placeholder="Search Songs"
+                    onChange={(e) => {
+                        setSearchInput(e.target.value);
+                    }}
+                    style={{width: "50%"}}
+                />
 
-            <input
-                className="w-70 h-10 rounded-md border border-gray-400 px-4 bg-black text-white "
-                type="text"
-                placeholder="Search Songs"
-                onChange={(e) => {
-                    setSearchInput(e.target.value);
-                }}
-                style={{width: "100%"}}
-            />
-
-            <table>
-                <thead>
-                <tr>
-                    <th>Song Name</th>
-                    <th>Artist</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {searchData.data && searchData.data.length > 0 ? (
-                    searchData.data.map((song) => (
-                        <tr key={song._id}>
-                            <td>{song.songName}</td>
-                            <td>{song.singers}</td>
-                            <td>
-                                <button onClick={() => addSongToPlaylist(song._id)}>Add to Playlist</button>
-                            </td>
-                        </tr>
-                    ))
-                ) : (
+                <table>
+                    <thead>
                     <tr>
-                        <td colSpan="3">No results found</td>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
-                )}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {searchData.data && searchData.data.length > 0 ? (
+                        searchData.data.map((song) => (
+                            <tr key={song._id}>
+                                <td colSpan={6} style={{backgroundColor: 'black'}}>
+                                    <Card
+                                        sx={{
+                                            backgroundColor: 'black'
+                                        }}
+                                    >
+                                        <Stack direction={'row'}>
+                                            <CardMedia
+                                                component="img"
+                                                height="194"
+                                                image={song?.avatar}
+                                                alt="Paella dish"
+                                                onClick={() => {
+                                                    dispatch(setSong(song));
+                                                    dispatch(setPlayBar(true));
+                                                }}
+                                                sx={{
+                                                    width: '100px',
+                                                    height: '100px',
+                                                    cursor: "pointer",
+                                                }}
+                                            />
+                                            <CardContent
+                                                sx={{
+                                                    flexGrow: '1',
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'flex-start',
+                                                }}
+                                            >
+                                                <Stack direction={'column'}>
+                                                    <Typography
+                                                        variant="body2"
+                                                        style={{
+                                                            color: 'white',
+                                                            fontSize: '14px',
+                                                            fontWeight: '500',
+                                                        }}>
+                                                        <Link to={`/song/detail/${song._id}`}>
+                                                            {song.songName}
+                                                        </Link>
+                                                    </Typography>
+                                                    <Typography
+                                                        variant="body2"
+                                                        style={{
+                                                            color: 'white',
+                                                            fontSize: '12px',
+                                                            fontWeight: '400',
+                                                        }}>
+                                                        {song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
+                                                    </Typography>
+                                                </Stack>
+                                            </CardContent>
+                                            <CardActions disableSpacing>
+                                                <Button
+                                                    variant="outlined"
+                                                    onClick={() => addSongToPlaylist(song._id)}
+                                                    sx={{
+                                                        borderColor: 'white',
+                                                        color: 'white',
+                                                        borderRadius: '500px',
+                                                        '&:hover': {
+                                                            transform: 'scale(1.1)',
+                                                            backgroundColor: 'black',
+                                                            fontWeight: 600,
+                                                            borderColor: 'white',
+                                                        }
+                                                    }}
+                                                >
+                                                    Add
+                                                </Button>
+                                            </CardActions>
+                                        </Stack>
+                                    </Card>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="3">No results found</td>
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
+            </Stack>
 
             <Footer/>
         </Root>
@@ -317,13 +494,12 @@ const Root = styled('div')(
 
         td,
         th {
-            border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
             text-align: left;
             padding: 8px;
         }
 
         th {
-            background-color: ${theme.palette.mode === 'dark' ? grey[900] : 'grey'};
+            background-color: ${theme.palette.mode === 'dark' ? grey[900] : 'black'};
         }
     `,
     rootSx

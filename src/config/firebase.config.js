@@ -1,13 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 const firebaseConfig = {
-    apiKey: "AIzaSyBOR0GGxF4Oyd9iu7I-V3zJpalnvk5Rhmc",
-    authDomain: "budget-spotify.firebaseapp.com",
-    projectId: "budget-spotify",
-    storageBucket: "budget-spotify.appspot.com",
-    messagingSenderId: "573482884078",
-    appId: "1:573482884078:web:d59cd5535e2b5db6b74cff",
-    measurementId: "G-W1S26TEF9K"
+    apiKey: "AIzaSyCt0dSmh2IURDKkpZxTab9SPpkNAhGl7AE",
+    authDomain: "budget-spotify-f7142.firebaseapp.com",
+    projectId: "budget-spotify-f7142",
+    storageBucket: "budget-spotify-f7142.appspot.com",
+    messagingSenderId: "28392913964",
+    appId: "1:28392913964:web:81b6bf775a8d4e2ae42589",
+    measurementId: "G-CY8X9VDZTR"
 };
 
 const app = initializeApp(firebaseConfig);
