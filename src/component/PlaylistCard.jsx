@@ -26,42 +26,14 @@ export default function PlaylistCard({ playlist,playlistId }) {
         }
     return (
         <div className='songCardDiv'>
-            <div>
-                <IconButton
-                    aria-label="more"
-                    id="long-button"
-                    aria-controls={open ? 'long-menu' : undefined}
-                    aria-expanded={open ? 'true' : undefined}
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                    style={{ float: 'right' }} // Dropdown
-                >
-                    <MoreVertIcon style={{ transform: 'rotate(90deg)', color: 'white' }} />
-                </IconButton>
-                <Menu
-                    id="long-menu"
-                    MenuListProps={{
-                        'aria-labelledby': 'long-button',
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    PaperProps={{
-                        style: {
-                            maxHeight: ITEM_HEIGHT * 4.5,
-                            width: '20ch',
-                        },
-                    }}
-                >
-                    <MenuItem>
-                        <p onClick={() => {
-                            handleViewPlaylist(playlistId)
-                        }}>View playlist</p>
-                    </MenuItem>
-                </Menu>
-            </div>
-            <img src={playlist?.avatar} alt="image" />
-
+            <img
+                src={playlist?.avatar}
+                alt="image"
+                onClick={() => {
+                    handleViewPlaylist(playlistId)
+                }}
+                className="scale-img"
+            />
             <button onClick={() => {
                 setFlag(true)
             }}><FontAwesomeIcon icon={faPlay} /></button>
