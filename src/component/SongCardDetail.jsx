@@ -42,6 +42,15 @@ export default function SongCardDetail() {
     const dispatch = useDispatch();
     const currentSong = useSelector(state => state.song.song);
     const playingMusic = useSelector(state => state.playBar.playingMusic);
+    let songId = useParams().id;
+
+    useEffect(() => {
+        UserService.submitLikeOfSong(songId)
+            .then()
+            .catch((e) => {
+                console.log(e)
+            })
+    }, [favorite])
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -51,7 +60,6 @@ export default function SongCardDetail() {
         setFavorite(!favorite);
     }
 
-    let songId = useParams();
 
     useEffect(() => {
         UserService.getOneSong(songId.id)

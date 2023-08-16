@@ -7,23 +7,11 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemDecorator from "@mui/joy/ListItemDecorator";
-
-import FormatBold from "@mui/icons-material/FormatBold";
-import FormatItalic from "@mui/icons-material/FormatItalic";
-import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
-import Check from "@mui/icons-material/Check";
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 import UserService from "../services/user.service";
 
 export function TextareaComment() {
-  const [italic, setItalic] = React.useState(false);
-  const [fontWeight, setFontWeight] = React.useState("normal");
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [eventData, setEventData] = useState("");
   const [comment, setComment] = useState("");
   const [commentId, setCommentId] = useState("");
