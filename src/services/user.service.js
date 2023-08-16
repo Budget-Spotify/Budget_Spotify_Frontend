@@ -21,8 +21,8 @@ class UserService {
         return await axiosInstance.get("http://localhost:8000/user/info/" + id);
     }
 
-    static async editInfo(data, accessToken) {
-        return await axiosInstance.put("http://localhost:8000/user/editinfo");
+    static async editInfo(data) {
+        return await axiosInstance.put("http://localhost:8000/user/editinfo",data);
     }
 
     static async deleteSong(data) {

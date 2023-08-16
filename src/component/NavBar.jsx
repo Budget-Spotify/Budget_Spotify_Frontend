@@ -74,7 +74,7 @@ export default function MenuAppBar({ search }) {
                                         <img src={userLogin.avatar}></img>
                                     </Avatar>
                                 ) : (
-                                    <Avatar sx={{ width: 38, height: 38 }}>{userLogin.firstName.charAt(0)}</Avatar>
+                                    <Avatar sx={{ width: 38, height: 38 }}>{userLogin.firstName?.charAt(0)}</Avatar>
                                 )
                             ) : (
                                 <>

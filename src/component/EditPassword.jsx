@@ -52,7 +52,7 @@ const editpasswordSchema = Yup.object().shape({
 });
 
 const EditPassword = () => {
-    const [search] = useOutletContext();
+    const search = useOutletContext();
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
     const [errMessage, setErrorMessage] = useState("");
@@ -97,7 +97,7 @@ const EditPassword = () => {
             background: "black",
             borderRadius: "10px",
         }} >
-            <MenuAppBar />
+            <MenuAppBar search={search}/>
             <ThemeProvider theme={theme}>
                 <div className="w-full h-full flex flex-col items-center">
                     <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">

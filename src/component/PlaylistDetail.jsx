@@ -18,14 +18,16 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useDispatch } from "react-redux";
 import SongService from "../services/song.service";
 import { useOutletContext } from "react-router-dom";
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 export default function PlaylistDetail() {
     const search = useOutletContext();
     const dispatch = useDispatch();
     const params = useParams();
     const [songsListChange, setSongsListChange] = useState(null);
     const [data, setData] = useState([]);
-    const [searchInput, setSearchInput] = useState("");
-    const [searchData, setSearchData] = useState([]);
+    const [isPlay, setIsPlay] = useState(false);
+    const handleClickPlayPause = () => setIsPlay(!isPlay);
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
         SongService.getPublicPlaylist(params.playlistId, accessToken)
@@ -34,53 +36,109 @@ export default function PlaylistDetail() {
                 console.log(e)
             });
     }, [songsListChange]);
-
-    useEffect(() => {
-        const accessToken = localStorage.getItem("token");
-        UserService.searchSong(searchInput, accessToken)
-            .then(res => {
-                setSearchData(res)
-                setSongsListChange(res)
-            })
-            .catch(e => {
-                console.log(e)
-            });
-    }, [searchInput]);
     return (
         <Root>
-            <MenuAppBar search={search}/>
-            <section style={{
-                position: "relative",
-                overflow: "hidden",
-                backgroundColor: '#685A89',
-                maxHeight: "250px",
-                marginBottom: "20px"
-            }}>
-                <img
-                    src={data?.avatar}
-                    alt="This is a Picture"
-                    style={{ maxWidth: "25%", maxHeight: "100%" }}
-                />
-                <div
-                    style={{
-                        position: "absolute",
-                        top: "45%",
-                        left: "27%",
-                        transform: "translateY(-50%)",
-                    }}
-                >
-                    <div style={{ fontSize: "0.9rem" }}>
-                        Playlist
-                    </div>
-                    <div style={{ fontSize: "4rem" }}>
-                        {data?.playlistName}
-                    </div>
-                    <div style={{ fontSize: "0.9rem", marginLeft: "100%", width: "100%" }}>
-                        {data?.songs?.length} songs
-                    </div>
-                </div>
-            </section>
-
+            <MenuAppBar search={search} />
+            <Card
+                sx={{
+                    backgroundColor: 'black'
+                }}
+            >
+                <Stack direction={'row'}>
+                    <CardMedia
+                        component="img"
+                        height="194"
+                        image={data?.avatar}
+                        alt="Paella dish"
+                        sx={{
+                            width: '192px',
+                            height: '192px'
+                        }}
+                    />
+                    <CardContent style={{ flexGrow: '1' }}>
+                        <Typography
+                            variant="body2"
+                            style={{
+                                color: 'white',
+                                fontSize: '0.875rem',
+                                fontWeight: '700',
+                            }}>
+                            Playlist
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            style={
+                                data?.playlistName?.length > 21 ?
+                                    {
+                                        color: 'white',
+                                        fontSize: '4rem',
+                                        fontWeight: '900',
+                                    } :
+                                    {
+                                        color: 'white',
+                                        fontSize: '5rem',
+                                        fontWeight: '900',
+                                    }
+                            }
+                        >
+                            {data?.playlistName}
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            style={{
+                                color: 'white',
+                                fontSize: '0.875rem',
+                                fontWeight: '700',
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}>
+                            <img
+                                src={data?.uploader?.avatar}
+                                alt="error"
+                                style={{
+                                    width: '24px',
+                                    height: '24px',
+                                    borderRadius: '100%'
+                                }}
+                            />
+                            &nbsp;{data?.uploader?.lastName + " " + data?.uploader?.firstName} &bull; {data?.songs?.length} songs
+                        </Typography>
+                    </CardContent>
+                </Stack>
+                <CardActions disableSpacing>
+                        {
+                            isPlay ?
+                                (
+                                    <IconButton
+                                        aria-label="pause"
+                                        onClick={() => handleClickPlayPause()}
+                                    >
+                                        <PauseCircleIcon
+                                            fontSize='large'
+                                            sx={{
+                                                color: '#1ed760',
+                                                fontSize: 60,
+                                            }}
+                                        />
+                                    </IconButton>
+                                ) :
+                                (
+                                    <IconButton
+                                        aria-label="play"
+                                        onClick={() => handleClickPlayPause()}
+                                    >
+                                        <PlayCircleIcon
+                                            fontSize='large'
+                                            sx={{
+                                                color: '#1ed760',
+                                                fontSize: 60,
+                                            }}
+                                        />
+                                    </IconButton>
+                                )
+                        }
+                    </CardActions>
+            </Card>
 
             <table aria-label="custom pagination table">
                 <thead>
@@ -90,7 +148,7 @@ export default function PlaylistDetail() {
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>Time</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -148,19 +206,6 @@ export default function PlaylistDetail() {
                                                     {new Date(song.uploadTime).toLocaleDateString()}
                                                 </Typography>
                                             </Stack>
-                                        </CardContent>
-                                        <CardContent>
-                                            <Typography
-                                                variant="body2"
-                                                style={{
-                                                    color: 'white',
-                                                    fontSize: '14px',
-                                                    fontWeight: '500',
-                                                    paddingRight: '142.5px',
-                                                    paddingTop: '25px',
-                                                }}>
-                                                Time
-                                            </Typography>
                                         </CardContent>
                                         <CardActions disableSpacing>
                                             <IconButton aria-label="add to favorites">
