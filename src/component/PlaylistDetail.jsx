@@ -18,12 +18,16 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useDispatch } from "react-redux";
 import SongService from "../services/song.service";
 import { useOutletContext } from "react-router-dom";
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 export default function PlaylistDetail() {
     const search = useOutletContext();
     const dispatch = useDispatch();
     const params = useParams();
     const [songsListChange, setSongsListChange] = useState(null);
     const [data, setData] = useState([]);
+    const [isPlay, setIsPlay] = useState(false);
+    const handleClickPlayPause = () => setIsPlay(!isPlay);
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
         SongService.getPublicPlaylist(params.playlistId, accessToken)
@@ -97,10 +101,43 @@ export default function PlaylistDetail() {
                                     borderRadius: '100%'
                                 }}
                             />
-                            &nbsp;{data?.uploader?.lastName +" "+ data?.uploader?.firstName} &bull; {data?.songs?.length} songs
+                            &nbsp;{data?.uploader?.lastName + " " + data?.uploader?.firstName} &bull; {data?.songs?.length} songs
                         </Typography>
                     </CardContent>
                 </Stack>
+                <CardActions disableSpacing>
+                        {
+                            isPlay ?
+                                (
+                                    <IconButton
+                                        aria-label="pause"
+                                        onClick={() => handleClickPlayPause()}
+                                    >
+                                        <PauseCircleIcon
+                                            fontSize='large'
+                                            sx={{
+                                                color: '#1ed760',
+                                                fontSize: 60,
+                                            }}
+                                        />
+                                    </IconButton>
+                                ) :
+                                (
+                                    <IconButton
+                                        aria-label="play"
+                                        onClick={() => handleClickPlayPause()}
+                                    >
+                                        <PlayCircleIcon
+                                            fontSize='large'
+                                            sx={{
+                                                color: '#1ed760',
+                                                fontSize: 60,
+                                            }}
+                                        />
+                                    </IconButton>
+                                )
+                        }
+                    </CardActions>
             </Card>
 
             <table aria-label="custom pagination table">
