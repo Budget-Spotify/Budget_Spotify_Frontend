@@ -214,7 +214,7 @@ export default function MusicPlayBar() {
                         /> :
                         <ReactH5AudioPlayer
                             ref={audioRef}
-                            src={"https://firebasestorage.googleapis.com/v0/b/budget-spotify.appspot.com/o/placeholders%2FMp3%20placeholder.mp3?alt=media&token=61efdf22-c1fa-4a93-ada0-ae5629ff565f"}
+                            src={"https://firebasestorage.googleapis.com/v0/b/budget-spotify-f7142.appspot.com/o/songs%2FMp3%20placeholder.mp3?alt=media&token=908222d7-598f-4bb6-ad0a-2affc413a574"}
                             layout="stacked-reverse"
                             volume={1.0}
                             showSkipControls={true}
