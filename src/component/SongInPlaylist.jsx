@@ -8,7 +8,7 @@ import {Link, useParams} from "react-router-dom";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import CardMedia from "@mui/material/CardMedia";
-import {setSong as setCurrentSong, setSong} from "../redux/features/songs/songSlice";
+import {setPlayList, setSong, setSong as setCurrentSong} from "../redux/features/songs/songSlice";
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -16,7 +16,7 @@ import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import EditIcon from "@mui/icons-material/Edit";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -25,7 +25,8 @@ import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useOutletContext } from "react-router-dom";
+import {useOutletContext} from "react-router-dom";
+
 export default function SongInPlaylist() {
     const search = useOutletContext()
     const dispatch = useDispatch();
@@ -37,7 +38,9 @@ export default function SongInPlaylist() {
     const userLogin = JSON.parse(localStorage.getItem('userLogin'));
     const fullNameUser = userLogin.lastName + ` ${userLogin.firstName}`;
     const [isPlay, setIsPlay] = useState(false);
+    const isPlayingMusic = useSelector(state => state.playBar.playingMusic);
     const [songIdToDelete, setSongIdToDelete] = useState('');
+    const currentSong = useSelector(state => state.song.song);
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = (songId) => {
@@ -45,7 +48,25 @@ export default function SongInPlaylist() {
         setSongIdToDelete(songId);
     }
     const handleClose = () => setOpen(false);
-    const handleClickPlayPause = () => setIsPlay(!isPlay);
+    const handleClickPlay = () => {
+        dispatch(setPlayList(data.songs));
+        dispatch(setCurrentSong(data.songs[0]));
+        dispatch(setPlay(true));
+        dispatch(setPlayBar(true));
+        setIsPlay(!isPlay);
+    }
+    const handleClickPause = () => {
+        dispatch(setPlay(false))
+        setIsPlay(false);
+    }
+
+    useEffect(() => {
+        setIsPlay(false)
+    }, [currentSong]);
+
+    useEffect(() => {
+        setIsPlay(isPlayingMusic)
+    }, [isPlayingMusic]);
 
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
@@ -165,7 +186,7 @@ export default function SongInPlaylist() {
                             (
                                 <IconButton
                                     aria-label="pause"
-                                    onClick={() => handleClickPlayPause()}
+                                    onClick={() => handleClickPause()}
                                 >
                                     <PauseCircleIcon
                                         fontSize='large'
@@ -179,7 +200,7 @@ export default function SongInPlaylist() {
                             (
                                 <IconButton
                                     aria-label="play"
-                                    onClick={() => handleClickPlayPause()}
+                                    onClick={() => handleClickPlay()}
                                 >
                                     <PlayCircleIcon
                                         fontSize='large'
@@ -222,7 +243,7 @@ export default function SongInPlaylist() {
                                         image={song?.avatar}
                                         alt="Paella dish"
                                         onClick={() => {
-                                            dispatch(setSong(song));
+                                            dispatch(setCurrentSong(song));
                                             dispatch(setPlayBar(true));
                                         }}
                                         sx={{
@@ -395,7 +416,7 @@ export default function SongInPlaylist() {
                                                 image={song?.avatar}
                                                 alt="Paella dish"
                                                 onClick={() => {
-                                                    dispatch(setSong(song));
+                                                    dispatch(setCurrentSong(song));
                                                     dispatch(setPlayBar(true));
                                                 }}
                                                 sx={{
