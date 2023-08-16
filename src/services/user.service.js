@@ -96,6 +96,10 @@ class UserService {
     static async submitLikePlaylist(playlist){
         return await axiosInstance.get("http://localhost:8000/user/playlist/like/" + playlist);
     }
+
+    static async submitDislikePlaylist(playlist){
+        return await axiosInstance.get("http://localhost:8000/user/playlist/dislike/" + playlist);
+    }
 }
 
 export default UserService;
