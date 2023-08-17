@@ -24,6 +24,7 @@ import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import {TextareaComment} from "./CommentBox";
 import {useGridLogger} from "@mui/x-data-grid";
 
+import { useOutletContext } from 'react-router-dom';
 const ExpandMore = styled((props) => {
     const {expand, ...other} = props;
     return <IconButton {...other} />;
@@ -36,6 +37,7 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function SongCardDetail() {
+    const search = useOutletContext();
     const [expanded, setExpanded] = React.useState(false);
     const [favorite, setFavorite] = React.useState(false);
     const [isPlay, setIsPlay] = React.useState(false);
@@ -112,7 +114,7 @@ export default function SongCardDetail() {
                     borderRadius: "10px",
                 }}
             >
-                <MenuAppBar/>
+                <MenuAppBar search={search}/>
                 <br/>
                 <br/>
                 <Card
