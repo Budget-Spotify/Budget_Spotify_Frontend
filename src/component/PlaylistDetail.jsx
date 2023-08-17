@@ -20,6 +20,7 @@ import SongService from "../services/song.service";
 import { useOutletContext } from "react-router-dom";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import { CommentPlaylist } from "./CommentPlayList";
 export default function PlaylistDetail() {
     const search = useOutletContext();
     const dispatch = useDispatch();
@@ -137,14 +138,6 @@ export default function PlaylistDetail() {
                                     </IconButton>
                                 )
                         }
-                        <IconButton aria-label="add to favorites">
-                                            <FavoriteBorderIcon
-                                                fontSize='large'
-                                                sx={{
-                                                    color: '#1ed760',
-                                                }}
-                                            />
-                                        </IconButton>
                     </CardActions>
             </Card>
 
@@ -232,6 +225,8 @@ export default function PlaylistDetail() {
                     ))}
                 </tbody>
             </table>
+            <br/>
+            <CommentPlaylist/>
             <Footer />
         </Root>
     );

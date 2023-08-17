@@ -84,6 +84,9 @@ class UserService {
     static async deleteComment(commentId) {
         return await axiosInstance.get("http://localhost:8000/user/song/delete-comment/" + commentId);
     }
+    static async submitCommentPlaylist(comment, playlistId) {
+        return await axiosInstance.post("http://localhost:8000/user/playlist/add-comment/" + playlistId, {comment: comment});
+    }
 }
 
 export default UserService;
