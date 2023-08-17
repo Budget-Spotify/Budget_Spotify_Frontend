@@ -100,6 +100,9 @@ class UserService {
     static async submitDislikePlaylist(playlist){
         return await axiosInstance.get("http://localhost:8000/user/playlist/dislike/" + playlist);
     }
+    static async submitCommentPlaylist(comment, playlistId) {
+        return await axiosInstance.post("http://localhost:8000/user/playlist/add-comment/" + playlistId, {comment: comment});
+    }
 }
 
 export default UserService;

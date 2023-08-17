@@ -21,6 +21,7 @@ import { useOutletContext } from "react-router-dom";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { CommentPlaylist } from "./CommentPlayList";
 export default function PlaylistDetail() {
     const search = useOutletContext();
     const dispatch = useDispatch();
@@ -280,6 +281,8 @@ export default function PlaylistDetail() {
                     ))}
                 </tbody>
             </table>
+            <br/>
+            <CommentPlaylist/>
             <Footer />
         </Root>
     );
