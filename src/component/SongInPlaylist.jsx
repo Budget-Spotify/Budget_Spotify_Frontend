@@ -38,6 +38,9 @@ export default function SongInPlaylist() {
     const fullNameUser = userLogin.lastName + ` ${userLogin.firstName}`;
     const [isPlay, setIsPlay] = useState(false);
     const [songIdToDelete, setSongIdToDelete] = useState('');
+    const [favorite, setFavorite] = React.useState(false);
+    const [handleFavoriteClickTime, setHandleFavoriteClickTime] = React.useState(0);
+    let playlistId = useParams().playlistId;
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = (songId) => {
@@ -48,17 +51,24 @@ export default function SongInPlaylist() {
     const handleClickPlayPause = () => setIsPlay(!isPlay);
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("token");
-        UserService.getSongInPlaylist(params.playlistId, accessToken)
-            .then(res => setData(res.data.playlist))
+        UserService.getSongInPlaylist(params.playlistId)
+            .then(res => {
+                setData(res.data.playlist);
+                const playlistLikeCounts = res.data.playlist?.playlistLikeCounts;
+                console.log(playlistLikeCounts)
+                playlistLikeCounts?.forEach(
+                    like => {
+                        like.user === userLogin._id ? setFavorite(true) : setFavorite(false);
+                    }
+                )
+            })
             .catch(e => {
                 console.log(e)
             });
     }, [songsListChange]);
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("token");
-        UserService.searchSong(searchInput, accessToken)
+        UserService.searchSong(searchInput)
             .then(res => {
                 setSearchData(res)
                 setSongsListChange(res)
@@ -69,8 +79,7 @@ export default function SongInPlaylist() {
     }, [searchInput]);
 
     const addSongToPlaylist = (songId) => {
-        const accessToken = localStorage.getItem("token");
-        UserService.addSongToPlaylist(params.playlistId, songId, accessToken)
+        UserService.addSongToPlaylist(params.playlistId, songId)
             .then(res => {
                 setSongsListChange(res)
             })
@@ -79,8 +88,7 @@ export default function SongInPlaylist() {
             });
     }
     const removeSongToPlaylist = (songId) => {
-        const accessToken = localStorage.getItem("token");
-        UserService.removeSongFromPlaylist(params.playlistId, songId, accessToken)
+        UserService.removeSongFromPlaylist(params.playlistId, songId)
             .then(res => {
                 setSongsListChange(res)
             })
@@ -89,6 +97,19 @@ export default function SongInPlaylist() {
             });
         handleClose();
     }
+
+    const handleFavoriteClick = async () => {
+        try {
+            !favorite
+                ? await UserService.submitLikePlaylist(playlistId)
+                : await UserService.submitDislikePlaylist(playlistId);
+
+            setHandleFavoriteClickTime(handleFavoriteClickTime + 1);
+            setFavorite(!favorite);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <Root>
@@ -191,6 +212,27 @@ export default function SongInPlaylist() {
                                 </IconButton>
                             )
                     }
+                    <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
+                        {
+                            favorite ?
+                                (
+                                    <FavoriteIcon
+                                        fontSize='large'
+                                        sx={{
+                                            color: '#1ed760'
+                                        }}
+                                    />
+                                ) :
+                                (
+                                    <FavoriteBorderIcon
+                                        fontSize='large'
+                                        sx={{
+                                            color: '#1ed760',
+                                        }}
+                                    />
+                                )
+                        }
+                    </IconButton>
                 </CardActions>
             </Card>
 
