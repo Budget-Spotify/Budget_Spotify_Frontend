@@ -20,6 +20,7 @@ import SongService from "../services/song.service";
 import { useOutletContext } from "react-router-dom";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 export default function PlaylistDetail() {
     const search = useOutletContext();
     const dispatch = useDispatch();
@@ -27,15 +28,41 @@ export default function PlaylistDetail() {
     const [songsListChange, setSongsListChange] = useState(null);
     const [data, setData] = useState([]);
     const [isPlay, setIsPlay] = useState(false);
+    const [favorite, setFavorite] = React.useState(false);
+    const [handleFavoriteClickTime, setHandleFavoriteClickTime] = React.useState(0);
+    let playlistId = useParams().playlistId;
+    const userInfo = JSON.parse(localStorage.getItem('userLogin'));
+
+
     const handleClickPlayPause = () => setIsPlay(!isPlay);
     useEffect(() => {
-        const accessToken = localStorage.getItem("token");
-        SongService.getPublicPlaylist(params.playlistId, accessToken)
-            .then(res => setData(res.data.playlist))
+        SongService.getPublicPlaylist(params.playlistId)
+            .then(res => {
+                setData(res.data.playlist)
+                const playlistLikeCounts = res.data.playlist?.playlistLikeCounts;
+                playlistLikeCounts?.forEach(
+                    like => {
+                        like.user === userInfo._id ? setFavorite(true) : setFavorite(false);
+                    }
+                )
+            })
             .catch(e => {
                 console.log(e)
             });
     }, [songsListChange]);
+
+    const handleFavoriteClick = async () => {
+        try {
+            !favorite
+                ? await UserService.submitLikePlaylist(playlistId)
+                : await UserService.submitDislikePlaylist(playlistId);
+
+            setHandleFavoriteClickTime(handleFavoriteClickTime + 1);
+            setFavorite(!favorite);
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <Root>
             <MenuAppBar search={search} />
@@ -137,6 +164,27 @@ export default function PlaylistDetail() {
                                     </IconButton>
                                 )
                         }
+                    <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
+                        {
+                            favorite ?
+                                (
+                                    <FavoriteIcon
+                                        fontSize='large'
+                                        sx={{
+                                            color: '#1ed760'
+                                        }}
+                                    />
+                                ) :
+                                (
+                                    <FavoriteBorderIcon
+                                        fontSize='large'
+                                        sx={{
+                                            color: '#1ed760',
+                                        }}
+                                    />
+                                )
+                        }
+                    </IconButton>
                     </CardActions>
             </Card>
 
