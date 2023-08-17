@@ -22,6 +22,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {setSong as setCurrentSong} from "../redux/features/songs/songSlice";
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import {TextareaComment} from "./CommentBox";
+import {useGridLogger} from "@mui/x-data-grid";
+
 import { useOutletContext } from 'react-router-dom';
 const ExpandMore = styled((props) => {
     const {expand, ...other} = props;
@@ -40,24 +42,45 @@ export default function SongCardDetail() {
     const [favorite, setFavorite] = React.useState(false);
     const [isPlay, setIsPlay] = React.useState(false);
     const [song, setSong] = React.useState({});
+    const [firstLoad, setFirstLoad] = React.useState(true);
+    const [handleFavoriteClickTime, setHandleFavoriteClickTime] = React.useState(0);
     const dispatch = useDispatch();
     const currentSong = useSelector(state => state.song.song);
     const playingMusic = useSelector(state => state.playBar.playingMusic);
+    let songId = useParams();
+    const userInfo = JSON.parse(localStorage.getItem('userLogin'));
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
-    const handleFavoriteClick = () => {
-        setFavorite(!favorite);
-    }
+    const handleFavoriteClick = async () => {
+        try {
+            !favorite
+                ? await UserService.submitLikeOfSong(songId.id)
+                : await UserService.submitDislikeOfSong(songId.id);
 
-    let songId = useParams();
+            setHandleFavoriteClickTime(handleFavoriteClickTime + 1);
+            setFavorite(!favorite);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
+
 
     useEffect(() => {
         UserService.getOneSong(songId.id)
             .then(res => {
                 setSong(res.data.song);
+                const songLikeCounts = res.data.song.songLikeCounts;
+                songLikeCounts.forEach(
+                    like => {
+                        like.user === userInfo._id ? setFavorite(true) : setFavorite(false);
+                    }
+                )
             })
             .catch(err => {
                 console.log(err);
