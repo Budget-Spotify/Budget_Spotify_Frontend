@@ -25,8 +25,10 @@ export function CommentPlaylist() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const[commentChange,setCommentChange]=useState(null)
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
+    const [commentId, setCommentId] = useState('');
+    const handleClick = (event, commentId) => {
         setAnchorEl(event.currentTarget);
+        setCommentId(commentId);
     };
     const handleClose = () => {
         setAnchorEl(null);
@@ -152,7 +154,9 @@ export function CommentPlaylist() {
                                 aria-controls={open ? 'long-menu' : undefined}
                                 aria-expanded={open ? 'true' : undefined}
                                 aria-haspopup="true"
-                                onClick={handleClick}
+                                onClick={(event) => {
+                                    handleClick(event, comment._id);
+                                }}
                                 style={{ float: 'right' }} // Dropdown
                             >
                                 <MoreVertIcon style={{ transform: 'rotate(90deg)', color: 'white' }} />
@@ -175,7 +179,7 @@ export function CommentPlaylist() {
                                 {comment?.user?._id.toString() === userLogin?._id?(
                                 <MenuItem>
                                     <button onClick={()=>{
-                                            handleDeleteComment(comment._id)
+                                            handleDeleteComment(commentId)
                                         }}>Delete</button>
                                    
                                 </MenuItem>
