@@ -137,6 +137,14 @@ export default function PlaylistDetail() {
                                     </IconButton>
                                 )
                         }
+                        <IconButton aria-label="add to favorites">
+                                            <FavoriteBorderIcon
+                                                fontSize='large'
+                                                sx={{
+                                                    color: '#1ed760',
+                                                }}
+                                            />
+                                        </IconButton>
                     </CardActions>
             </Card>
 
