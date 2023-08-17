@@ -84,6 +84,22 @@ class UserService {
     static async deleteComment(commentId) {
         return await axiosInstance.get("http://localhost:8000/user/song/delete-comment/" + commentId);
     }
+
+    static async submitLikeOfSong(songId){
+        return await axiosInstance.get("http://localhost:8000/user/song/like/" + songId);
+    }
+
+    static async submitDislikeOfSong(songId){
+        return await axiosInstance.get("http://localhost:8000/user/song/dislike/" + songId)
+    }
+
+    static async submitLikePlaylist(playlist){
+        return await axiosInstance.get("http://localhost:8000/user/playlist/like/" + playlist);
+    }
+
+    static async submitDislikePlaylist(playlist){
+        return await axiosInstance.get("http://localhost:8000/user/playlist/dislike/" + playlist);
+    }
 }
 
 export default UserService;
