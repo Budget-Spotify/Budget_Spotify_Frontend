@@ -1,12 +1,8 @@
-import axios from "axios";
+import {axiosInstance} from "../refreshToken/axios-interceptor";
 
-class AdminService{
-    static async getUserList(accessToken){
-        return await axios.get('http://localhost:8000/admin/userlist',{
-            headers: {
-                token: `Bearer ${accessToken}`
-            }
-        })
+class AdminService {
+    static async getUserList() {
+        return await axiosInstance.get('http://localhost:8000/admin/userlist')
     }
 }
 

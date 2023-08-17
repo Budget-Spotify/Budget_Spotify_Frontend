@@ -4,24 +4,20 @@ import Footer from "./Footer";
 import MenuAppBar from "./NavBar";
 import SongService from "../services/song.service";
 import { useOutletContext } from "react-router-dom";
-import PlaylistCard from "./PlaylistCard";
 
-export default function Songspage() {
+
+export default function SongOnly() {
     const search = useOutletContext();
     const [isLoading, setIsLoading] = useState(false);
     const [listPublicSongs, setListPublicSongs] = useState([]);
-    const [playlists, setPlaylists] = useState([])
-    const [singers, setSinger] = useState([])
+
 
     useEffect(() => {
         setIsLoading(true);
         SongService.searchSongPublic(search)
             .then((res) => {
                 setListPublicSongs(res.data.songs);
-                setPlaylists(res.data.playlists)
-                setSinger(res.data.singers)
                 setIsLoading(false);
-
             })
             .catch((err) => {
                 console.log(err);
@@ -41,7 +37,7 @@ export default function Songspage() {
                 borderRadius: "10px",
             }}
         >
-            <MenuAppBar search={search}/>
+            <MenuAppBar search={search} />
             <br />
             <br />
             {isLoading ? (
@@ -61,33 +57,16 @@ export default function Songspage() {
                             }}
                         >
                             {listPublicSongs && listPublicSongs.slice(0, 10).map((song, index) => (
-                                <SongCard
+                                <>
+                                    <SongCard
                                         songUrl={song.fileURL}
                                         image={song.avatar}
                                         title={song.songName}
                                         artist={song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
                                         key={index}
                                         song={song}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                    <div>
-                        <h1>Album</h1>
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: "repeat(5,1fr)",
-                                marginTop: "40px",
-                                gap: "30px 20px",
-                            }}
-                        >
-                            {playlists && playlists.slice(0, 10).map((playlist, index) => (
-                                <PlaylistCard
-                                        key={index}
-                                        playlist={playlist}
-                                        playlistId={playlist._id}
-                                />
+                                    />
+                                </>
                             ))}
                         </div>
                     </div>

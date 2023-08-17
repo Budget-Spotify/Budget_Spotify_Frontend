@@ -3,7 +3,6 @@ import MusicPlayBar from '../component/MusicPlayBar'
 import SideBar from '../component/SideBar'
 import {useState} from 'react'
 import {Outlet} from "react-router-dom";
-
 export default function Home() {
     const [search, setSearch] = useState("")
     const handleChange = (a) => {

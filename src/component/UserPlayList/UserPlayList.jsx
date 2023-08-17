@@ -1,21 +1,22 @@
 import * as React from "react";
-import MenuAppBar from "./NavBar";
-import Footer from "./Footer";
+import MenuAppBar from "../NavBar";
+import Footer from "../Footer";
 import {styled} from "@mui/system";
 import {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlay} from "@fortawesome/free-solid-svg-icons";
-import MusicPlayBar from "./MusicPlayBar";
-import UserService from "../services/user.service";
-import AddPlaylist from "./AddPlaylist";
+import MusicPlayBar from "../MusicPlayBar";
+import UserService from "../../services/user.service";
+import AddPlaylist from "../AddPlaylist";
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DeletePlayListModal from "./DeletePlaylist";
-import EditPlaylist from "./EditPlayList";
+import DeletePlayListModal from "../DeletePlaylist";
+import EditPlaylist from "../EditPlayList";
 import {useNavigate} from "react-router-dom";
-
+import "./UserPlayList.css"
+import { useOutletContext } from "react-router-dom";
 const ITEM_HEIGHT = 48;
 
 function PlayListCard({playlist, image, title, time, reload, playlistId}) {
@@ -76,26 +77,29 @@ function PlayListCard({playlist, image, title, time, reload, playlistId}) {
                     <MenuItem>
                         <EditPlaylist reload={reload} playlist={playlist}/>
                     </MenuItem>
-                    <MenuItem>
-                        <p onClick={() => {
-                            handleViewPlaylist(playlistId)
-                        }}>View playlist</p>
-                    </MenuItem>
                 </Menu>
             </div>
-            <img src={image} alt="image"/>
+            <img
+                src={image}
+                alt="image"
+                onClick={() => {
+                    handleViewPlaylist(playlistId)
+                }}
+                className="scale-img"
+            />
 
             <button onClick={() => {
                 setFlag(true)
             }}><FontAwesomeIcon icon={faPlay}/></button>
             <h3>{title}</h3>
-            <p>updated on: {time}</p>
+            <p>Updated on: {time}</p>
             {flag && <MusicPlayBar image={image} title={title} time={time}/>}
         </div>
     )
 }
 
 export default function UserPlaylist() {
+    const search = useOutletContext()
     const [data, setData] = useState([]);
     const [playListChange, setPlayListChange] = useState(null);
     useEffect(() => {
@@ -121,7 +125,7 @@ export default function UserPlaylist() {
                 borderRadius: "10px",
             }}
         >
-            <MenuAppBar/>
+            <MenuAppBar search={search}/>
             <div
                 style={{
                     display: "grid",
@@ -129,7 +133,8 @@ export default function UserPlaylist() {
                     marginTop: "40px",
                     gap: "30px 20px",
                 }}
-            ><AddPlaylist reload={setPlayListChange}/>
+            >
+                <AddPlaylist reload={setPlayListChange}/>
                 {data.map((e, index) => {
                     return (
                         <PlayListCard

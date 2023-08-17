@@ -156,7 +156,7 @@ const Listbox = styled('ul')(
 `,
 );
 
-export default function AutocompleteTextField({setValue,inputText,datalist,formField}) {
+export default function AutocompleteTextField({setValue,inputText,datalist,formField,defaultValues}) {
   const {
     getRootProps,
     getInputLabelProps,
@@ -170,6 +170,7 @@ export default function AutocompleteTextField({setValue,inputText,datalist,formF
     setAnchorEl,
   } = useAutocomplete({
     id: 'customized-hook-demo',
+    defaultValue: defaultValues,
     multiple: true,
     options: datalist,
     getOptionLabel: (option) => option.name,
