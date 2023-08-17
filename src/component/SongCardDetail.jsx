@@ -24,7 +24,8 @@ import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import {TextareaComment} from "./CommentBox";
 import {useGridLogger} from "@mui/x-data-grid";
 
-import { useOutletContext } from 'react-router-dom';
+import {useOutletContext} from 'react-router-dom';
+
 const ExpandMore = styled((props) => {
     const {expand, ...other} = props;
     return <IconButton {...other} />;
@@ -67,8 +68,6 @@ export default function SongCardDetail() {
             console.log(error);
         }
     };
-
-
 
 
     useEffect(() => {
@@ -235,6 +234,13 @@ export default function SongCardDetail() {
                                     )
                             }
                         </IconButton>
+                        <p
+                            style={{
+                                color: 'white'
+                            }}
+                        >
+                            {song.songLikeCounts?.length} likes
+                        </p>
                         <ExpandMore
                             expand={expanded}
                             onClick={handleExpandClick}

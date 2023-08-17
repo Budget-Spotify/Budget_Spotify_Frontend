@@ -186,6 +186,13 @@ export default function PlaylistDetail() {
                                 )
                         }
                     </IconButton>
+                    <p
+                    style={{
+                        color: 'white'
+                    }}
+                    >
+                        {data.playlistLikeCounts?.length} likes
+                    </p>
                     </CardActions>
             </Card>
 
