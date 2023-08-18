@@ -25,6 +25,12 @@ function PlayListCard({playlist, image, title, time, reload, playlistId}) {
     const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
+    const formatUploadTime = (time) => {
+        const date = new Date(time);
+        const dateString = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' });
+        const timeString = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        return `${dateString} ${timeString}`;
+    }
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -92,7 +98,7 @@ function PlayListCard({playlist, image, title, time, reload, playlistId}) {
                 setFlag(true)
             }}><FontAwesomeIcon icon={faPlay}/></button>
             <h3>{title}</h3>
-            <p>Updated on: {time}</p>
+            <p>Updated on: {formatUploadTime(playlist?.uploadTime)}</p>
             {flag && <MusicPlayBar image={image} title={title} time={time}/>}
         </div>
     )

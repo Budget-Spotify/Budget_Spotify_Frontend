@@ -12,6 +12,12 @@ export default function PlaylistCard({ playlist,playlistId }) {
     const handleViewPlaylist = (playlistId) => {
         navigate(`/playlist/detail/${playlistId}`)
         }
+    const formatUploadTime = (uploadTime) => {
+        const date = new Date(uploadTime);
+        const dateString = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' });
+        const timeString = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        return `${dateString} ${timeString}`;
+    }
     return (
         <div className='songCardDiv'>
             <img
@@ -26,7 +32,7 @@ export default function PlaylistCard({ playlist,playlistId }) {
                 setFlag(true)
             }}><FontAwesomeIcon icon={faPlay} /></button>
             <h3>{playlist?.playlistName}</h3>
-            <p>updated on: {playlist?.uploadTime}</p>
+            <p>updated on: {formatUploadTime(playlist?.uploadTime)}</p>
             </div>
     )
 }
