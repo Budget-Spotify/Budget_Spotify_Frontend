@@ -7,7 +7,7 @@ import {Fab} from "@mui/material";
 import UpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
-import { addSongIntoPlayList, setSong } from "../redux/features/songs/songSlice";
+import { addSongIntoPlayList, setPlayList, setSong } from "../redux/features/songs/songSlice";
 import SongService from "../services/song.service";
 
 
@@ -75,6 +75,7 @@ export default function MusicPlayBar() {
     const handlePreTrack = () => {
         const nextTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
         setCurrentTrackIndex(nextTrackIndex);
+        dispatch(setSong(tracks[nextTrackIndex]))
     };
     const handlePlayButton = () =>{
         dispatch(setPlay(true))
@@ -99,11 +100,19 @@ export default function MusicPlayBar() {
             const songExist = tracks.some(e => e.songName === song.songName)
             if(songExist){
                 const songIndex = tracks.findIndex(e => e.songName === song.songName);
-                setCurrentTrackIndex(songIndex)
-            } else {
+                return setCurrentTrackIndex(songIndex)
+            }
+            if(currentPlaylist.playlistName==='default-playlist-name-budget-spotify'){
                 dispatch(addSongIntoPlayList(song))
                 if(tracks.length===0) setCurrentTrackIndex(0)
                 else {setCurrentTrackIndex(tracks.length)}
+            }
+            else {
+                dispatch(setPlayList({
+                    playlistName: 'default-playlist-name-budget-spotify',
+                    songs: [song]
+                }))
+                setCurrentTrackIndex(0)
             }
         }
     },[song])
@@ -112,11 +121,6 @@ export default function MusicPlayBar() {
         if(playingMusic) handlePlay()
         else handlePause()
     },[playingMusic]);
-
-    useEffect(()=>{
-        if(song.songName===tracks[currentTrackIndex]?.songName) console.log(true)
-        else console.log(false);;
-    },[currentTrackIndex])
 
     return (
         <>
@@ -219,7 +223,6 @@ export default function MusicPlayBar() {
                                 height: isPlaying ? "100px" : "0%",
                                 margin: "0 auto",
                                 backgroundColor: "#131313",
-                                // padding: "0% 20px 16px 20px",
                                 borderRadius: "10px",
                             }}
                         /> :
@@ -233,11 +236,10 @@ export default function MusicPlayBar() {
                             onPlay={handleEmptyTracks}
                             style={{
                                 color: "white",
-                                width: "62%",
-                                height: "0%",
+                                width: "60%",
+                                height: isPlaying ? "100px" : "0%",
                                 margin: "0 auto",
                                 backgroundColor: "#131313",
-                                // padding: "0% 20px 16px 20px",
                                 borderRadius: "10px",
                             }}
                         />
