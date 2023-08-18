@@ -34,7 +34,7 @@ export default function PlaylistDetail() {
     const [handleFavoriteClickTime, setHandleFavoriteClickTime] = React.useState(0);
     let playlistId = useParams().playlistId;
     const userInfo = JSON.parse(localStorage.getItem('userLogin'));
-    const [playlistLikeCounts, setPlaylistLikeCounts] = React.useState([]);
+    const [playlistLikeCounts, setPlaylistLikeCounts] = useState([]);
 
 
     const handleClickPlayPause = () => setIsPlay(!isPlay);
@@ -42,8 +42,8 @@ export default function PlaylistDetail() {
         SongService.getPublicPlaylist(params.playlistId)
             .then(res => {
                 setData(res.data.playlist)
-                setPlaylistLikeCounts(res.data.playlist.playlistLikeCounts);
-                const userLikes = res.data.playlist.playlistLikeCounts.some(like => like.user === userInfo._id);
+                setPlaylistLikeCounts(res.data.playlist?.playlistLikeCounts);
+                const userLikes = res.data.playlist?.playlistLikeCounts.some(like => like.user === userInfo._id);
                 setFavorite(userLikes);
             })
             .catch(e => {
@@ -190,7 +190,7 @@ export default function PlaylistDetail() {
                             color: 'white'
                         }}
                     >
-                        {data.playlistLikeCounts?.length} likes
+                        {playlistLikeCounts?.length} likes
                     </p>
                 </CardActions>
             </Card>
@@ -307,13 +307,12 @@ const Root = styled('div')(
 
         td,
         th {
-            border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
             text-align: left;
             padding: 8px;
         }
 
         th {
-            background-color: ${theme.palette.mode === 'dark' ? grey[900] : 'grey'};
+            background-color: ${theme.palette.mode === 'dark' ? grey[900] : 'black'};
         }
     `,
     rootSx

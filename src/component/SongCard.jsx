@@ -6,8 +6,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {setSong} from "../redux/features/songs/songSlice";
 import {setPlayBar, setPlay} from "../redux/features/musicPlayBar/playBarSlice";
 import {Link} from "react-router-dom";
+import Stack from "@mui/material/Stack";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
-export default function SongCard({songUrl, image, title, artist, id, song}) {
+export default function SongCard({songUrl, image, title, artist, id, song, likes}) {
     const dispatch = useDispatch();
     const [flag, setFlag] = useState(false);
     const currentSong = useSelector(state => state.song.song)
@@ -67,7 +69,25 @@ export default function SongCard({songUrl, image, title, artist, id, song}) {
             >
                 {title}
             </h3>
-            <p style={{fontSize: '12px'}}>{artist}</p>
+            <Stack direction='row'>
+                <p style={{fontSize: '12px'}}>{artist}</p>
+                <p
+                    style={{
+                        fontSize: '12px',
+                        marginLeft: '75%',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}
+                >
+                    <FavoriteIcon
+                        sx={{
+                            fontSize: '12px'
+                        }}
+                    />
+                    &nbsp;{likes}
+                </p>
+            </Stack>
         </div>
     )
 }
