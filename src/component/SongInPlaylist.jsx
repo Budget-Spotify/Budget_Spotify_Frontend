@@ -1,6 +1,5 @@
 import MenuAppBar from "./NavBar";
 import Footer from "./Footer";
-import * as React from "react";
 import {styled} from "@mui/system";
 import {useEffect, useState} from "react";
 import UserService from "../services/user.service";
@@ -8,15 +7,14 @@ import {Link, useParams} from "react-router-dom";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import CardMedia from "@mui/material/CardMedia";
-import {setSong as setCurrentSong, setSong} from "../redux/features/songs/songSlice";
+import {setSong,setPlayList} from "../redux/features/songs/songSlice";
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import EditIcon from "@mui/icons-material/Edit";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -26,34 +24,76 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useOutletContext } from "react-router-dom";
+
 export default function SongInPlaylist() {
     const search = useOutletContext()
+
     const dispatch = useDispatch();
+
     const params = useParams();
+    const playlistId = useParams().playlistId;
+
     const [songsListChange, setSongsListChange] = useState(null);
     const [data, setData] = useState([]);
+
     const [searchInput, setSearchInput] = useState("");
     const [searchData, setSearchData] = useState([]);
+
     const userLogin = JSON.parse(localStorage.getItem('userLogin'));
     const fullNameUser = userLogin.lastName + ` ${userLogin.firstName}`;
-    const [isPlay, setIsPlay] = useState(false);
-    const [songIdToDelete, setSongIdToDelete] = useState('');
-    const [favorite, setFavorite] = React.useState(false);
-    const [handleFavoriteClickTime, setHandleFavoriteClickTime] = React.useState(0);
-    let playlistId = useParams().playlistId;
 
-    const [open, setOpen] = React.useState(false);
+    const [isPlay, setIsPlay] = useState(false);
+
+    const [songIdToDelete, setSongIdToDelete] = useState('');
+
+    const [favorite, setFavorite] = useState(false);
+    const [handleFavoriteClickTime, setHandleFavoriteClickTime] = useState(0);
+
+    const song = useSelector(state => state.song.song)
+    const currentPlaylist = useSelector(state => state.song.currentPlaylist)
+    const isShowingPlaybar = useSelector(state => state.playBar.isPlaying)
+    const isPlayingMusic = useSelector(state => state.playBar.playingMusic)
+
+    const [open, setOpen] = useState(false);
+
     const handleOpen = (songId) => {
         setOpen(true);
         setSongIdToDelete(songId);
     }
     const handleClose = () => setOpen(false);
-    const handleClickPlayPause = () => setIsPlay(!isPlay);
+    const handlePlay = () => {
+        if(data.playlistName!==currentPlaylist.playlistName){
+            dispatch(setPlayList({
+                playlistName: data.playlistName,
+                songs: data.songs
+            }))
+            dispatch(setSong(data.songs[0]))
+        }
+        dispatch(setPlayBar(true))
+        setIsPlay(true)
+    }
+    const handlePause = () => {
+        setIsPlay(false)
+    }
+
+    useEffect(()=>{
+        if(data.playlistName===currentPlaylist.playlistName){
+            dispatch(setPlayBar(true))
+            dispatch(setPlay(isPlay))
+        }
+    },[isPlay])
+    useEffect(()=>{
+        if(data.playlistName!==currentPlaylist.playlistName) setIsPlay(false)
+        else setIsPlay(isPlayingMusic)
+    },[isPlayingMusic])
 
     useEffect(() => {
         UserService.getSongInPlaylist(params.playlistId)
             .then(res => {
                 setData(res.data.playlist);
+                if(res.data.playlist.playlistName===currentPlaylist.playlistName){
+                    setIsPlay(isPlayingMusic)
+                }
                 const playlistLikeCounts = res.data.playlist?.playlistLikeCounts;
                 console.log(playlistLikeCounts)
                 playlistLikeCounts?.forEach(
@@ -186,7 +226,7 @@ export default function SongInPlaylist() {
                             (
                                 <IconButton
                                     aria-label="pause"
-                                    onClick={() => handleClickPlayPause()}
+                                    onClick={handlePause}
                                 >
                                     <PauseCircleIcon
                                         fontSize='large'
@@ -200,7 +240,7 @@ export default function SongInPlaylist() {
                             (
                                 <IconButton
                                     aria-label="play"
-                                    onClick={() => handleClickPlayPause()}
+                                    onClick={handlePlay}
                                 >
                                     <PlayCircleIcon
                                         fontSize='large'
@@ -264,8 +304,15 @@ export default function SongInPlaylist() {
                                         image={song?.avatar}
                                         alt="Paella dish"
                                         onClick={() => {
+                                            if(data.playlistName!==currentPlaylist.playlistName){
+                                                dispatch(setPlayList({
+                                                    playlistName: data.playlistName,
+                                                    songs: data.songs
+                                                }))
+                                            }
                                             dispatch(setSong(song));
                                             dispatch(setPlayBar(true));
+                                            setIsPlay(true)
                                         }}
                                         sx={{
                                             width: '100px',

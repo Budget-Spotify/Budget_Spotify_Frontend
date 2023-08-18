@@ -4,23 +4,23 @@ export const songSlice = createSlice({
     name: 'song',
     initialState: {
         song: {},
-        currentPlaylist: []
+        currentPlaylist: {
+            playlistName: 'default-playlist-name-budget-spotify',
+            songs: []
+        }
     },
     reducers: {
         setSong: (state, action) => {
             state.song = {...action.payload}
         },
         setPlayList: (state, action) =>{
-            state.currentPlaylist = [...action.payload]
-        },
-        resetPlayList: (state, action)=>{
-            state.currentPlaylist = []
+            state.currentPlaylist = {...action.payload}
         },
         addSongIntoPlayList: (state, action) =>{
-            state.currentPlaylist.push(action.payload)
+            state.currentPlaylist.songs.push(action.payload)
         }
     }
 })
 
-export const {setSong, setPlayList, resetPlayList, addSongIntoPlayList} = songSlice.actions;
+export const {setSong, setPlayList, addSongIntoPlayList} = songSlice.actions;
 export default songSlice.reducer;

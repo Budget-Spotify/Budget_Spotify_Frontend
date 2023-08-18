@@ -87,8 +87,13 @@ export default function SongCardDetail() {
             })
     }, []);
 
+    useEffect(()=>{
+        if(song.songName===currentSong.songName) setIsPlay(playingMusic)
+    },[song])
+
     useEffect(() => {
-        if (song.songName !== currentSong.songName) setIsPlay(false);
+        if (song.songName !== currentSong.songName) setIsPlay(false)
+        else setIsPlay(playingMusic);
     }, [currentSong]);
 
     useEffect(() => {
