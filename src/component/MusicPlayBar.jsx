@@ -14,7 +14,8 @@ import SongService from "../services/song.service";
 export default function MusicPlayBar() {
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const song = useSelector(state => state.song.song);
-    const tracks = useSelector(state => state.song.currentPlaylist)
+    const currentPlaylist = useSelector(state => state.song.currentPlaylist)
+    const tracks = currentPlaylist.songs
     const dispatch = useDispatch();
     const isPlaying = useSelector(state => state.playBar.isPlaying);
     const playingMusic = useSelector(state => state.playBar.playingMusic);
@@ -47,21 +48,20 @@ export default function MusicPlayBar() {
     const handleNextTrack = () => {
         let nextTrackIndex = currentTrackIndex
         let songIds = tracks.map(song=> song._id)
-        if(currentTrackIndex===tracks.length-1){
+        if(currentTrackIndex===tracks.length-1 && currentPlaylist.playlistName==='default-playlist-name-budget-spotify'){
             SongService.getRandomSong(songIds)
             .then(res=>{
                 const randomSong = res.data.data
-                const songExist = tracks.some(e => e.songName === randomSong.songName)
-                if(songExist){
-                    handleNextTrack()
-                } else {
+                if(randomSong==='No song available') nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
+                else {
                     dispatch(setSong(res.data.data))
                     dispatch(addSongIntoPlayList(res.data.data))
                     nextTrackIndex = currentTrackIndex + 1
-                }   
+                }
             })
             .catch(err=>{
-                console.log(err);
+                nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
+                dispatch(setSong(tracks[nextTrackIndex]))
             })
         } else nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
         setCurrentTrackIndex(nextTrackIndex);
