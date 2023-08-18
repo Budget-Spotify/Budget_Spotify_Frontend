@@ -22,9 +22,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {setSong as setCurrentSong} from "../redux/features/songs/songSlice";
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import {TextareaComment} from "./CommentBox";
-import {useGridLogger} from "@mui/x-data-grid";
 
-import { useOutletContext } from 'react-router-dom';
+import {useOutletContext} from 'react-router-dom';
+
 const ExpandMore = styled((props) => {
     const {expand, ...other} = props;
     return <IconButton {...other} />;
@@ -42,13 +42,12 @@ export default function SongCardDetail() {
     const [favorite, setFavorite] = React.useState(false);
     const [isPlay, setIsPlay] = React.useState(false);
     const [song, setSong] = React.useState({});
-    const [firstLoad, setFirstLoad] = React.useState(true);
-    const [handleFavoriteClickTime, setHandleFavoriteClickTime] = React.useState(0);
     const dispatch = useDispatch();
     const currentSong = useSelector(state => state.song.song);
     const playingMusic = useSelector(state => state.playBar.playingMusic);
     let songId = useParams();
     const userInfo = JSON.parse(localStorage.getItem('userLogin'));
+    const [songLikeCounts, setSongLikeCounts] = React.useState([]);
 
 
     const handleExpandClick = () => {
@@ -61,7 +60,6 @@ export default function SongCardDetail() {
                 ? await UserService.submitLikeOfSong(songId.id)
                 : await UserService.submitDislikeOfSong(songId.id);
 
-            setHandleFavoriteClickTime(handleFavoriteClickTime + 1);
             setFavorite(!favorite);
         } catch (error) {
             console.log(error);
@@ -69,23 +67,20 @@ export default function SongCardDetail() {
     };
 
 
-
-
     useEffect(() => {
-        UserService.getOneSong(songId.id)
-            .then(res => {
-                setSong(res.data.song);
-                const songLikeCounts = res.data.song.songLikeCounts;
-                songLikeCounts.forEach(
-                    like => {
-                        like.user === userInfo._id ? setFavorite(true) : setFavorite(false);
-                    }
-                )
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }, []);
+        if (songId.id) {
+            UserService.getOneSong(songId.id)
+                .then(res => {
+                    setSong(res.data.song);
+                    setSongLikeCounts(res.data.song.songLikeCounts);
+                    const userLikes = res.data.song.songLikeCounts.some(like => like.user === userInfo?._id);
+                    setFavorite(userLikes);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    }, [songId.id, userInfo?._id, favorite]);
 
     useEffect(()=>{
         if(song.songName===currentSong.songName) setIsPlay(playingMusic)
@@ -240,6 +235,13 @@ export default function SongCardDetail() {
                                     )
                             }
                         </IconButton>
+                        <p
+                            style={{
+                                color: 'white'
+                            }}
+                        >
+                            {songLikeCounts?.length} likes
+                        </p>
                         <ExpandMore
                             expand={expanded}
                             onClick={handleExpandClick}

@@ -22,7 +22,6 @@ import Button from "@mui/material/Button";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useOutletContext } from "react-router-dom";
 
 export default function SongInPlaylist() {
@@ -47,7 +46,6 @@ export default function SongInPlaylist() {
     const [songIdToDelete, setSongIdToDelete] = useState('');
 
     const [favorite, setFavorite] = useState(false);
-    const [handleFavoriteClickTime, setHandleFavoriteClickTime] = useState(0);
 
     const song = useSelector(state => state.song.song)
     const currentPlaylist = useSelector(state => state.song.currentPlaylist)
@@ -144,7 +142,6 @@ export default function SongInPlaylist() {
                 ? await UserService.submitLikePlaylist(playlistId)
                 : await UserService.submitDislikePlaylist(playlistId);
 
-            setHandleFavoriteClickTime(handleFavoriteClickTime + 1);
             setFavorite(!favorite);
         } catch (error) {
             console.log(error);
