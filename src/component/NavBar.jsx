@@ -11,6 +11,8 @@ import { Avatar } from "@mui/material";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Button from "@mui/material/Button";
 import { useEffect } from 'react';
+import Notification from "./Notification";
+import Stack from "@mui/material/Stack";
 
 
 
@@ -60,7 +62,8 @@ export default function MenuAppBar({ search }) {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     </Typography>
                     {auth && (
-                        <div>
+                        <Stack direction='row' alignItems='center'>
+                            <Notification/>
                             <IconButton
                                 onClick={handleMenu}
                                 size="small"
@@ -174,7 +177,7 @@ export default function MenuAppBar({ search }) {
                                     )
                                 }
                             </Menu>
-                        </div>
+                        </Stack>
                     )}
                 </Toolbar>
                 {search !== "" ? (

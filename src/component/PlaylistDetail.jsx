@@ -27,11 +27,9 @@ export default function PlaylistDetail() {
     const search = useOutletContext();
     const dispatch = useDispatch();
     const params = useParams();
-    const [songsListChange, setSongsListChange] = useState(null);
     const [data, setData] = useState([]);
     const [isPlay, setIsPlay] = useState(false);
     const [favorite, setFavorite] = React.useState(false);
-    const [handleFavoriteClickTime, setHandleFavoriteClickTime] = React.useState(0);
     let playlistId = useParams().playlistId;
     const userInfo = JSON.parse(localStorage.getItem('userLogin'));
     const [playlistLikeCounts, setPlaylistLikeCounts] = useState([]);
@@ -49,7 +47,7 @@ export default function PlaylistDetail() {
             .catch(e => {
                 console.log(e)
             });
-    }, [songsListChange, params.playlistId, userInfo?._id, handleFavoriteClickTime]);
+    }, [params.playlistId, userInfo?._id, favorite]);
 
     const handleFavoriteClick = async () => {
         try {
@@ -57,7 +55,6 @@ export default function PlaylistDetail() {
                 ? await UserService.submitLikePlaylist(playlistId)
                 : await UserService.submitDislikePlaylist(playlistId);
 
-            setHandleFavoriteClickTime(handleFavoriteClickTime + 1);
             setFavorite(!favorite);
         } catch (error) {
             console.log(error);
