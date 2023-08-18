@@ -68,11 +68,15 @@ export default function Songspage() {
                                         artist={song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
                                         key={index}
                                         song={song}
+                                        likes={song.songLikeCounts?.length}
                                 />
                             ))}
                         </div>
                     </div>
                     <div>
+                        <br/>
+                        <br/>
+                        <br/>
                         <h1>Album</h1>
                         <div
                             style={{
@@ -87,6 +91,7 @@ export default function Songspage() {
                                         key={index}
                                         playlist={playlist}
                                         playlistId={playlist._id}
+                                        likes={playlist.playlistLikeCounts?.length}
                                 />
                             ))}
                         </div>
