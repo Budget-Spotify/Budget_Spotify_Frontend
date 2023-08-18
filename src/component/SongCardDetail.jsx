@@ -22,7 +22,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {setSong as setCurrentSong} from "../redux/features/songs/songSlice";
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import {TextareaComment} from "./CommentBox";
-import {useGridLogger} from "@mui/x-data-grid";
 
 import { useOutletContext } from 'react-router-dom';
 const ExpandMore = styled((props) => {
@@ -76,11 +75,9 @@ export default function SongCardDetail() {
             .then(res => {
                 setSong(res.data.song);
                 const songLikeCounts = res.data.song.songLikeCounts;
-                songLikeCounts.forEach(
-                    like => {
-                        like.user === userInfo._id ? setFavorite(true) : setFavorite(false);
-                    }
-                )
+                const foundFavorite = songLikeCounts?.some(like => like.user === userInfo._id);
+
+                setFavorite(!!foundFavorite);
             })
             .catch(err => {
                 console.log(err);

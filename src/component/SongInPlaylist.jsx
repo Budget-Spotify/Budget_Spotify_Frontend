@@ -55,12 +55,9 @@ export default function SongInPlaylist() {
             .then(res => {
                 setData(res.data.playlist);
                 const playlistLikeCounts = res.data.playlist?.playlistLikeCounts;
-                console.log(playlistLikeCounts)
-                playlistLikeCounts?.forEach(
-                    like => {
-                        like.user === userLogin._id ? setFavorite(true) : setFavorite(false);
-                    }
-                )
+                const foundFavorite = playlistLikeCounts?.some(like => like.user === userLogin._id);
+
+                setFavorite(!!foundFavorite);
             })
             .catch(e => {
                 console.log(e)
