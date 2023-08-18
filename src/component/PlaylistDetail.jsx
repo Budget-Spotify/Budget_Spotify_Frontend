@@ -43,13 +43,13 @@ export default function PlaylistDetail() {
             .then(res => {
                 setData(res.data.playlist)
                 setPlaylistLikeCounts(res.data.playlist?.playlistLikeCounts);
-                const userLikes = res.data.playlist?.playlistLikeCounts.some(like => like.user === userInfo._id);
+                const userLikes = res.data.playlist?.playlistLikeCounts.some(like => like.user === userInfo?._id);
                 setFavorite(userLikes);
             })
             .catch(e => {
                 console.log(e)
             });
-    }, [songsListChange, params.playlistId, userInfo._id, handleFavoriteClickTime]);
+    }, [songsListChange, params.playlistId, userInfo?._id, handleFavoriteClickTime]);
 
     const handleFavoriteClick = async () => {
         try {

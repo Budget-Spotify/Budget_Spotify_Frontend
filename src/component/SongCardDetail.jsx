@@ -53,7 +53,6 @@ export default function SongCardDetail() {
     const [songLikeCounts, setSongLikeCounts] = React.useState([]);
 
 
-
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -78,14 +77,14 @@ export default function SongCardDetail() {
                 .then(res => {
                     setSong(res.data.song);
                     setSongLikeCounts(res.data.song.songLikeCounts);
-                    const userLikes = res.data.song.songLikeCounts.some(like => like.user === userInfo._id);
+                    const userLikes = res.data.song.songLikeCounts.some(like => like.user === userInfo?._id);
                     setFavorite(userLikes);
                 })
                 .catch(err => {
                     console.log(err);
                 });
         }
-    }, [songId.id, userInfo._id, handleFavoriteClickTime]);
+    }, [songId.id, userInfo?._id, handleFavoriteClickTime]);
 
     useEffect(() => {
         if (song.songName !== currentSong.songName) setIsPlay(false);
