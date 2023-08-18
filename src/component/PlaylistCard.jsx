@@ -9,13 +9,6 @@ export default function PlaylistCard({ playlist,playlistId }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
     const handleViewPlaylist = (playlistId) => {
         navigate(`/playlist/detail/${playlistId}`)
         }
