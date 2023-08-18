@@ -50,6 +50,8 @@ export default function SongCardDetail() {
     const playingMusic = useSelector(state => state.playBar.playingMusic);
     let songId = useParams();
     const userInfo = JSON.parse(localStorage.getItem('userLogin'));
+    const [songLikeCounts, setSongLikeCounts] = React.useState([]);
+
 
 
     const handleExpandClick = () => {
@@ -71,20 +73,19 @@ export default function SongCardDetail() {
 
 
     useEffect(() => {
-        UserService.getOneSong(songId.id)
-            .then(res => {
-                setSong(res.data.song);
-                const songLikeCounts = res.data.song.songLikeCounts;
-                songLikeCounts.forEach(
-                    like => {
-                        like.user === userInfo._id ? setFavorite(true) : setFavorite(false);
-                    }
-                )
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }, []);
+        if (songId.id) {
+            UserService.getOneSong(songId.id)
+                .then(res => {
+                    setSong(res.data.song);
+                    setSongLikeCounts(res.data.song.songLikeCounts);
+                    const userLikes = res.data.song.songLikeCounts.some(like => like.user === userInfo._id);
+                    setFavorite(userLikes);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    }, [songId.id, userInfo._id, handleFavoriteClickTime]);
 
     useEffect(() => {
         if (song.songName !== currentSong.songName) setIsPlay(false);
@@ -239,7 +240,7 @@ export default function SongCardDetail() {
                                 color: 'white'
                             }}
                         >
-                            {song.songLikeCounts?.length} likes
+                            {songLikeCounts?.length} likes
                         </p>
                         <ExpandMore
                             expand={expanded}

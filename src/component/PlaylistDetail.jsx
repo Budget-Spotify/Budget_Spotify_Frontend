@@ -1,27 +1,28 @@
 import MenuAppBar from "./NavBar";
 import Footer from "./Footer";
 import * as React from "react";
-import { styled } from "@mui/system";
-import { useEffect, useState } from "react";
+import {styled} from "@mui/system";
+import {useEffect, useState} from "react";
 import UserService from "../services/user.service";
-import { Link, useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import CardMedia from "@mui/material/CardMedia";
-import { setSong } from "../redux/features/songs/songSlice";
-import { setPlayBar } from "../redux/features/musicPlayBar/playBarSlice";
+import {setSong} from "../redux/features/songs/songSlice";
+import {setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useDispatch } from "react-redux";
+import {useDispatch} from "react-redux";
 import SongService from "../services/song.service";
-import { useOutletContext } from "react-router-dom";
+import {useOutletContext} from "react-router-dom";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { CommentPlaylist } from "./CommentPlayList";
+import {CommentPlaylist} from "./CommentPlayList";
+
 export default function PlaylistDetail() {
     const search = useOutletContext();
     const dispatch = useDispatch();
@@ -33,6 +34,7 @@ export default function PlaylistDetail() {
     const [handleFavoriteClickTime, setHandleFavoriteClickTime] = React.useState(0);
     let playlistId = useParams().playlistId;
     const userInfo = JSON.parse(localStorage.getItem('userLogin'));
+    const [playlistLikeCounts, setPlaylistLikeCounts] = React.useState([]);
 
 
     const handleClickPlayPause = () => setIsPlay(!isPlay);
@@ -40,18 +42,14 @@ export default function PlaylistDetail() {
         SongService.getPublicPlaylist(params.playlistId)
             .then(res => {
                 setData(res.data.playlist)
-                const playlistLikeCounts = res.data.playlist?.playlistLikeCounts;
-                console.log(playlistLikeCounts)
-                playlistLikeCounts?.forEach(
-                    like => {
-                        like.user === userInfo._id ? setFavorite(true) : setFavorite(false);
-                    }
-                )
+                setPlaylistLikeCounts(res.data.playlist.playlistLikeCounts);
+                const userLikes = res.data.playlist.playlistLikeCounts.some(like => like.user === userInfo._id);
+                setFavorite(userLikes);
             })
             .catch(e => {
                 console.log(e)
             });
-    }, [songsListChange]);
+    }, [songsListChange, params.playlistId, userInfo._id, handleFavoriteClickTime]);
 
     const handleFavoriteClick = async () => {
         try {
@@ -67,7 +65,7 @@ export default function PlaylistDetail() {
     };
     return (
         <Root>
-            <MenuAppBar search={search} />
+            <MenuAppBar search={search}/>
             <Card
                 sx={{
                     backgroundColor: 'black'
@@ -84,7 +82,7 @@ export default function PlaylistDetail() {
                             height: '192px'
                         }}
                     />
-                    <CardContent style={{ flexGrow: '1' }}>
+                    <CardContent style={{flexGrow: '1'}}>
                         <Typography
                             variant="body2"
                             style={{
@@ -135,37 +133,37 @@ export default function PlaylistDetail() {
                     </CardContent>
                 </Stack>
                 <CardActions disableSpacing>
-                        {
-                            isPlay ?
-                                (
-                                    <IconButton
-                                        aria-label="pause"
-                                        onClick={() => handleClickPlayPause()}
-                                    >
-                                        <PauseCircleIcon
-                                            fontSize='large'
-                                            sx={{
-                                                color: '#1ed760',
-                                                fontSize: 60,
-                                            }}
-                                        />
-                                    </IconButton>
-                                ) :
-                                (
-                                    <IconButton
-                                        aria-label="play"
-                                        onClick={() => handleClickPlayPause()}
-                                    >
-                                        <PlayCircleIcon
-                                            fontSize='large'
-                                            sx={{
-                                                color: '#1ed760',
-                                                fontSize: 60,
-                                            }}
-                                        />
-                                    </IconButton>
-                                )
-                        }
+                    {
+                        isPlay ?
+                            (
+                                <IconButton
+                                    aria-label="pause"
+                                    onClick={() => handleClickPlayPause()}
+                                >
+                                    <PauseCircleIcon
+                                        fontSize='large'
+                                        sx={{
+                                            color: '#1ed760',
+                                            fontSize: 60,
+                                        }}
+                                    />
+                                </IconButton>
+                            ) :
+                            (
+                                <IconButton
+                                    aria-label="play"
+                                    onClick={() => handleClickPlayPause()}
+                                >
+                                    <PlayCircleIcon
+                                        fontSize='large'
+                                        sx={{
+                                            color: '#1ed760',
+                                            fontSize: 60,
+                                        }}
+                                    />
+                                </IconButton>
+                            )
+                    }
                     <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
                         {
                             favorite ?
@@ -188,102 +186,102 @@ export default function PlaylistDetail() {
                         }
                     </IconButton>
                     <p
-                    style={{
-                        color: 'white'
-                    }}
+                        style={{
+                            color: 'white'
+                        }}
                     >
                         {data.playlistLikeCounts?.length} likes
                     </p>
-                    </CardActions>
+                </CardActions>
             </Card>
 
             <table aria-label="custom pagination table">
                 <thead>
-                    <tr>
-                        <th>Song</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                <tr>
+                    <th>Song</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
 
-                    </tr>
+                </tr>
                 </thead>
                 <tbody>
-                    {data?.songs?.map(song => (
-                        <tr key={song._id}>
-                            <td colSpan={6} style={{ backgroundColor: 'grey' }}>
-                                <Card
-                                    sx={{
-                                        backgroundColor: 'black'
-                                    }}
-                                >
-                                    <Stack direction={'row'}>
-                                        <CardMedia
-                                            component="img"
-                                            height="194"
-                                            image={song?.avatar}
-                                            alt="Paella dish"
-                                            onClick={() => {
-                                                dispatch(setSong(song));
-                                                dispatch(setPlayBar(true));
-                                            }}
-                                            sx={{
-                                                width: '100px',
-                                                height: '100px',
-                                                cursor: "pointer",
-                                            }}
-                                        />
-                                        <CardContent
-                                            sx={{
-                                                flexGrow: '1',
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                justifyContent: 'flex-start',
-                                            }}
-                                        >
-                                            <Stack direction={'column'}>
-                                                <Typography
-                                                    variant="body2"
-                                                    style={{
-                                                        color: 'white',
-                                                        fontSize: '14px',
-                                                        fontWeight: '500',
-                                                    }}>
-                                                    <Link to={`/song/detail/${song._id}`}>
-                                                        {song.songName}
-                                                    </Link>
-                                                </Typography>
-                                                <Typography
-                                                    variant="body2"
-                                                    style={{
-                                                        color: 'white',
-                                                        fontSize: '12px',
-                                                        fontWeight: '400',
-                                                    }}>
-                                                    {new Date(song.uploadTime).toLocaleDateString()}
-                                                </Typography>
-                                            </Stack>
-                                        </CardContent>
-                                        <CardActions disableSpacing>
-                                            <IconButton aria-label="add to favorites">
-                                                <FavoriteBorderIcon
-                                                    fontSize='large'
-                                                    sx={{
-                                                        color: '#1ed760',
-                                                    }}
-                                                />
-                                            </IconButton>
-                                        </CardActions>
-                                    </Stack>
-                                </Card>
-                            </td>
-                        </tr>
-                    ))}
+                {data?.songs?.map(song => (
+                    <tr key={song._id}>
+                        <td colSpan={6} style={{backgroundColor: 'grey'}}>
+                            <Card
+                                sx={{
+                                    backgroundColor: 'black'
+                                }}
+                            >
+                                <Stack direction={'row'}>
+                                    <CardMedia
+                                        component="img"
+                                        height="194"
+                                        image={song?.avatar}
+                                        alt="Paella dish"
+                                        onClick={() => {
+                                            dispatch(setSong(song));
+                                            dispatch(setPlayBar(true));
+                                        }}
+                                        sx={{
+                                            width: '100px',
+                                            height: '100px',
+                                            cursor: "pointer",
+                                        }}
+                                    />
+                                    <CardContent
+                                        sx={{
+                                            flexGrow: '1',
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            justifyContent: 'flex-start',
+                                        }}
+                                    >
+                                        <Stack direction={'column'}>
+                                            <Typography
+                                                variant="body2"
+                                                style={{
+                                                    color: 'white',
+                                                    fontSize: '14px',
+                                                    fontWeight: '500',
+                                                }}>
+                                                <Link to={`/song/detail/${song._id}`}>
+                                                    {song.songName}
+                                                </Link>
+                                            </Typography>
+                                            <Typography
+                                                variant="body2"
+                                                style={{
+                                                    color: 'white',
+                                                    fontSize: '12px',
+                                                    fontWeight: '400',
+                                                }}>
+                                                {new Date(song.uploadTime).toLocaleDateString()}
+                                            </Typography>
+                                        </Stack>
+                                    </CardContent>
+                                    <CardActions disableSpacing>
+                                        <IconButton aria-label="add to favorites">
+                                            <FavoriteBorderIcon
+                                                fontSize='large'
+                                                sx={{
+                                                    color: '#1ed760',
+                                                }}
+                                            />
+                                        </IconButton>
+                                    </CardActions>
+                                </Stack>
+                            </Card>
+                        </td>
+                    </tr>
+                ))}
                 </tbody>
             </table>
             <br/>
             <CommentPlaylist/>
-            <Footer />
+            <Footer/>
         </Root>
     );
 }
@@ -299,7 +297,7 @@ const rootSx = {
 };
 
 const Root = styled('div')(
-    ({ theme }) => `
+    ({theme}) => `
         table {
             font-family: IBM Plex Sans, sans-serif;
             font-size: 0.875rem;
