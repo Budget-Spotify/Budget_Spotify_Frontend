@@ -52,7 +52,10 @@ export default function MusicPlayBar() {
             SongService.getRandomSong(songIds)
             .then(res=>{
                 const randomSong = res.data.data
-                if(randomSong==='No song available') nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
+                if(randomSong==='No song available') {
+                    nextTrackIndex = (currentTrackIndex + 1) % tracks.length
+                    dispatch(setSong(tracks[nextTrackIndex]))
+                }
                 else {
                     dispatch(setSong(res.data.data))
                     dispatch(addSongIntoPlayList(res.data.data))
@@ -63,7 +66,10 @@ export default function MusicPlayBar() {
                 nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
                 dispatch(setSong(tracks[nextTrackIndex]))
             })
-        } else nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
+        } else {
+            nextTrackIndex = (currentTrackIndex + 1) % tracks.length
+            dispatch(setSong(tracks[nextTrackIndex]))
+        }
         setCurrentTrackIndex(nextTrackIndex);
     };
     const handlePreTrack = () => {
@@ -106,6 +112,11 @@ export default function MusicPlayBar() {
         if(playingMusic) handlePlay()
         else handlePause()
     },[playingMusic]);
+
+    useEffect(()=>{
+        if(song.songName===tracks[currentTrackIndex]?.songName) console.log(true)
+        else console.log(false);;
+    },[currentTrackIndex])
 
     return (
         <>
