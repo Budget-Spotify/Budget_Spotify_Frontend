@@ -147,6 +147,7 @@ export function CommentPlaylist() {
                             marginBottom: "10px",
                         }}
                     >
+                        {comment?.user?._id.toString() === userLogin?._id?(
                         <div>
                             <IconButton
                                 aria-label="more"
@@ -176,16 +177,17 @@ export function CommentPlaylist() {
                                     },
                                 }}
                             >
-                                {comment?.user?._id.toString() === userLogin?._id?(
+                                
                                 <MenuItem>
                                     <button onClick={()=>{
                                             handleDeleteComment(commentId)
                                         }}>Delete</button>
                                    
                                 </MenuItem>
-                                 ):(<MenuItem></MenuItem>)}
+                                 
                             </Menu>
                         </div>
+                        ):(<MenuItem></MenuItem>)}
                         <Typography
                             variant="body2"
                             style={{

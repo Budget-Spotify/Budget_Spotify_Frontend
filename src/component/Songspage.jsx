@@ -73,6 +73,9 @@ export default function Songspage() {
                         </div>
                     </div>
                     <div>
+                        <br/>
+                        <br/>
+                        <br/>
                         <h1>Album</h1>
                         <div
                             style={{
