@@ -63,7 +63,7 @@ export default function MenuAppBar({ search }) {
                     </Typography>
                     {auth && (
                         <Stack direction='row' alignItems='center'>
-                            <Notification/>
+                            {userLogin && <Notification/>}
                             <IconButton
                                 onClick={handleMenu}
                                 size="small"
