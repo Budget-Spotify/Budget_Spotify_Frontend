@@ -69,24 +69,23 @@ export default function SongCard({songUrl, image, title, artist, id, song, likes
             >
                 {title}
             </h3>
-            <Stack direction='row'>
-                <p style={{fontSize: '12px'}}>{artist}</p>
-                <p
-                    style={{
-                        fontSize: '12px',
-                        marginLeft: '75%',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center'
-                    }}
-                >
+            <Stack
+                direction='row'
+                alignItems='center'
+                sx={{
+                    fontSize: '12px'
+                }}
+            >
+                <p>{artist}</p>
+                <div style={{marginLeft: 'auto', display: 'flex', alignItems: 'center'}}>
                     <FavoriteIcon
                         sx={{
-                            fontSize: '12px'
+                            fontSize: '12px',
+                            marginRight: '4px',
                         }}
                     />
-                    &nbsp;{likes}
-                </p>
+                    <p style={{margin: 0}}>{likes}</p>
+                </div>
             </Stack>
         </div>
     )
