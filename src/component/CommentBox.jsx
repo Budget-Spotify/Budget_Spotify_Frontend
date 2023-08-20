@@ -40,7 +40,7 @@ export function TextareaComment() {
       .catch((e) => {
         console.log(e);
       });
-  }, []);
+  }, [commentChange]);
 
   const handleComment = () => {
     if (comment) {

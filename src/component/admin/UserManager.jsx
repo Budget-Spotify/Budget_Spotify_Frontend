@@ -3,11 +3,12 @@ import {styled} from '@mui/system';
 import TablePagination, {
     tablePaginationClasses as classes,
 } from '@mui/base/TablePagination';
-import {useOutletContext} from "react-router-dom";
-import MenuAppBar from "./NavBar";
+import {useOutletContext, useLocation} from "react-router-dom";
+import MenuAppBar from "../NavBar";
 import {useState, useEffect} from 'react';
-import AdminService from '../services/admin.service'
-import Footer from "./Footer";
+import AdminService from '../../services/admin.service'
+import Footer from "../Footer";
+import { Link } from 'react-router-dom';
 
 export default function UserList() {
     const search = useOutletContext()
@@ -15,7 +16,19 @@ export default function UserList() {
     const [isLoading, setisLoading] = useState(false);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+    const [activeLink, setActiveLink] = useState("");
+    const location = useLocation()
+    useEffect(() => {
+        if (location.pathname === "/users-manager") {
+            setActiveLink("UserList");
+        } else if (location.pathname === "/singers-manager") {
+            setActiveLink("Singer");
+        } else if (location.pathname === "/composers-manager") {
+            setActiveLink("Composer");
+        } else if (location.pathname === "/tags-manager") {
+            setActiveLink("Tags");
+        }
+    }, [location]);
     function getData() {
         const accessToken = localStorage.getItem("token");
         setisLoading(true);
@@ -59,6 +72,46 @@ export default function UserList() {
                     Loading...
                 </h2>
             ) : (
+                <>
+                <Link
+                            to={'/users-manager'}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "UserList" ? "green" : "white"
+                            }}
+                        >
+                            UserList
+                        </Link>
+                        <Link
+                            to={'/singers-manager'}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "Singer" ? "green" : "white"
+                            }}
+                        >
+                           Singer
+                        </Link>
+                        <Link
+                            to={'/composers-manager'}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "Composer" ? "green" : "white"
+                            }}
+                        >
+                           Composer
+                        </Link>
+                        <Link
+                            to={"/tags-manager"}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "Tags" ? "green" : "white"
+                            }}
+                        >
+                           Tags
+                        </Link>
+                        <br/>
+                        <br/>
+                        <br/>
                 <div>
                     <h2 className="text-2xl font-semibold">List Of Users</h2>
                     <br/>
@@ -117,6 +170,8 @@ export default function UserList() {
                         </tfoot>
                     </table>
                 </div>
+                </>
+                
             )}
             <Footer/>
         </Root>
