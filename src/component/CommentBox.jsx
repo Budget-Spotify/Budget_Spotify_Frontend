@@ -71,7 +71,6 @@ export function TextareaComment() {
 
     eventSource.onmessage = (event) => {
       const eventData = JSON.parse(event.data);
-      console.log(eventData);
       if(eventData.songId===songId){
         setEventData(eventData.relatedComments);
       }
