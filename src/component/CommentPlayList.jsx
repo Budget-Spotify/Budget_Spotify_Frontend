@@ -62,8 +62,8 @@ export function CommentPlaylist() {
 
         eventSource.onmessage = (event) => {
             const eventData = JSON.parse(event.data);
-            console.log(eventData);
-            if (eventData.playlistId === playlistId) {
+            console.log(eventData)
+            if (eventData.clientId === playlistId) {
                 setEventData(eventData.relatedComments);
             }
         };
