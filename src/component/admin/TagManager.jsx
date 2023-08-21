@@ -9,6 +9,8 @@ import {useState, useEffect} from 'react';
 import AdminService from '../../services/admin.service'
 import Footer from "../Footer";
 import { Link } from 'react-router-dom';
+import AddTag from './AddTag';
+import DeleteTagModal from './DeleteTag';
 
 export default function TagManager() {
     const search = useOutletContext()
@@ -18,6 +20,7 @@ export default function TagManager() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [activeLink, setActiveLink] = useState("");
     const location = useLocation()
+    const [tagsChange,setTagsChange]=useState(null)
     useEffect(() => {
         if (location.pathname === "/users-manager") {
             setActiveLink("UserList");
@@ -40,7 +43,7 @@ export default function TagManager() {
 
     useEffect(() => {
         getData()
-    }, []);
+    }, [tagsChange]);
     const rows = data.tags.sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
     const emptyRows =
@@ -114,6 +117,7 @@ export default function TagManager() {
                         <br/>
                 <div>
                     <h2 className="text-2xl font-semibold">List Of Tag</h2>
+                    <AddTag reload={setTagsChange}/>
                     <br/>
                     <table aria-label="custom pagination table">
                         <thead>
@@ -129,7 +133,12 @@ export default function TagManager() {
                         ).map((row, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{row.name}</td>
+                                <td>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            {row.name}
+                                            <DeleteTagModal TagId={row._id} reload={setTagsChange} />
+                                        </div>
+                                </td>
                             </tr>
                         ))}
                         {emptyRows > 0 && (

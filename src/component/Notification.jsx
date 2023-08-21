@@ -23,7 +23,8 @@ export default function Notification() {
 
         eventSource.onmessage = (event) => {
             const eventData = JSON.parse(event.data);
-            setAllNotify(eventData.allNotifyOfUploader);
+            console.log(eventData.allNotifyOfUploader.reverse());
+            setAllNotify(eventData.allNotifyOfUploader.reverse());
         };
 
         eventSource.onerror = (error) => {

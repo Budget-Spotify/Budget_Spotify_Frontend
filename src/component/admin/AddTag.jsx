@@ -64,7 +64,7 @@ const style = {
 const validationSchema = Yup.object({
     name: Yup.string().required('name is reqired'),
 });
-export default function AddComposer({reload}) {
+export default function AddTag({reload}) {
     const [open, setOpen] = useState(false);
     const [showError, setShowError] = useState("");
     const handleOpen = () => setOpen(true);
@@ -83,7 +83,7 @@ export default function AddComposer({reload}) {
                 let data = {
                     name:values.name
                 };
-                AdminService.addComposer(data)
+                AdminService.addTag(data)
                 .then((res) => {
                     reload(res)
                 })
@@ -144,9 +144,9 @@ export default function AddComposer({reload}) {
                                 value={formAdd.values.name}
                                 onChange={formAdd.handleChange}
                                 id="name"
-                                label="Composer name"
+                                label="Tag name"
                                 name="name"
-                                autoComplete="Composer name"
+                                autoComplete="Tag name"
                                 autoFocus
                             />
                             {formAdd.errors.name && (

@@ -9,6 +9,8 @@ import {useState, useEffect} from 'react';
 import AdminService from '../../services/admin.service'
 import Footer from "../Footer";
 import { Link } from 'react-router-dom';
+import AddComposer from './AddComposer';
+import DeleteComposerModal from './DeleteComposer';
 
 export default function ComposerManager() {
     const search = useOutletContext()
@@ -18,6 +20,7 @@ export default function ComposerManager() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [activeLink, setActiveLink] = useState("");
     const location = useLocation()
+    const[composersChange,setComposersChange]=useState(null)
     useEffect(() => {
         if (location.pathname === "/users-manager") {
             setActiveLink("UserList");
@@ -40,7 +43,7 @@ export default function ComposerManager() {
 
     useEffect(() => {
         getData()
-    }, []);
+    }, [composersChange]);
     const rows = data.composers.sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
     const emptyRows =
@@ -114,6 +117,7 @@ export default function ComposerManager() {
                         <br/>
                 <div>
                     <h2 className="text-2xl font-semibold">List Of Composer</h2>
+                    <AddComposer reload={setComposersChange}/>
                     <br/>
                     <table aria-label="custom pagination table">
                         <thead>
@@ -129,7 +133,10 @@ export default function ComposerManager() {
                         ).map((row, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{row.name}</td>
+                                <td><div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            {row.name}
+                                            <DeleteComposerModal ComposerId={row._id} reload={setComposersChange} />
+                                        </div></td>
                             </tr>
                         ))}
                         {emptyRows > 0 && (
