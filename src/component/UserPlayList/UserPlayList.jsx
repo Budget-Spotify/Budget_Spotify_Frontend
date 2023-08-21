@@ -4,7 +4,7 @@ import Footer from "../Footer";
 import {styled} from "@mui/system";
 import {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlay} from "@fortawesome/free-solid-svg-icons";
+import {faPause, faPlay} from "@fortawesome/free-solid-svg-icons";
 import MusicPlayBar from "../MusicPlayBar";
 import UserService from "../../services/user.service";
 import AddPlaylist from "../AddPlaylist";
@@ -16,7 +16,11 @@ import DeletePlayListModal from "../DeletePlaylist";
 import EditPlaylist from "../EditPlayList";
 import {useNavigate} from "react-router-dom";
 import "./UserPlayList.css"
-import { useOutletContext } from "react-router-dom";
+import {useOutletContext} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {setPlayList, setSong} from "../../redux/features/songs/songSlice";
+import {setPlayBar} from "../../redux/features/musicPlayBar/playBarSlice";
+
 const ITEM_HEIGHT = 48;
 
 function PlayListCard({playlist, image, title, time, reload, playlistId}) {
@@ -25,10 +29,14 @@ function PlayListCard({playlist, image, title, time, reload, playlistId}) {
     const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
+    const [isPlay, setIsPlay] = useState(false);
+    const dispatch = useDispatch();
+    const [data, setData] = useState([]);
+    const currentPlaylist = useSelector(state => state.song.currentPlaylist)
     const formatUploadTime = (time) => {
         const date = new Date(time);
-        const dateString = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' });
-        const timeString = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        const dateString = date.toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: '2-digit'});
+        const timeString = date.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit'});
         return `${dateString} ${timeString}`;
     }
     const handleClick = (event) => {
@@ -47,6 +55,21 @@ function PlayListCard({playlist, image, title, time, reload, playlistId}) {
                 console.log(e)
             })
     }
+    const handlePlay = () => {
+        // if (data.playlistName !== currentPlaylist.playlistName) {
+        //     dispatch(setPlayList({
+        //         playlistName: data.playlistName,
+        //         songs: data.songs
+        //     }))
+        //     dispatch(setSong(data.songs[0]))
+        // }
+        // dispatch(setPlayBar(true))
+        setIsPlay(true)
+    }
+    const handlePause = () => {
+        setIsPlay(false)
+    }
+
     return (
         <div className='songCardDiv'>
             <div>
@@ -93,10 +116,23 @@ function PlayListCard({playlist, image, title, time, reload, playlistId}) {
                 }}
                 className="scale-img"
             />
-
-            <button onClick={() => {
-                setFlag(true)
-            }}><FontAwesomeIcon icon={faPlay}/></button>
+            {
+                isPlay
+                    ? (
+                        <button
+                            onClick={handlePause}
+                        >
+                            <FontAwesomeIcon icon={faPause}/>
+                        </button>
+                    )
+                    : (
+                        <button
+                            onClick={handlePlay}
+                        >
+                            <FontAwesomeIcon icon={faPlay}/>
+                        </button>
+                    )
+            }
             <h3>{title}</h3>
             <p>Updated on: {formatUploadTime(playlist?.uploadTime)}</p>
             {flag && <MusicPlayBar image={image} title={title} time={time}/>}
