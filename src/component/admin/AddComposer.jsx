@@ -135,7 +135,7 @@ export default function AddComposer({reload}) {
                                         : {color: "red"}
                                 }
                             >
-                                {showError === "" ? "Add Singer" : showError}
+                                {showError === "" ? "Add Composer" : showError}
                             </h1>
                             <TextField
                                 margin="normal"

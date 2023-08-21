@@ -135,7 +135,7 @@ export default function AddTag({reload}) {
                                         : {color: "red"}
                                 }
                             >
-                                {showError === "" ? "Add Singer" : showError}
+                                {showError === "" ? "Add Tag" : showError}
                             </h1>
                             <TextField
                                 margin="normal"
