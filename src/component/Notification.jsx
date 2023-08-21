@@ -96,25 +96,21 @@ export default function Notification() {
                                             color: seen ? "gray" : "white"
                                         }}
                                     >
-                                        <div
+                                        <img
+                                            src={notify.sourceUser.avatar}
+                                            alt="Error"
                                             style={{
                                                 width: '50px',
                                                 height: '50px',
                                                 borderRadius: '50%',
-                                                overflow: 'hidden',
+                                                objectFit: 'cover',
+                                            }}
+                                        />
+                                        <Box
+                                            style={{
+                                                overflowWrap: 'break-word'
                                             }}
                                         >
-                                            <img
-                                                src={notify.sourceUser.avatar}
-                                                alt="Error"
-                                                style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    objectFit: 'cover',
-                                                }}
-                                            />
-                                        </div>
-                                        <Box>
                                             {`${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity.songName : notify.entity.playlistName}`}
                                         </Box>
                                     </Stack>
