@@ -10,7 +10,8 @@ import AdminService from '../../services/admin.service'
 import Footer from "../Footer";
 import { Link } from 'react-router-dom';
 import DeleteSingerModal from './DeleteSinger';
-export default function SingerList() {
+import AddSinger from './AddSinger';
+export default function SingerManager() {
     const search = useOutletContext()
     const [data, setData] = useState({ singers: [] });
     const [isLoading, setisLoading] = useState(false);
@@ -116,6 +117,7 @@ export default function SingerList() {
                     <br />
                     <div>
                         <h2 className="text-2xl font-semibold">List Of Singer</h2>
+                        <AddSinger reload={setSingerChange}/>
                         <br />
                         <table aria-label="custom pagination table">
                             <thead>

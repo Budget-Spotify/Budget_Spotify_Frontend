@@ -10,7 +10,7 @@ import AdminService from '../../services/admin.service'
 import Footer from "../Footer";
 import { Link } from 'react-router-dom';
 
-export default function TagList() {
+export default function TagManager() {
     const search = useOutletContext()
     const [data, setData] = useState({tags: []});
     const [isLoading, setisLoading] = useState(false);

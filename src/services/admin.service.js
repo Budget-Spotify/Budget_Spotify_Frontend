@@ -13,8 +13,8 @@ class AdminService {
     static async getTags(){
         return await axiosInstance.get('http://localhost:8000/admin/tags')
     }
-    static async addSinger(){
-        return await axiosInstance.post('http://localhost:8000/admin/addsinger')
+    static async addSinger(data){
+        return await axiosInstance.post('http://localhost:8000/admin/addsinger',data)
     }
     static async deleteSinger(id){
         return await axiosInstance.delete('http://localhost:8000/admin/deletesinger/'+id)

@@ -10,7 +10,7 @@ import AdminService from '../../services/admin.service'
 import Footer from "../Footer";
 import { Link } from 'react-router-dom';
 
-export default function ComposerList() {
+export default function ComposerManager() {
     const search = useOutletContext()
     const [data, setData] = useState({composers: []});
     const [isLoading, setisLoading] = useState(false);
