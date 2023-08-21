@@ -6,7 +6,7 @@ import {SignupComponent} from "./pages/Signup";
 import Songspage from "./component/Songspage";
 import React from "react";
 import SongUploaded from "./component/SongsUploaded";
-import UserList from './component/UserManager';
+import UserList from './component/admin/UserManager';
 import SongCardDetail from "./component/SongCardDetail";
 import EditPassword from './component/EditPassword';
 import DetailUser from './component/DetailUser';
@@ -15,6 +15,9 @@ import UserPlaylist from './component/UserPlayList/UserPlayList';
 import SongOnly from './component/SearchSongOnly';
 import PlaylistOnly from './component/SearchPlaylistOnly';
 import PlaylistDetail from './component/PlaylistDetail';
+import SingerList from './component/admin/SingerManager';
+import ComposerList from './component/admin/ComposerManger';
+import TagList from './component/admin/TagManager';
 
 function App() {
     return (
@@ -29,6 +32,9 @@ function App() {
                             <Route path="/playlists/song-in-play-list/:playlistId" element={<SongInPlaylist/>}/>
                             <Route path="/songs-uploaded" element={<SongUploaded/>}/>
                             <Route path="/users-manager" element={<UserList/>}/>
+                            <Route path="/singers-manager" element={<SingerList/>}/>
+                            <Route path="/composers-manager" element={<ComposerList/>}/>
+                            <Route path="/tags-manager" element={<TagList/>}/>
                             <Route path="/song/detail/:id" element={<SongCardDetail/>}/>
                             <Route path="/info/editpassword" element={<EditPassword/>}/>
                             <Route path="/info/detail" element={<DetailUser/>}/>
