@@ -61,7 +61,6 @@ function PlayListCard({playlist, image, title, time, reload, playlistId, data}) 
                 songs: data.songs
             }))
             dispatch(setSong(data.songs[0]))
-            console.log(data)
         }
         dispatch(setPlayBar(true))
         setIsPlay(true)
