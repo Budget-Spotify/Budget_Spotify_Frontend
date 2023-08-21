@@ -19,20 +19,19 @@ import "./UserPlayList.css"
 import {useOutletContext} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {setPlayList, setSong} from "../../redux/features/songs/songSlice";
-import {setPlayBar} from "../../redux/features/musicPlayBar/playBarSlice";
+import {setPlay, setPlayBar} from "../../redux/features/musicPlayBar/playBarSlice";
 
 const ITEM_HEIGHT = 48;
 
-function PlayListCard({playlist, image, title, time, reload, playlistId}) {
+function PlayListCard({playlist, image, title, time, reload, playlistId, data}) {
     const [flag, setFlag] = useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
     const [isPlay, setIsPlay] = useState(false);
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
-    const currentPlaylist = useSelector(state => state.song.currentPlaylist)
+    const currentPlaylist = useSelector(state => state.song.currentPlaylist);
+    const isPlayingMusic = useSelector(state => state.playBar.playingMusic);
     const formatUploadTime = (time) => {
         const date = new Date(time);
         const dateString = date.toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: '2-digit'});
@@ -56,19 +55,32 @@ function PlayListCard({playlist, image, title, time, reload, playlistId}) {
             })
     }
     const handlePlay = () => {
-        // if (data.playlistName !== currentPlaylist.playlistName) {
-        //     dispatch(setPlayList({
-        //         playlistName: data.playlistName,
-        //         songs: data.songs
-        //     }))
-        //     dispatch(setSong(data.songs[0]))
-        // }
-        // dispatch(setPlayBar(true))
+        if (data.playlistName !== currentPlaylist.playlistName) {
+            dispatch(setPlayList({
+                playlistName: data.playlistName,
+                songs: data.songs
+            }))
+            dispatch(setSong(data.songs[0]))
+            console.log(data)
+        }
+        dispatch(setPlayBar(true))
         setIsPlay(true)
     }
     const handlePause = () => {
         setIsPlay(false)
     }
+
+    useEffect(() => {
+        if (data.playlistName === currentPlaylist.playlistName) {
+            dispatch(setPlayBar(true))
+            dispatch(setPlay(isPlay))
+        }
+    }, [isPlay])
+
+    useEffect(() => {
+        if (data.playlistName !== currentPlaylist.playlistName) setIsPlay(false)
+        else setIsPlay(isPlayingMusic)
+    }, [isPlayingMusic, currentPlaylist])
 
     return (
         <div className='songCardDiv'>
@@ -187,6 +199,7 @@ export default function UserPlaylist() {
                             playlistId={e._id}
                             key={index}
                             reload={setPlayListChange}
+                            data={e}
                         />
                     );
                 })}
