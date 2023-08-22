@@ -23,7 +23,11 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {CommentPlaylist} from "./CommentPlayList";
 import Button from '@mui/material/Button';
+import { useNavigate } from "react-router-dom";
 export default function PlaylistDetail() {
+    const navigate = useNavigate()
+    const userLoginJSON = localStorage.getItem('userLogin');
+    const userLogin = JSON.parse(userLoginJSON);
     const search = useOutletContext();
     const dispatch = useDispatch();
     const params = useParams();
@@ -53,11 +57,16 @@ export default function PlaylistDetail() {
 
     const handleFavoriteClick = async () => {
         try {
-            !favorite
+            if(userLogin){
+                !favorite
                 ? await UserService.submitLikePlaylist(playlistId)
                 : await UserService.submitDislikePlaylist(playlistId);
 
             setFavorite(!favorite);
+            }else{
+                navigate('/login')
+            }
+            
         } catch (error) {
             console.log(error);
         }

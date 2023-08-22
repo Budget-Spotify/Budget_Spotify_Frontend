@@ -22,9 +22,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {setSong as setCurrentSong} from "../redux/features/songs/songSlice";
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import {TextareaComment} from "./CommentBox";
-
 import {useOutletContext} from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 const ExpandMore = styled((props) => {
     const {expand, ...other} = props;
     return <IconButton {...other} />;
@@ -37,6 +36,7 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function SongCardDetail() {
+    const navigate = useNavigate()
     const search = useOutletContext();
     const [expanded, setExpanded] = React.useState(false);
     const [favorite, setFavorite] = React.useState(false);
@@ -48,6 +48,8 @@ export default function SongCardDetail() {
     let songId = useParams();
     const userInfo = JSON.parse(localStorage.getItem('userLogin'));
     const [songLikeCounts, setSongLikeCounts] = React.useState([]);
+    const userLoginJSON = localStorage.getItem('userLogin');
+    const userLogin = JSON.parse(userLoginJSON);
 
 
     const handleExpandClick = () => {
@@ -56,11 +58,15 @@ export default function SongCardDetail() {
 
     const handleFavoriteClick = async () => {
         try {
-            !favorite
+            if(userLogin){
+                !favorite
                 ? await UserService.submitLikeOfSong(songId.id)
                 : await UserService.submitDislikeOfSong(songId.id);
 
             setFavorite(!favorite);
+            }else{
+                navigate('/login')
+            }
         } catch (error) {
             console.log(error);
         }
