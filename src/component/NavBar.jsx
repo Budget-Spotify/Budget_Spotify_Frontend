@@ -6,18 +6,16 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { useState } from "react";
-import { Avatar } from "@mui/material";
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {useState} from "react";
+import {Avatar} from "@mui/material";
+import {Link, useNavigate, useLocation} from 'react-router-dom';
 import Button from "@mui/material/Button";
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import Notification from "./Notification";
 import Stack from "@mui/material/Stack";
 
 
-
-export default function MenuAppBar({ search }) {
-    const navigate = useNavigate()
+export default function MenuAppBar({search}) {
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
     const [auth, setAuth] = useState(true);
@@ -44,22 +42,22 @@ export default function MenuAppBar({ search }) {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userLogin');
-        navigate('/');
+        window.location.href = '/';
     }
     return (
-        <Box sx={{ flexGrow: 1, position: 'fixed', top: 0, zIndex: 999, width: '77%' }}>
-            <AppBar position="static" sx={{ backgroundColor: 'black' }}>
+        <Box sx={{flexGrow: 1, position: 'fixed', top: 0, zIndex: 999, width: '77%'}}>
+            <AppBar position="static" sx={{backgroundColor: 'black'}}>
                 <Toolbar>
                     <IconButton
                         size="large"
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{ mr: 2 }}
+                        sx={{mr: 2}}
                     >
-                        <MenuIcon />
+                        <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                     </Typography>
                     {auth && (
                         <Stack direction='row' alignItems='center'>
@@ -67,58 +65,58 @@ export default function MenuAppBar({ search }) {
                             <IconButton
                                 onClick={handleMenu}
                                 size="small"
-                                sx={{ ml: 2 }}
+                                sx={{ml: 2}}
                                 aria-controls={open ? 'account-menu' : undefined}
                                 aria-haspopup="true"
                                 aria-expanded={open ? 'true' : undefined}
                             >   {userLogin ? (
                                 userLogin.avatar ? (
-                                    <Avatar sx={{ width: 38, height: 38 }}>
+                                    <Avatar sx={{width: 38, height: 38}}>
                                         <img src={userLogin.avatar}></img>
                                     </Avatar>
                                 ) : (
-                                    <Avatar sx={{ width: 38, height: 38 }}>{userLogin.firstName?.charAt(0)}</Avatar>
+                                    <Avatar sx={{width: 38, height: 38}}>{userLogin.firstName?.charAt(0)}</Avatar>
                                 )
                             ) : (
                                 <>
                                     <Button color="inherit"
-                                        component={Link}
-                                        to='/signup'
-                                        sx={{
-                                            backgroundColor: "black",
-                                            borderRadius: "30px",
-                                            color: "#fffa",
-                                            textDecoration: "none",
-                                            width: "120px",
-                                            height: "55px",
-                                            '&:hover': {
-                                                backgroundColor: "black",
-                                                color: "white",
-                                                fontWeight: 'bold',
-                                            },
-                                        }}
-                                    >
-                                        <b>Sign up</b>
-                                    </Button>
-                                    <div style={{ position: 'relative', width: '145px', height: '50px' }}>
-                                        <Button color="inherit"
                                             component={Link}
-                                            to='/login'
+                                            to='/signup'
                                             sx={{
-                                                backgroundColor: "white",
+                                                backgroundColor: "black",
                                                 borderRadius: "30px",
-                                                color: "black",
+                                                color: "#fffa",
                                                 textDecoration: "none",
-                                                width: "100%",
-                                                height: "100%",
+                                                width: "120px",
+                                                height: "55px",
                                                 '&:hover': {
-                                                    backgroundColor: "white",
-                                                    color: "black",
-                                                    height: "51px",
-                                                    width: "146px",
+                                                    backgroundColor: "black",
+                                                    color: "white",
                                                     fontWeight: 'bold',
                                                 },
                                             }}
+                                    >
+                                        <b>Sign up</b>
+                                    </Button>
+                                    <div style={{position: 'relative', width: '145px', height: '50px'}}>
+                                        <Button color="inherit"
+                                                component={Link}
+                                                to='/login'
+                                                sx={{
+                                                    backgroundColor: "white",
+                                                    borderRadius: "30px",
+                                                    color: "black",
+                                                    textDecoration: "none",
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    '&:hover': {
+                                                        backgroundColor: "white",
+                                                        color: "black",
+                                                        height: "51px",
+                                                        width: "146px",
+                                                        fontWeight: 'bold',
+                                                    },
+                                                }}
                                         >
                                             <b>Log in</b>
                                         </Button>
@@ -159,20 +157,21 @@ export default function MenuAppBar({ search }) {
                                         },
                                     },
                                 }}
-                                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                                transformOrigin={{horizontal: 'right', vertical: 'top'}}
+                                anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                             >
                                 {userLogin ? (
-                                    <div>
-                                        <MenuItem><Link style={{ width: '100%', display: 'block' }}
-                                            to={`/info/detail`}>Profile</Link></MenuItem>
-                                        <MenuItem><Link style={{ width: '100%', display: 'block' }}
-                                            to={'/info/editpassword'}>Change Password</Link></MenuItem>
-                                        <MenuItem onClick={handleLogout}>Log out</MenuItem>
-                                    </div>) :
+                                        <div>
+                                            <MenuItem><Link style={{width: '100%', display: 'block'}}
+                                                            to={`/info/detail`}>Profile</Link></MenuItem>
+                                            <MenuItem><Link style={{width: '100%', display: 'block'}}
+                                                            to={'/info/editpassword'}>Change Password</Link></MenuItem>
+                                            <MenuItem onClick={handleLogout}>Log out</MenuItem>
+                                        </div>) :
                                     (
                                         <div>
-                                            <MenuItem><Link style={{ width: '100%', display: 'block' }} to={'/login'}>Login</Link></MenuItem>
+                                            <MenuItem><Link style={{width: '100%', display: 'block'}}
+                                                            to={'/login'}>Login</Link></MenuItem>
                                         </div>
                                     )
                                 }

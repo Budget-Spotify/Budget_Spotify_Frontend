@@ -7,7 +7,7 @@ import {Fab} from "@mui/material";
 import UpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
-import { addSongIntoPlayList, setPlayList, setSong } from "../redux/features/songs/songSlice";
+import {addSongIntoPlayList, setPlayList, setSong} from "../redux/features/songs/songSlice";
 import SongService from "../services/song.service";
 
 
@@ -38,34 +38,36 @@ export default function MusicPlayBar() {
     const audioRef = useRef();
 
     const handlePlay = () => {
-      audioRef.current.audio.current.play();
+        const audioElement = audioRef.current.audio.current;
+        if (audioElement && audioElement.readyState >= 2) {
+            audioElement.play();
+        }
     };
 
     const handlePause = () => {
-      audioRef.current.audio.current.pause();
+        audioRef.current.audio.current.pause();
     };
 
     const handleNextTrack = () => {
         let nextTrackIndex = currentTrackIndex
-        let songIds = tracks.map(song=> song._id)
-        if(currentTrackIndex===tracks.length-1 && currentPlaylist.playlistName==='default-playlist-name-budget-spotify'){
+        let songIds = tracks.map(song => song._id)
+        if (currentTrackIndex === tracks.length - 1 && currentPlaylist.playlistName === 'default-playlist-name-budget-spotify') {
             SongService.getRandomSong(songIds)
-            .then(res=>{
-                const randomSong = res.data.data
-                if(randomSong==='No song available') {
-                    nextTrackIndex = (currentTrackIndex + 1) % tracks.length
+                .then(res => {
+                    const randomSong = res.data.data
+                    if (randomSong === 'No song available') {
+                        nextTrackIndex = (currentTrackIndex + 1) % tracks.length
+                        dispatch(setSong(tracks[nextTrackIndex]))
+                    } else {
+                        dispatch(setSong(res.data.data))
+                        dispatch(addSongIntoPlayList(res.data.data))
+                        nextTrackIndex = currentTrackIndex + 1
+                    }
+                })
+                .catch(err => {
+                    nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
                     dispatch(setSong(tracks[nextTrackIndex]))
-                }
-                else {
-                    dispatch(setSong(res.data.data))
-                    dispatch(addSongIntoPlayList(res.data.data))
-                    nextTrackIndex = currentTrackIndex + 1
-                }
-            })
-            .catch(err=>{
-                nextTrackIndex = (currentTrackIndex + 1) % tracks.length;
-                dispatch(setSong(tracks[nextTrackIndex]))
-            })
+                })
         } else {
             nextTrackIndex = (currentTrackIndex + 1) % tracks.length
             dispatch(setSong(tracks[nextTrackIndex]))
@@ -77,37 +79,40 @@ export default function MusicPlayBar() {
         setCurrentTrackIndex(nextTrackIndex);
         dispatch(setSong(tracks[nextTrackIndex]))
     };
-    const handlePlayButton = () =>{
-        dispatch(setPlay(true))
+    const handlePlayButton = () => {
+        dispatch(setPlay(true));
+        handlePlay();
     }
     const handlePauseButton = () => {
         dispatch(setPlay(false))
     }
-    const handleEmptyTracks = () =>{
-        let songIds = tracks.map(song=> song._id)
+    const handleEmptyTracks = () => {
+        let songIds = tracks.map((song) => song._id);
         SongService.getRandomSong(songIds)
-            .then(res=>{
-                dispatch(setSong(res.data.data))
-                dispatch(addSongIntoPlayList(res.data.data))
+            .then((res) => {
+                dispatch(setSong(res.data.data));
+                dispatch(addSongIntoPlayList(res.data.data));
+                handlePlay();
             })
-            .catch(err=>{
+            .catch((err) => {
                 console.log(err);
-            })
+            });
     }
 
-    useEffect(()=>{
-        if(song.songName) {
+    useEffect(() => {
+        if (song.songName) {
             const songExist = tracks.some(e => e.songName === song.songName)
-            if(songExist){
+            if (songExist) {
                 const songIndex = tracks.findIndex(e => e.songName === song.songName);
                 return setCurrentTrackIndex(songIndex)
             }
-            if(currentPlaylist.playlistName==='default-playlist-name-budget-spotify'){
+            if (currentPlaylist.playlistName === 'default-playlist-name-budget-spotify') {
                 dispatch(addSongIntoPlayList(song))
-                if(tracks.length===0) setCurrentTrackIndex(0)
-                else {setCurrentTrackIndex(tracks.length)}
-            }
-            else {
+                if (tracks.length === 0) setCurrentTrackIndex(0)
+                else {
+                    setCurrentTrackIndex(tracks.length)
+                }
+            } else {
                 dispatch(setPlayList({
                     playlistName: 'default-playlist-name-budget-spotify',
                     songs: [song]
@@ -115,12 +120,12 @@ export default function MusicPlayBar() {
                 setCurrentTrackIndex(0)
             }
         }
-    },[song])
-    
-    useEffect(()=>{
-        if(playingMusic) handlePlay()
+    }, [song])
+
+    useEffect(() => {
+        if (playingMusic) handlePlay()
         else handlePause()
-    },[playingMusic]);
+    }, [playingMusic]);
 
     return (
         <>
@@ -196,15 +201,29 @@ export default function MusicPlayBar() {
                     )}
 
                     <div style={{color: "#fff", background: "black", width: "78%"}}>
-                        {song.songName && tracks[currentTrackIndex] ? <h3 style={{background: "black", marginTop: "10px", marginLeft: "10px"}}>{tracks[currentTrackIndex].songName}</h3> :
+                        {song.songName && tracks[currentTrackIndex] ? <h3 style={{
+                                background: "black",
+                                marginTop: "10px",
+                                marginLeft: "10px"
+                            }}>{tracks[currentTrackIndex].songName}</h3> :
                             <h3 style={{marginTop: "10px", marginLeft: "10px", background: "black"}}>...</h3>}
                         {song.songName && tracks[currentTrackIndex] ?
-                            <p style={{fontSize: "12px", background: "black", marginTop: "10px", marginLeft: "10px"}}>{tracks[currentTrackIndex].singers[0] ? tracks[currentTrackIndex].singers[0].name : 'Unknown Singer'}</p> :
-                            <p style={{background: "black", fontSize: "12px", marginTop: "10px", marginLeft: "10px"}}>...</p>}
+                            <p style={{
+                                fontSize: "12px",
+                                background: "black",
+                                marginTop: "10px",
+                                marginLeft: "10px"
+                            }}>{tracks[currentTrackIndex].singers[0] ? tracks[currentTrackIndex].singers[0].name : 'Unknown Singer'}</p> :
+                            <p style={{
+                                background: "black",
+                                fontSize: "12px",
+                                marginTop: "10px",
+                                marginLeft: "10px"
+                            }}>...</p>}
                     </div>
                 </div>
                 {
-                    song.songName && tracks[currentTrackIndex]? <ReactH5AudioPlayer
+                    song.songName && tracks[currentTrackIndex] ? <ReactH5AudioPlayer
                             ref={audioRef}
                             src={tracks[currentTrackIndex].fileURL}
                             layout="stacked-reverse"

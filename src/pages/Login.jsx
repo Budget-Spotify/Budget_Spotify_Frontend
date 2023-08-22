@@ -75,7 +75,7 @@ export function LoginComponent() {
             <div className="w-full h-full flex flex-col items-center">
                 <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
                     <h1 className="text-4xl font-bold">
-                        Music<span className="text-green-500">Mix</span>
+                        DieC<span className="text-green-500">Music</span>
                     </h1>
 
                 </div>
@@ -140,7 +140,7 @@ export function LoginComponent() {
                     </div>
                     <div
                         className="border border-gray-500 text-gray-500 w-full flex items-center justify-center py-4 rounded-full font-bold  cursor-pointer hover:opacity-75">
-                        <Link to="/signup">SIGN UP FOR MusicMix</Link>
+                        <Link to="/signup">SIGN UP FOR DieCMusic</Link>
                     </div>
                 </div>
                 <ToastContainer/>
