@@ -14,6 +14,7 @@ export default function PlaylistCard({playlist, playlistId, likes}) {
     const handleViewPlaylist = (playlistId) => {
         navigate(`/playlist/detail/${playlistId}`)
     }
+
     const formatUploadTime = (uploadTime) => {
         const date = new Date(uploadTime);
         const dateString = date.toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: '2-digit'});
@@ -30,9 +31,13 @@ export default function PlaylistCard({playlist, playlistId, likes}) {
                 }}
                 className="scale-img"
             />
-            <button onClick={() => {
-                setFlag(true)
-            }}><FontAwesomeIcon icon={faPlay}/></button>
+            <button
+                onClick={() => {
+                    setFlag(true)
+                }}
+            >
+                <FontAwesomeIcon icon={faPlay}/>
+            </button>
             <h3>{playlist?.playlistName}</h3>
             <Stack
                 direction='row'
