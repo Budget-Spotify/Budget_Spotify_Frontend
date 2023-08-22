@@ -106,29 +106,35 @@ export default function Notification() {
                                                 objectFit: 'cover',
                                             }}
                                         />
-                                        <Box
-                                            style={{
-                                                overflowWrap: 'break-word'
-                                            }}
-                                        >
-                                            {
-                                                notify.entityType === "Songs" ? (
-                                                    <Link to={`/song/detail/${notify.entity._id}`} onClick={() => {
-                                                        UserService.changeToSeen(notify._id);
-                                                        handleClick();
-                                                    }}>
-                                                        {`${index + 1}. ${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
-                                                    </Link>
-                                                ) : (
-                                                    <Link to={`/song/detail/${notify.entity._id}`} onClick={() => {
-                                                        UserService.changeToSeen(notify._id);
-                                                        handleClick();
-                                                    }}>
+                                        {
+                                            notify.entityType === "Songs" ? (
+                                                <Link to={`/song/detail/${notify.entity._id}`} onClick={() => {
+                                                    UserService.changeToSeen(notify._id);
+                                                    handleClick();
+                                                }}>
+                                                    <Box
+                                                        style={{
+                                                            overflowWrap: 'break-word'
+                                                        }}
+                                                    >
                                                         {`${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
-                                                    </Link>
-                                                )
-                                            }
-                                        </Box>
+                                                    </Box>
+                                                </Link>
+                                            ) : (
+                                                <Link to={`/playlist/detail/${notify.entity._id}`} onClick={() => {
+                                                    UserService.changeToSeen(notify._id);
+                                                    handleClick();
+                                                }}>
+                                                    <Box
+                                                        style={{
+                                                            overflowWrap: 'break-word'
+                                                        }}
+                                                    >
+                                                        {`${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
+                                                    </Box>
+                                                </Link>
+                                            )
+                                        }
                                     </Stack>
                                 ))}
                             </div>
