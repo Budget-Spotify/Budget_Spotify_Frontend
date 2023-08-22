@@ -5,6 +5,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import './Notification.css';
 import Stack from "@mui/material/Stack";
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
+import {Link} from "react-router-dom";
 
 export default function Notification() {
     const userInfo = JSON.parse(localStorage.getItem('userLogin'));
@@ -18,7 +19,7 @@ export default function Notification() {
     };
 
     const handleClickNotice = () => {
-        setSeen(!seen);
+        setSeen(seen);
     }
 
     const open = Boolean(anchorEl);
@@ -31,7 +32,7 @@ export default function Notification() {
 
         eventSource.onmessage = (event) => {
             const eventData = JSON.parse(event.data);
-            setAllNotify(eventData.allNotifyOfUploader);
+            setAllNotify(eventData.allNotifyOfUploader.reverse());
         };
 
         eventSource.onerror = (error) => {
@@ -84,7 +85,7 @@ export default function Notification() {
                             <div
                                 className="notification-box"
                             >
-                                {allNotify.map(notify => (
+                                {allNotify.map((notify, index) => (
                                     <Stack
                                         direction='row'
                                         alignItems='center'
@@ -111,7 +112,18 @@ export default function Notification() {
                                                 overflowWrap: 'break-word'
                                             }}
                                         >
-                                            {`${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity.songName : notify.entity.playlistName}`}
+                                            {
+                                                notify.entityType === "Songs" ? (
+                                                    <Link to={`/song/detail/${notify.entity._id}`}>
+                                                        {`${index + 1}. ${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
+                                                    </Link>
+                                                ) : (
+                                                    <Link to={`/playlist/detail/${notify.entity._id}`}>
+                                                        {`${index + 1}. ${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
+                                                    </Link>
+                                                )
+                                            }
+
                                         </Box>
                                     </Stack>
                                 ))}
