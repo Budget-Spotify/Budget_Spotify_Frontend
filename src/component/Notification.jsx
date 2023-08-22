@@ -95,8 +95,8 @@ export default function Notification() {
                                         style={{
                                             color: notify.seen ? "gray" : "white"
                                         }}
-                                    >
-                                        <img
+                                    >     
+                                    <img
                                             src={notify.sourceUser.avatar}
                                             alt="Error"
                                             style={{
@@ -108,6 +108,7 @@ export default function Notification() {
                                         />
                                         {
                                             notify.entityType === "Songs" ? (
+                                                notify?.entity?._id?(
                                                 <Link to={`/song/detail/${notify?.entity?._id}`} onClick={() => {
                                                     UserService.changeToSeen(notify?._id);
                                                     handleClick();
@@ -120,19 +121,23 @@ export default function Notification() {
                                                         {`${notify?.sourceUser?.firstName} ${notify?.action} on the ${notify?.entityType} ${(notify?.entityType === "Songs") ? notify?.entity?.songName : notify?.entity?.playlistName}`}
                                                     </Box>
                                                 </Link>
+                                                ):(<Link>The post has deleted</Link>)
+                                                
                                             ) : (
-                                                <Link to={`/playlist/detail/${notify?.entity?._id}`} onClick={() => {
-                                                    UserService.changeToSeen(notify?._id);
-                                                    handleClick();
-                                                }}>
-                                                    <Box
-                                                        style={{
-                                                            overflowWrap: 'break-word'
-                                                        }}
-                                                    >
-                                                        {`${notify?.sourceUser?.firstName} ${notify?.action} on the ${notify?.entityType} ${(notify?.entityType === "Songs") ? notify?.entity?.songName : notify.entity?.playlistName}`}
-                                                    </Box>
-                                                </Link>
+                                                notify?.entity?._id?(
+                                                    <Link to={`/playlist/detail/${notify?.entity?._id}`} onClick={() => {
+                                                        UserService.changeToSeen(notify?._id);
+                                                        handleClick();
+                                                    }}>
+                                                        <Box
+                                                            style={{
+                                                                overflowWrap: 'break-word'
+                                                            }}
+                                                        >
+                                                            {`${notify?.sourceUser?.firstName} ${notify?.action} on the ${notify?.entityType} ${(notify?.entityType === "Songs") ? notify?.entity?.songName : notify.entity?.playlistName}`}
+                                                        </Box>
+                                                    </Link>
+                                                ):(<Link>The post has deleted</Link>)
                                             )
                                         }
                                     </Stack>
