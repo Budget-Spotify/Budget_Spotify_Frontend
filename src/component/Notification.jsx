@@ -6,21 +6,18 @@ import './Notification.css';
 import Stack from "@mui/material/Stack";
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 import {Link} from "react-router-dom";
+import Badge from '@mui/material/Badge';
+import UserService from "../services/user.service";
 
 export default function Notification() {
     const userInfo = JSON.parse(localStorage.getItem('userLogin'));
     const userId = userInfo._id;
     const [anchorEl, setAnchorEl] = useState(null);
     const [allNotify, setAllNotify] = useState([]);
-    const [seen, setSeen] = useState(false);
 
     const handleClick = (event) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
     };
-
-    const handleClickNotice = () => {
-        setSeen(seen);
-    }
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popper' : undefined;
@@ -44,10 +41,13 @@ export default function Notification() {
             eventSource.close();
         };
     }, []);
+    const NotSeenArray = allNotify.filter(notify => !notify.seen);
 
     return (
         <div>
-            <NotificationsIcon onClick={handleClick}/>
+            <Badge badgeContent={NotSeenArray.length} color="error">
+                <NotificationsIcon onClick={handleClick}/>
+            </Badge>
             <Popper
                 id={id}
                 open={open}
@@ -92,9 +92,8 @@ export default function Notification() {
                                         gap={1}
                                         className="notification"
                                         key={notify._id}
-                                        onClick={() => handleClickNotice()}
                                         style={{
-                                            color: seen ? "gray" : "white"
+                                            color: notify.seen ? "gray" : "white"
                                         }}
                                     >
                                         <img
@@ -114,16 +113,21 @@ export default function Notification() {
                                         >
                                             {
                                                 notify.entityType === "Songs" ? (
-                                                    <Link to={`/song/detail/${notify.entity._id}`}>
+                                                    <Link to={`/song/detail/${notify.entity._id}`} onClick={() => {
+                                                        UserService.changeToSeen(notify._id);
+                                                        handleClick();
+                                                    }}>
                                                         {`${index + 1}. ${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
                                                     </Link>
                                                 ) : (
-                                                    <Link to={`/playlist/detail/${notify.entity._id}`}>
-                                                        {`${index + 1}. ${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
+                                                    <Link to={`/song/detail/${notify.entity._id}`} onClick={() => {
+                                                        UserService.changeToSeen(notify._id);
+                                                        handleClick();
+                                                    }}>
+                                                        {`${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
                                                     </Link>
                                                 )
                                             }
-
                                         </Box>
                                     </Stack>
                                 ))}
