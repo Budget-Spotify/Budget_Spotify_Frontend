@@ -3,23 +3,39 @@ import {styled} from '@mui/system';
 import TablePagination, {
     tablePaginationClasses as classes,
 } from '@mui/base/TablePagination';
-import {useOutletContext} from "react-router-dom";
-import MenuAppBar from "./NavBar";
+import {useOutletContext,useLocation} from "react-router-dom";
+import MenuAppBar from "../NavBar";
 import {useState, useEffect} from 'react';
-import AdminService from '../services/admin.service'
-import Footer from "./Footer";
+import AdminService from '../../services/admin.service'
+import Footer from "../Footer";
+import { Link } from 'react-router-dom';
+import AddComposer from './AddComposer';
+import DeleteComposerModal from './DeleteComposer';
 
-export default function UserList() {
+export default function ComposerManager() {
     const search = useOutletContext()
-    const [data, setData] = useState({list: []});
+    const [data, setData] = useState({composers: []});
     const [isLoading, setisLoading] = useState(false);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+    const [activeLink, setActiveLink] = useState("");
+    const location = useLocation()
+    const[composersChange,setComposersChange]=useState(null)
+    useEffect(() => {
+        if (location.pathname === "/users-manager") {
+            setActiveLink("UserList");
+        } else if (location.pathname === "/singers-manager") {
+            setActiveLink("Singer");
+        } else if (location.pathname === "/composers-manager") {
+            setActiveLink("Composer");
+        } else if (location.pathname === "/tags-manager") {
+            setActiveLink("Tags");
+        }
+    }, [location]);
     function getData() {
         const accessToken = localStorage.getItem("token");
         setisLoading(true);
-        AdminService.getUserList(accessToken).then(res => {
+        AdminService.getComposers(accessToken).then(res => {
             setData(res.data)
             setisLoading(false)
         })
@@ -27,8 +43,8 @@ export default function UserList() {
 
     useEffect(() => {
         getData()
-    }, []);
-    const rows = data.list.sort((a, b) => (a.calories < b.calories ? -1 : 1));
+    }, [composersChange]);
+    const rows = data.composers.sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -59,16 +75,55 @@ export default function UserList() {
                     Loading...
                 </h2>
             ) : (
+                <>
+                <Link
+                            to={'/users-manager'}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "UserList" ? "green" : "white"
+                            }}
+                        >
+                            UserList
+                        </Link>
+                        <Link
+                            to={'/singers-manager'}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "Singer" ? "green" : "white"
+                            }}
+                        >
+                           Singer
+                        </Link>
+                        <Link
+                            to={'/composers-manager'}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "Composer" ? "green" : "white"
+                            }}
+                        >
+                           Composer
+                        </Link>
+                        <Link
+                            to={"/tags-manager"}
+                            style={{
+                                marginRight: "20px",
+                                color: activeLink === "Tags" ? "green" : "white"
+                            }}
+                        >
+                           Tags
+                        </Link>
+                        <br/>
+                        <br/>
+                        <br/>
                 <div>
-                    <h2 className="text-2xl font-semibold">List Of Users</h2>
+                    <h2 className="text-2xl font-semibold">List Of Composer</h2>
+                    <AddComposer reload={setComposersChange}/>
                     <br/>
                     <table aria-label="custom pagination table">
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>User Name</th>
-                            <th>first Name</th>
-                            <th>Last Name</th>
+                            <th>Composer Name</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -78,13 +133,10 @@ export default function UserList() {
                         ).map((row, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{row.username}</td>
-                                <td>
-                                    {row.firstName}
-                                </td>
-                                <td>
-                                    {row.lastName}
-                                </td>
+                                <td><div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            {row.name}
+                                            <DeleteComposerModal ComposerId={row._id} reload={setComposersChange} />
+                                        </div></td>
                             </tr>
                         ))}
                         {emptyRows > 0 && (
@@ -117,6 +169,8 @@ export default function UserList() {
                         </tfoot>
                     </table>
                 </div>
+                </>
+                
             )}
             <Footer/>
         </Root>

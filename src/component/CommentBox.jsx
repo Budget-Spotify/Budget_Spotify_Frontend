@@ -23,7 +23,7 @@ export function TextareaComment() {
   const userLoginJSON = localStorage.getItem('userLogin');
   const userLogin = JSON.parse(userLoginJSON);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const[commentChange,setCommentChange]=useState(null)
+  
   const open = Boolean(anchorEl);
   const handleClick = (event, commentId) => {
         setAnchorEl(event.currentTarget);
@@ -57,7 +57,7 @@ export function TextareaComment() {
   const handleDeleteComment = (commentId) => {
     UserService.deleteComment(commentId)
       .then(res=>{
-        setCommentChange(res)
+        
       })
       .catch((e) => {
         console.log(e);
@@ -85,7 +85,7 @@ export function TextareaComment() {
     return () => {
       eventSource.close();
     };
-  }, [commentChange]);
+  }, []);
 
   return (
     <FormControl sx={{width:"75vw"}}>

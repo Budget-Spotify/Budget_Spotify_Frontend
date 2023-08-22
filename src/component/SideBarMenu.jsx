@@ -27,7 +27,7 @@ export default function SideBarMenu() {
                         <NavLink to="/users-manager" className={({ isActive }) =>
                             isActive ? "navLinksClick" : "navLinks"
                         }>
-                            User Manager
+                            Admin Dashboard
                         </NavLink>
                     ):(<></>)}
                 </div>

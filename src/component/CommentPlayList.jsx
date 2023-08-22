@@ -23,7 +23,6 @@ export function CommentPlaylist() {
     const { playlistId } = useParams()
     const commentsArray = eventData;
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const[commentChange,setCommentChange]=useState(null)
     const open = Boolean(anchorEl);
     const [commentId, setCommentId] = useState('');
     const handleClick = (event, commentId) => {
@@ -48,7 +47,7 @@ export function CommentPlaylist() {
     const handleDeleteComment = (commentId) => {
         UserService.deleteComment(commentId)
             .then(res=>{
-                setCommentChange(res)
+                
             })
             .catch((e) => {
                 console.log(e);
@@ -76,7 +75,7 @@ export function CommentPlaylist() {
         return () => {
             eventSource.close();
         };
-    }, [commentChange]);
+    }, []);
 
     return (
         <FormControl sx={{ width: "75vw" }}>
