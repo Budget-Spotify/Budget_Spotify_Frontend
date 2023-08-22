@@ -22,7 +22,7 @@ import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {CommentPlaylist} from "./CommentPlayList";
-
+import Button from '@mui/material/Button';
 export default function PlaylistDetail() {
     const search = useOutletContext();
     const dispatch = useDispatch();
@@ -33,8 +33,10 @@ export default function PlaylistDetail() {
     let playlistId = useParams().playlistId;
     const userInfo = JSON.parse(localStorage.getItem('userLogin'));
     const [playlistLikeCounts, setPlaylistLikeCounts] = useState([]);
-
-
+    const [visible, setVisible] = useState(4);
+    const showMoreItems = () => {
+        setVisible((prevValue) => prevValue + 4);
+      };
     const handleClickPlayPause = () => setIsPlay(!isPlay);
     useEffect(() => {
         SongService.getPublicPlaylist(params.playlistId)
@@ -204,7 +206,7 @@ export default function PlaylistDetail() {
                 </tr>
                 </thead>
                 <tbody>
-                {data?.songs?.map(song => (
+                {data?.songs?.slice(0,visible).map(song => (
                     <tr key={song._id}>
                         <td colSpan={6} style={{backgroundColor: 'grey'}}>
                             <Card
@@ -274,6 +276,11 @@ export default function PlaylistDetail() {
                         </td>
                     </tr>
                 ))}
+                <div>
+                <Button style={{backgroundColor:"green"}} variant="contained" disableElevation onClick={showMoreItems}>
+                    Load More
+                 </Button>
+                </div>
                 </tbody>
             </table>
             <br/>
