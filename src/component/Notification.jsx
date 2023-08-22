@@ -121,7 +121,7 @@ export default function Notification() {
                                                         {`${notify?.sourceUser?.firstName} ${notify?.action} on the ${notify?.entityType} ${(notify?.entityType === "Songs") ? notify?.entity?.songName : notify?.entity?.playlistName}`}
                                                     </Box>
                                                 </Link>
-                                                ):(<Link>bài viết đã bị xóa</Link>)
+                                                ):(<Link>The post has deleted</Link>)
                                                 
                                             ) : (
                                                 notify?.entity?._id?(
@@ -137,7 +137,7 @@ export default function Notification() {
                                                             {`${notify?.sourceUser?.firstName} ${notify?.action} on the ${notify?.entityType} ${(notify?.entityType === "Songs") ? notify?.entity?.songName : notify.entity?.playlistName}`}
                                                         </Box>
                                                     </Link>
-                                                ):(<Link>bài viết đã bị xóa</Link>)
+                                                ):(<Link>The post has deleted</Link>)
                                             )
                                         }
                                     </Stack>
