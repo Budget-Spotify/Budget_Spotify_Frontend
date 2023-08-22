@@ -14,8 +14,10 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from "react-router-dom";
 const ITEM_HEIGHT = 48;
 export function CommentPlaylist() {
+    const navigate = useNavigate()
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
     const [eventData, setEventData] = useState("");
@@ -34,14 +36,18 @@ export function CommentPlaylist() {
         setAnchorEl(null);
     };
     const handleComment = () => {
-        if (comment) {
-            UserService.submitCommentPlaylist(comment, playlistId)
-                .then(() => {
-                    setComment("");
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
+        if(userLogin){
+            if (comment) {
+                UserService.submitCommentPlaylist(comment, playlistId)
+                    .then(() => {
+                        setComment("");
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            }
+        }else{
+            navigate('/login')
         }
     };
 

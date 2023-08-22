@@ -13,8 +13,10 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from "react-router-dom";
 const ITEM_HEIGHT = 48;
 export function TextareaComment() {
+  const navigate = useNavigate()
   const [eventData, setEventData] = useState("");
   const [comment, setComment] = useState("");
   const [commentId, setCommentId] = useState("");
@@ -43,14 +45,18 @@ export function TextareaComment() {
   }, []);
 
   const handleComment = () => {
-    if (comment) {
-      UserService.submitComment(comment, songId)
-        .then(() => {
-          setComment("");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+    if(userLogin){
+      if (comment) {
+        UserService.submitComment(comment, songId)
+          .then(() => {
+            setComment("");
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    }else{
+       navigate('/login')
     }
   };
 
