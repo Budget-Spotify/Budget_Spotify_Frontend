@@ -108,8 +108,8 @@ export default function Notification() {
                                         />
                                         {
                                             notify.entityType === "Songs" ? (
-                                                <Link to={`/song/detail/${notify.entity._id}`} onClick={() => {
-                                                    UserService.changeToSeen(notify._id);
+                                                <Link to={`/song/detail/${notify?.entity?._id}`} onClick={() => {
+                                                    UserService.changeToSeen(notify?._id);
                                                     handleClick();
                                                 }}>
                                                     <Box
@@ -117,12 +117,12 @@ export default function Notification() {
                                                             overflowWrap: 'break-word'
                                                         }}
                                                     >
-                                                        {`${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
+                                                        {`${notify?.sourceUser?.firstName} ${notify?.action} on the ${notify?.entityType} ${(notify?.entityType === "Songs") ? notify?.entity?.songName : notify?.entity?.playlistName}`}
                                                     </Box>
                                                 </Link>
                                             ) : (
-                                                <Link to={`/playlist/detail/${notify.entity._id}`} onClick={() => {
-                                                    UserService.changeToSeen(notify._id);
+                                                <Link to={`/playlist/detail/${notify?.entity?._id}`} onClick={() => {
+                                                    UserService.changeToSeen(notify?._id);
                                                     handleClick();
                                                 }}>
                                                     <Box
@@ -130,7 +130,7 @@ export default function Notification() {
                                                             overflowWrap: 'break-word'
                                                         }}
                                                     >
-                                                        {`${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
+                                                        {`${notify?.sourceUser?.firstName} ${notify?.action} on the ${notify?.entityType} ${(notify?.entityType === "Songs") ? notify?.entity?.songName : notify.entity?.playlistName}`}
                                                     </Box>
                                                 </Link>
                                             )
