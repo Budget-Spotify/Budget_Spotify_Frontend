@@ -120,7 +120,7 @@ export default function Notification() {
                                                         {`${index + 1}. ${notify.sourceUser.firstName} ${notify.action} on the ${notify.entityType} ${(notify.entityType === "Songs") ? notify.entity?.songName : notify.entity?.playlistName}`}
                                                     </Link>
                                                 ) : (
-                                                    <Link to={`/song/detail/${notify.entity._id}`} onClick={() => {
+                                                    <Link to={`/playlist/detail/${notify.entity._id}`} onClick={() => {
                                                         UserService.changeToSeen(notify._id);
                                                         handleClick();
                                                     }}>
