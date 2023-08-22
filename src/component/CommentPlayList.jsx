@@ -25,6 +25,7 @@ export function CommentPlaylist() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [commentId, setCommentId] = useState('');
+    
     const handleClick = (event, commentId) => {
         setAnchorEl(event.currentTarget);
         setCommentId(commentId);
@@ -76,7 +77,7 @@ export function CommentPlaylist() {
             eventSource.close();
         };
     }, []);
-
+    
     return (
         <FormControl sx={{ width: "75vw" }}>
             <FormLabel sx={{ color: "white", marginLeft: "10px", fontSize: "16px" }}>
