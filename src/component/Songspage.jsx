@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import SongCard from "./SongCard";
 import Footer from "./Footer";
 import MenuAppBar from "./NavBar";
 import SongService from "../services/song.service";
-import { useOutletContext } from "react-router-dom";
+import {useOutletContext} from "react-router-dom";
 import PlaylistCard from "./PlaylistCard";
 
 export default function Songspage() {
@@ -42,16 +42,23 @@ export default function Songspage() {
             }}
         >
             <MenuAppBar search={search}/>
-            <br />
-            <br />
+            <br/>
+            <br/>
             {isLoading ? (
-                <h2 style={{ textAlign: "center", margin: "150px", color: "#1DB954" }}>
+                <h2 style={{textAlign: "center", margin: "150px", color: "#1DB954"}}>
                     Loading...
                 </h2>
             ) : (
                 <>
                     <div>
-                        <h1>Best of music</h1>
+                        <p
+                            style={{
+                                fontSize: '30px',
+                                fontWeight: 500
+                            }}
+                        >
+                            Best of music
+                        </p>
                         <div
                             style={{
                                 display: "grid",
@@ -62,13 +69,13 @@ export default function Songspage() {
                         >
                             {listPublicSongs && listPublicSongs.slice(0, 10).map((song, index) => (
                                 <SongCard
-                                        songUrl={song.fileURL}
-                                        image={song.avatar}
-                                        title={song.songName}
-                                        artist={song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
-                                        key={index}
-                                        song={song}
-                                        likes={song.songLikeCounts?.length}
+                                    songUrl={song.fileURL}
+                                    image={song.avatar}
+                                    title={song.songName}
+                                    artist={song.singers[0] ? song.singers[0].name : 'Unknown Singer'}
+                                    key={index}
+                                    song={song}
+                                    likes={song.songLikeCounts?.length}
                                 />
                             ))}
                         </div>
@@ -77,7 +84,14 @@ export default function Songspage() {
                         <br/>
                         <br/>
                         <br/>
-                        <h1>Album</h1>
+                        <p
+                            style={{
+                                fontSize: '30px',
+                                fontWeight: 500
+                            }}
+                        >
+                            Album
+                        </p>
                         <div
                             style={{
                                 display: "grid",
@@ -88,10 +102,10 @@ export default function Songspage() {
                         >
                             {playlists && playlists.slice(0, 10).map((playlist, index) => (
                                 <PlaylistCard
-                                        key={index}
-                                        playlist={playlist}
-                                        playlistId={playlist._id}
-                                        likes={playlist.playlistLikeCounts?.length}
+                                    key={index}
+                                    playlist={playlist}
+                                    playlistId={playlist._id}
+                                    likes={playlist.playlistLikeCounts?.length}
                                 />
                             ))}
                         </div>
@@ -99,7 +113,7 @@ export default function Songspage() {
                 </>
             )}
 
-            <Footer />
+            <Footer/>
         </div>
     );
 }
