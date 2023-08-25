@@ -14,8 +14,10 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from "react-router-dom";
 const ITEM_HEIGHT = 48;
 export function CommentPlaylist() {
+    const navigate = useNavigate()
     const userLoginJSON = localStorage.getItem('userLogin');
     const userLogin = JSON.parse(userLoginJSON);
     const [eventData, setEventData] = useState("");
@@ -23,9 +25,9 @@ export function CommentPlaylist() {
     const { playlistId } = useParams()
     const commentsArray = eventData;
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const[commentChange,setCommentChange]=useState(null)
     const open = Boolean(anchorEl);
     const [commentId, setCommentId] = useState('');
+    
     const handleClick = (event, commentId) => {
         setAnchorEl(event.currentTarget);
         setCommentId(commentId);
@@ -34,21 +36,25 @@ export function CommentPlaylist() {
         setAnchorEl(null);
     };
     const handleComment = () => {
-        if (comment) {
-            UserService.submitCommentPlaylist(comment, playlistId)
-                .then(() => {
-                    setComment("");
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
+        if(userLogin){
+            if (comment) {
+                UserService.submitCommentPlaylist(comment, playlistId)
+                    .then(() => {
+                        setComment("");
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+            }
+        }else{
+            navigate('/login')
         }
     };
 
     const handleDeleteComment = (commentId) => {
         UserService.deleteComment(commentId)
             .then(res=>{
-                setCommentChange(res)
+                
             })
             .catch((e) => {
                 console.log(e);
@@ -62,8 +68,8 @@ export function CommentPlaylist() {
 
         eventSource.onmessage = (event) => {
             const eventData = JSON.parse(event.data);
-            console.log(eventData);
-            if (eventData.playlistId === playlistId) {
+            console.log(eventData)
+            if (eventData.clientId === playlistId) {
                 setEventData(eventData.relatedComments);
             }
         };
@@ -76,8 +82,8 @@ export function CommentPlaylist() {
         return () => {
             eventSource.close();
         };
-    }, [commentChange]);
-
+    }, []);
+    
     return (
         <FormControl sx={{ width: "75vw" }}>
             <FormLabel sx={{ color: "white", marginLeft: "10px", fontSize: "16px" }}>
@@ -147,6 +153,7 @@ export function CommentPlaylist() {
                             marginBottom: "10px",
                         }}
                     >
+                        {comment?.user?._id.toString() === userLogin?._id?(
                         <div>
                             <IconButton
                                 aria-label="more"
@@ -176,16 +183,17 @@ export function CommentPlaylist() {
                                     },
                                 }}
                             >
-                                {comment?.user?._id.toString() === userLogin?._id?(
+                                
                                 <MenuItem>
                                     <button onClick={()=>{
                                             handleDeleteComment(commentId)
                                         }}>Delete</button>
                                    
                                 </MenuItem>
-                                 ):(<MenuItem></MenuItem>)}
+                                 
                             </Menu>
                         </div>
+                        ):(<MenuItem></MenuItem>)}
                         <Typography
                             variant="body2"
                             style={{

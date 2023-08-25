@@ -103,6 +103,10 @@ class UserService {
     static async submitCommentPlaylist(comment, playlistId) {
         return await axiosInstance.post("http://localhost:8000/user/playlist/add-comment/" + playlistId, {comment: comment});
     }
+
+    static async changeToSeen(notifyId){
+        return await axiosInstance.patch("http://localhost:8000/user/notify/change-to-seen/" + notifyId);
+    }
 }
 
 export default UserService;

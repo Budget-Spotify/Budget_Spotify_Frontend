@@ -1,12 +1,12 @@
 import {useFormik} from "formik";
 import {Link, useNavigate} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
-import TextField from '@mui/material/TextField';
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {useState} from "react";
 import {GGLogin} from "./GGLogin";
 import {AuthService} from "../services/auth.service";
-
+import { InputAdornment,IconButton,TextField } from "@mui/material";
+import { Visibility,VisibilityOff } from "@mui/icons-material";
 const theme = createTheme({
     palette: {
         primary: {
@@ -43,6 +43,11 @@ const theme = createTheme({
 export function LoginComponent() {
     const [loginFail, setLoginFail] = useState(false);
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
     const formik = useFormik({
             initialValues: {
                 username: "",
@@ -70,7 +75,7 @@ export function LoginComponent() {
             <div className="w-full h-full flex flex-col items-center">
                 <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
                     <h1 className="text-4xl font-bold">
-                        Music<span className="text-green-500">Mix</span>
+                        DieC<span className="text-green-500">Music</span>
                     </h1>
 
                 </div>
@@ -91,7 +96,7 @@ export function LoginComponent() {
                             />
                         </div>
 
-                        <div style={{marginBottom: '10px'}}>
+                        <div style={{marginBottom: '10px',display: 'flex', justifyContent: 'space-between' }} >
                             <TextField
                                 label="Password"
                                 placeholder="Password"
@@ -99,10 +104,20 @@ export function LoginComponent() {
                                 value={formik.values.password}
                                 onChange={formik.handleChange}
                                 name="password"
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton style={{color:"white",}} onClick={handleTogglePassword}>
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
                             />
+                            
                         </div>
-
+                        
                         <div style={{display: 'flex', justifyContent: 'center'}}>
                             {loginFail && <div style={{color: 'red'}}><p>Wrong password or user name</p></div>}
                         </div>
@@ -125,7 +140,7 @@ export function LoginComponent() {
                     </div>
                     <div
                         className="border border-gray-500 text-gray-500 w-full flex items-center justify-center py-4 rounded-full font-bold  cursor-pointer hover:opacity-75">
-                        <Link to="/signup">SIGN UP FOR MusicMix</Link>
+                        <Link to="/signup">SIGN UP FOR DieCMusic</Link>
                     </div>
                 </div>
                 <ToastContainer/>
