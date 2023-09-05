@@ -246,9 +246,9 @@ function UserAddSong({reload}) {
     });
     useEffect(() => {
         Promise.all([
-            SongService.getSingers(),
-            SongService.getComposers(),
-            SongService.getTags()
+            SongService.getAllSingers(),
+            SongService.getAllComposers(),
+            SongService.getAllTags()
         ])
             .then(values => {
                 setSingers(values[0].data.data)

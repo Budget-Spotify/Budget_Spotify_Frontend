@@ -154,7 +154,7 @@ export default function AddPlaylist({reload}) {
             resetFormFileAndImage();
             formAdd.resetForm();
             handleClose()
-            UserService.addPlayList(data, accessToken)
+            UserService.createPlaylist(data, accessToken)
                 .then((res) => {
                     reload(res)
                 })

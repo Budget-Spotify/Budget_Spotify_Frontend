@@ -47,7 +47,7 @@ export function TextareaComment() {
   const handleComment = () => {
     if(userLogin){
       if (comment) {
-        UserService.submitComment(comment, songId)
+        UserService.commentOnSong(comment, songId)
           .then(() => {
             setComment("");
           })

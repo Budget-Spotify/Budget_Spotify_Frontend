@@ -1,26 +1,30 @@
 import axios from "axios";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 class SongService {
-    static async getPublicSongs() {
-        return await axios.get('http://localhost:8000/song/list/songs');
+    static async getAllSongs() {
+        return await axios.get(REACT_APP_API_URL + 'song/songs');
     }
-    static async getRandomSong(songIDs){
-        return await axios.post('http://localhost:8000/song/random',songIDs)
+    static async createRandomSong(songIDs){
+        return await axios.post(REACT_APP_API_URL + 'song/random-songs', songIDs);
     }
-    static async searchSongPublic(songname) {
-        return await axios.get(`http://localhost:8000/song/search-public?songName=${songname}`);
+    static async searchSong(songName) {
+        return await axios.get(REACT_APP_API_URL + `song/songs/search?search=${songName}`);
     }
-    static async getSingers(){
-        return await axios.get('http://localhost:8000/song/singers')
+    static async getAllSingers(){
+        return await axios.get(REACT_APP_API_URL + 'song/singers');
     }
-    static async getComposers(){
-        return await axios.get('http://localhost:8000/song/composers')
+    static async getAllComposers(){
+        return await axios.get(REACT_APP_API_URL + 'song/composers');
     }
-    static async getTags(){
-        return await axios.get('http://localhost:8000/song/tags')
+    static async getAllTags(){
+        return await axios.get(REACT_APP_API_URL + 'song/tags');
     }
-    static async getPublicPlaylist(playlistId){
-        return await axios.get(`http://localhost:8000/song/playlist-public/${playlistId}`)
+    static async getPlaylist(playlistId){
+        return await axios.get(REACT_APP_API_URL + `song/playlists/${playlistId}`);
+    }
+    static async getAllPlaylistPublic(){
+        return await axios.get(REACT_APP_API_URL + 'song/playlists');
     }
 }
 

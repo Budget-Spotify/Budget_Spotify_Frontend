@@ -60,8 +60,8 @@ export default function SongCardDetail() {
         try {
             if(userLogin){
                 !favorite
-                ? await UserService.submitLikeOfSong(songId.id)
-                : await UserService.submitDislikeOfSong(songId.id);
+                ? await UserService.likeSong(songId.id)
+                : await UserService.dislikeSong(songId.id);
 
             setFavorite(!favorite);
             }else{

@@ -1,111 +1,113 @@
 import {axiosInstance} from "../refreshToken/axios-interceptor";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 class UserService {
-    static async getSongs() {
-        return await axiosInstance.get("http://localhost:8000/user/list/songs");
+    static async getOneSong(songId) {
+        return await axiosInstance.get(REACT_APP_API_URL + "user/songs/" + songId);
     }
 
-    static async getOneSong(songId) {
-        return await axiosInstance.get("http://localhost:8000/user/song/detail/" + songId);
+    static async showCommentInSong(songId) {
+        return await axiosInstance.get(REACT_APP_API_URL + "user/songs/" + songId + "/comments");
     }
 
     static async addSong(data) {
-        return await axiosInstance.post("http://localhost:8000/user/upload/song", data);
+        return await axiosInstance.post(REACT_APP_API_URL + "user/songs", data);
+    }
+
+    static async addSongToPlaylist(playlistId, songId) {
+        return await axiosInstance.post(REACT_APP_API_URL + "user/playlists/" + playlistId + "/songs", {songId: songId});
+    }
+
+    static async removeSongFromPlaylist(playlistId, songId) {
+        return await axiosInstance.delete(REACT_APP_API_URL + `user/playlists/${playlistId}/songs/${songId}`);
+    }
+
+    static async commentOnSong(comment, songId) {
+        return await axiosInstance.post(REACT_APP_API_URL + `user/songs/${songId}/comments`, {comment: comment});
+    }
+
+    static async commentOnPlaylist(comment, playlistId) {
+        return await axiosInstance.post(REACT_APP_API_URL + `user/playlists/${playlistId}/comments`, {comment: comment});
+    }
+
+    static async deleteComment(commentId) {
+        return await axiosInstance.delete(REACT_APP_API_URL + "user/comments/" + commentId);
+    }
+
+    static async getSongs() {
+        return await axiosInstance.get(REACT_APP_API_URL + "user/songs");
+    }
+
+    static async likeSong(songId) {
+        return await axiosInstance.patch(REACT_APP_API_URL + "user/songs/" + songId + "/like");
+    }
+
+    static async dislikeSong(songId) {
+        return await axiosInstance.patch(REACT_APP_API_URL + "user/songs/" + songId + "/dislike")
+    }
+
+    static async likePlaylist(playlistId) {
+        return await axiosInstance.patch(REACT_APP_API_URL + "user/playlists/" + playlistId + "/like");
+    }
+
+    static async dislikePlaylist(playlistId) {
+        return await axiosInstance.patch(REACT_APP_API_URL + "user/playlists/" + playlistId + "/dislike");
+    }
+
+    static async getInfo() {
+        return await axiosInstance.get(REACT_APP_API_URL + "user/details/");
+    }
+
+    static async getPlaylist() {
+        return await axiosInstance.get(REACT_APP_API_URL + "user/playlists");
+    }
+
+    static async getSongInPlaylist(playlistId) {
+        return await axiosInstance.get(REACT_APP_API_URL + "user/playlists/" + playlistId + "/songs");
+    }
+
+    static async searchSong(playlistName) {
+        return await axiosInstance.get(REACT_APP_API_URL + "user/search/songs?name=" + playlistName);
     }
 
     static async editPassword(data) {
-        return await axiosInstance.put("http://localhost:8000/user/editpassword", data);
-    }
-
-    static async getInfo(id) {
-        return await axiosInstance.get("http://localhost:8000/user/info/" + id);
+        return await axiosInstance.put(REACT_APP_API_URL + "user/password", data);
     }
 
     static async editInfo(data) {
-        return await axiosInstance.put("http://localhost:8000/user/editinfo",data);
+        return await axiosInstance.put(REACT_APP_API_URL + "user/info", data);
     }
 
     static async deleteSong(data) {
-        return await axiosInstance.delete("http://localhost:8000/user/song/delete", {
+        return await axiosInstance.delete(REACT_APP_API_URL + "user/songs", {
             data: data,
         });
     }
 
-    static async getPlaylist() {
-        return await axiosInstance.get("http://localhost:8000/user/playlist");
-    }
-
-    static async getSongInPlaylist(playlistId) {
-        return await axiosInstance.get("http://localhost:8000/user/playlist/" + playlistId);
-    }
-
-    static async addPlayList(data) {
-        return await axiosInstance.post("http://localhost:8000/user/playlist/create", data);
-    }
-
-    static async searchSong(playlistName, accessToken) {
-        return await axiosInstance.get(`http://localhost:8000/user/search?songName=${playlistName}`);
-    }
-
-    static async addSongToPlaylist(playlistId, songId) {
-        return await axiosInstance.post(`http://localhost:8000/user/playlist/add-song/` + playlistId, {songId: songId});
-    }
-
-    static async removeSongFromPlaylist(playlistId, songId) {
-        return await axiosInstance.post(`http://localhost:8000/user/playlist/remove-song/` + playlistId, {songId: songId});
+    static async createPlaylist(data) {
+        return await axiosInstance.post(REACT_APP_API_URL + "/user/playlists/", data);
     }
 
     static async deletePlaylist(data) {
-        return await axiosInstance.delete("http://localhost:8000/user/playlist/delete", {
+        return await axiosInstance.delete(REACT_APP_API_URL + "/user/playlists", {
             data: data,
         });
     }
 
     static async editPlaylist(data) {
-        return await axiosInstance.put("http://localhost:8000/user/playlist/update", data);
+        return await axiosInstance.put(REACT_APP_API_URL + "/user/playlists", data);
     }
 
     static async updateSongState(data) {
-        return await axiosInstance.put("http://localhost:8000/user/song/update-state", data);
+        return await axiosInstance.put(REACT_APP_API_URL + "/user/songs/update-state", data);
     }
 
-    static async editSong(data){
-        return await axiosInstance.put("http://localhost:8000/user/song/update", data)
+    static async editSong(data) {
+        return await axiosInstance.put(REACT_APP_API_URL + "/user/songs", data)
     }
 
-    static async showCommentInSong(songId){
-        return await axiosInstance.get("http://localhost:8000/user/song/show-comment/" + songId);
-    }
-
-    static async submitComment(comment, songId) {
-        return await axiosInstance.post("http://localhost:8000/user/song/add-comment/" + songId, {comment: comment});
-    }
-
-    static async deleteComment(commentId) {
-        return await axiosInstance.get("http://localhost:8000/user/song/delete-comment/" + commentId);
-    }
-
-    static async submitLikeOfSong(songId){
-        return await axiosInstance.get("http://localhost:8000/user/song/like/" + songId);
-    }
-
-    static async submitDislikeOfSong(songId){
-        return await axiosInstance.get("http://localhost:8000/user/song/dislike/" + songId)
-    }
-
-    static async submitLikePlaylist(playlist){
-        return await axiosInstance.get("http://localhost:8000/user/playlist/like/" + playlist);
-    }
-
-    static async submitDislikePlaylist(playlist){
-        return await axiosInstance.get("http://localhost:8000/user/playlist/dislike/" + playlist);
-    }
-    static async submitCommentPlaylist(comment, playlistId) {
-        return await axiosInstance.post("http://localhost:8000/user/playlist/add-comment/" + playlistId, {comment: comment});
-    }
-
-    static async changeToSeen(notifyId){
-        return await axiosInstance.patch("http://localhost:8000/user/notify/change-to-seen/" + notifyId);
+    static async changeToSeen(notifyId) {
+        return await axiosInstance.patch(REACT_APP_API_URL + "/user/notifications/"+ notifyId +"/seen" );
     }
 }
 

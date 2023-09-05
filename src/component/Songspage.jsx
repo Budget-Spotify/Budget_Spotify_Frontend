@@ -15,7 +15,7 @@ export default function Songspage() {
 
     useEffect(() => {
         setIsLoading(true);
-        SongService.searchSongPublic(search)
+        SongService.searchSong(search)
             .then((res) => {
                 setListPublicSongs(res.data.songs);
                 setPlaylists(res.data.playlists)

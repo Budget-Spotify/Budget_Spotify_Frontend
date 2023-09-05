@@ -136,8 +136,8 @@ export default function SongInPlaylist() {
     const handleFavoriteClick = async () => {
         try {
             !favorite
-                ? await UserService.submitLikePlaylist(playlistId)
-                : await UserService.submitDislikePlaylist(playlistId);
+                ? await UserService.likePlaylist(playlistId)
+                : await UserService.dislikePlaylist(playlistId);
 
             setFavorite(!favorite);
         } catch (error) {

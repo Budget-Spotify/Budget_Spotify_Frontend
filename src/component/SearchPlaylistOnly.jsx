@@ -14,7 +14,7 @@ export default function PlaylistOnly() {
 
     useEffect(() => {
         setIsLoading(true);
-        SongService.searchSongPublic(search)
+        SongService.searchSong(search)
             .then((res) => {
                 setPlaylists(res.data.playlists)
                 setIsLoading(false);

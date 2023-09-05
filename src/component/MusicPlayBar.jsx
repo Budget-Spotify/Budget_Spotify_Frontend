@@ -52,7 +52,7 @@ export default function MusicPlayBar() {
         let nextTrackIndex = currentTrackIndex
         let songIds = tracks.map(song => song._id)
         if (currentTrackIndex === tracks.length - 1 && currentPlaylist.playlistName === 'default-playlist-name-budget-spotify') {
-            SongService.getRandomSong(songIds)
+            SongService.createRandomSong(songIds)
                 .then(res => {
                     const randomSong = res.data.data
                     if (randomSong === 'No song available') {
@@ -88,7 +88,7 @@ export default function MusicPlayBar() {
     }
     const handleEmptyTracks = () => {
         let songIds = tracks.map((song) => song._id);
-        SongService.getRandomSong(songIds)
+        SongService.createRandomSong(songIds)
             .then((res) => {
                 dispatch(setSong(res.data.data));
                 dispatch(addSongIntoPlayList(res.data.data));

@@ -38,7 +38,7 @@ export function CommentPlaylist() {
     const handleComment = () => {
         if(userLogin){
             if (comment) {
-                UserService.submitCommentPlaylist(comment, playlistId)
+                UserService.commentOnPlaylist(comment, playlistId)
                     .then(() => {
                         setComment("");
                     })

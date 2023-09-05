@@ -43,7 +43,7 @@ export default function PlaylistDetail() {
       };
     const handleClickPlayPause = () => setIsPlay(!isPlay);
     useEffect(() => {
-        SongService.getPublicPlaylist(params.playlistId)
+        SongService.getPlaylist(params.playlistId)
             .then(res => {
                 setData(res.data.playlist)
                 setPlaylistLikeCounts(res.data.playlist?.playlistLikeCounts);
@@ -59,8 +59,8 @@ export default function PlaylistDetail() {
         try {
             if(userLogin){
                 !favorite
-                ? await UserService.submitLikePlaylist(playlistId)
-                : await UserService.submitDislikePlaylist(playlistId);
+                ? await UserService.likePlaylist(playlistId)
+                : await UserService.dislikePlaylist(playlistId);
 
             setFavorite(!favorite);
             }else{

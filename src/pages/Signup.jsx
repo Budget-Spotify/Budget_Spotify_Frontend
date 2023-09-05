@@ -6,6 +6,7 @@ import {ToastContainer} from "react-toastify";
 import TextField from '@mui/material/TextField';
 import {useState} from "react";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {AuthService} from "../services/auth.service";
 
 const theme = createTheme({
     palette: {
@@ -98,7 +99,7 @@ export function SignupComponent() {
                     gender: values.gender,
                     avatar: values.avatar,
                 }
-                await axios.post("http://localhost:8000/auth/register", data);
+                await AuthService.register(data)
                 navigate('/login');
             } catch (error) {
                 set_alert_exist_user(true);
