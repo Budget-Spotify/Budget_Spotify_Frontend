@@ -63,7 +63,7 @@ export function CommentPlaylist() {
 
     useEffect(() => {
         const eventSource = new EventSource(
-            "http://localhost:8000/sse/comment-on-playlist/" + playlistId
+            "https://back-end-spotify-clone.up.railway.app/sse/comment-on-playlist/" + playlistId
         );
 
         eventSource.onmessage = (event) => {

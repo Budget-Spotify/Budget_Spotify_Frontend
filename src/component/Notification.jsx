@@ -24,7 +24,7 @@ export default function Notification() {
 
     useEffect(() => {
         const eventSource = new EventSource(
-            "http://localhost:8000/sse/notifyInNavbar/" + userId
+            "https://back-end-spotify-clone.up.railway.app/sse/notifyInNavbar/" + userId
         );
 
         eventSource.onmessage = (event) => {
@@ -95,9 +95,9 @@ export default function Notification() {
                                         style={{
                                             color: notify.seen ? "gray" : "white"
                                         }}
-                                    >     
-                                    <img
-                                            src={notify.sourceUser.avatar}
+                                    >
+                                        <img
+                                            src={notify.sourceUser?.avatar}
                                             alt="Error"
                                             style={{
                                                 width: '50px',
@@ -108,23 +108,32 @@ export default function Notification() {
                                         />
                                         {
                                             notify.entityType === "Songs" ? (
-                                                notify?.entity?._id?(
-                                                <Link to={`/song/detail/${notify?.entity?._id}`} onClick={() => {
-                                                    UserService.changeToSeen(notify?._id);
-                                                    handleClick();
-                                                }}>
+                                                notify?.entity?._id ? (
+                                                    <Link to={`/song/detail/${notify?.entity?._id}`} onClick={() => {
+                                                        UserService.changeToSeen(notify?._id);
+                                                        handleClick();
+                                                    }}>
+                                                        <Box
+                                                            style={{
+                                                                overflowWrap: 'break-word'
+                                                            }}
+                                                        >
+                                                            {`${notify?.sourceUser?.firstName} ${notify?.action} on the ${notify?.entityType} ${(notify?.entityType === "Songs") ? notify?.entity?.songName : notify?.entity?.playlistName}`}
+                                                        </Box>
+                                                    </Link>
+                                                ) : (
                                                     <Box
-                                                        style={{
-                                                            overflowWrap: 'break-word'
+                                                        onClick={() => {
+                                                            UserService.changeToSeen(notify?._id);
+                                                            handleClick();
                                                         }}
                                                     >
-                                                        {`${notify?.sourceUser?.firstName} ${notify?.action} on the ${notify?.entityType} ${(notify?.entityType === "Songs") ? notify?.entity?.songName : notify?.entity?.playlistName}`}
+                                                        The post has deleted
                                                     </Box>
-                                                </Link>
-                                                ):(<Link>The post has deleted</Link>)
-                                                
+                                                )
+
                                             ) : (
-                                                notify?.entity?._id?(
+                                                notify?.entity?._id ? (
                                                     <Link to={`/playlist/detail/${notify?.entity?._id}`} onClick={() => {
                                                         UserService.changeToSeen(notify?._id);
                                                         handleClick();
@@ -137,7 +146,16 @@ export default function Notification() {
                                                             {`${notify?.sourceUser?.firstName} ${notify?.action} on the ${notify?.entityType} ${(notify?.entityType === "Songs") ? notify?.entity?.songName : notify.entity?.playlistName}`}
                                                         </Box>
                                                     </Link>
-                                                ):(<Link>The post has deleted</Link>)
+                                                ) : (
+                                                    <Box
+                                                        onClick={() => {
+                                                            UserService.changeToSeen(notify?._id);
+                                                            handleClick();
+                                                        }}
+                                                    >
+                                                        The post has deleted
+                                                    </Box>
+                                                )
                                             )
                                         }
                                     </Stack>

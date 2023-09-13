@@ -8,14 +8,14 @@ import {Link, useParams} from "react-router-dom";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import CardMedia from "@mui/material/CardMedia";
-import {setSong} from "../redux/features/songs/songSlice";
-import {setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
+import {setPlayList, setSong} from "../redux/features/songs/songSlice";
+import {setPlay, setPlayBar} from "../redux/features/musicPlayBar/playBarSlice";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import SongService from "../services/song.service";
 import {useOutletContext} from "react-router-dom";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
@@ -38,10 +38,36 @@ export default function PlaylistDetail() {
     const userInfo = JSON.parse(localStorage.getItem('userLogin'));
     const [playlistLikeCounts, setPlaylistLikeCounts] = useState([]);
     const [visible, setVisible] = useState(4);
+    const currentPlaylist = useSelector(state => state.song.currentPlaylist);
+    const isPlayingMusic = useSelector(state => state.playBar.playingMusic);
     const showMoreItems = () => {
         setVisible((prevValue) => prevValue + 4);
       };
-    const handleClickPlayPause = () => setIsPlay(!isPlay);
+    const handlePlay = () => {
+        if(data.playlistName!==currentPlaylist.playlistName){
+            dispatch(setPlayList({
+                playlistName: data.playlistName,
+                songs: data.songs
+            }))
+            dispatch(setSong(data.songs[0]))
+        }
+        dispatch(setPlayBar(true))
+        setIsPlay(true)
+    }
+    const handlePause = () => {
+        setIsPlay(false)
+    }
+
+    useEffect(()=>{
+        if(data.playlistName===currentPlaylist.playlistName){
+            dispatch(setPlayBar(true))
+            dispatch(setPlay(isPlay))
+        }
+    },[isPlay])
+    useEffect(()=>{
+        if(data.playlistName!==currentPlaylist.playlistName) setIsPlay(false)
+        else setIsPlay(isPlayingMusic)
+    },[isPlayingMusic])
     useEffect(() => {
         SongService.getPublicPlaylist(params.playlistId)
             .then(res => {
@@ -146,7 +172,7 @@ export default function PlaylistDetail() {
                             (
                                 <IconButton
                                     aria-label="pause"
-                                    onClick={() => handleClickPlayPause()}
+                                    onClick={handlePause}
                                 >
                                     <PauseCircleIcon
                                         fontSize='large'
@@ -160,7 +186,7 @@ export default function PlaylistDetail() {
                             (
                                 <IconButton
                                     aria-label="play"
-                                    onClick={() => handleClickPlayPause()}
+                                    onClick={handlePlay}
                                 >
                                     <PlayCircleIcon
                                         fontSize='large'
