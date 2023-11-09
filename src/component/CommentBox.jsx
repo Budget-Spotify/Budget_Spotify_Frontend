@@ -72,7 +72,7 @@ export function TextareaComment() {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      "http://localhost:8000/sse/comment-on-song/" + songId
+      "https://back-end-spotify-clone.up.railway.app/sse/comment-on-song/" + songId
     );
 
     eventSource.onmessage = (event) => {
